@@ -13,13 +13,6 @@ namespace MatchFlix_Frontend.Pages
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
-using System.Net.Http;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
 #line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
 using System.Net.Http.Json;
 
@@ -82,6 +75,20 @@ using MatchFlix_Frontend.Shared;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 11 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using AntDesign;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+using System.Net.Http;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/fetchdata")]
     public partial class FetchData : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -91,24 +98,22 @@ using MatchFlix_Frontend.Shared;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 37 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+#line 36 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
        
-    private WeatherForecast[] forecasts;
+    private Anime[] animes;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() =>
+        animes = await Http.GetFromJsonAsync<Anime[]>("https://localhost:5031/anime/popular");
+
+    private async Task LoadAnime()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        animes = await Http.GetFromJsonAsync<Anime[]>("https://localhost:5031/anime/popular");
     }
 
-    public class WeatherForecast
+    public class Anime
     {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public string name { get; set; }
+        public int score { get; set; }
     }
 
 #line default

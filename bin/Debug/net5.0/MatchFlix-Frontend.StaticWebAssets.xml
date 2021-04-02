@@ -1,0 +1,5 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\" />
+  <ContentRoot BasePath="/" Path="C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\scopedcss\bundle\" />
+  <ContentRoot BasePath="_content/AntDesign" Path="C:\Users\ander\.nuget\packages\antdesign\0.1.0\build\..\staticwebassets\" />
+</StaticWebAssets>
