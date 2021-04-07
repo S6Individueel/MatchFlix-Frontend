@@ -98,22 +98,37 @@ using System.Net.Http;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 36 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+#line 38 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
        
-    private Anime[] animes;
+    private ShowDTO[] dataSet;
 
-    protected override async Task OnInitializedAsync() =>
-        animes = await Http.GetFromJsonAsync<Anime[]>("https://localhost:5031/anime/popular");
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 43 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+                                                                                                               
 
-    private async Task LoadAnime()
+    private async Task LoadData(string dataURL)
     {
-        animes = await Http.GetFromJsonAsync<Anime[]>("https://localhost:5031/anime/popular");
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 47 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+                           
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL); //Todo: Replace with dynamic URL
     }
 
-    public class Anime
+    public class ShowDTO
     {
-        public string name { get; set; }
-        public int score { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Media_type { get; set; }
+        public string Description { get; set; }
+        public string Release_date { get; set; }
+        public string Image_url { get; set; }
     }
 
 #line default

@@ -645,3 +645,5 @@ C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Fronte
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.dll
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\ref\MatchFlix-Frontend.dll
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.pdb
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Swiping.razor.g.cs
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Swiping.razor.g.cs

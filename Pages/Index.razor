@@ -1,50 +1,9 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<h1>Welcome to MatchFlix</h1>
 
-Welcome to your new app.
+<p>Swipe. Match. Watch.</p>
 
-@*<p>
-    Name: @anime.AnimeTitle
-</p>
-<p>
-    EpisodeAmount: @anime.EpisodeAmount.ToString()
-</p>
+@code{
 
-@code {
-        IndexViewModel anime = null;
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            anime = new IndexViewModel
-            {
-                AnimeTitle = "AOT",
-                EpisodeAmount = 16,
-                isAiring = true,
-                Episodes = new List<Episode> {
-                    new Episode { Id = 1, Name = "The Strongest", Description = "AOT ep 1", HostSite = "9anime.to" },
-                    new Episode { Id = 2, Name = "The Weakest", Description = "AOT ep 2", HostSite = "9anime.to" }
-                };
-        }
-    }
-
-    #region "View Model"
-    class IndexViewModel
-    {
-        public string AnimeTitle { get; set; }
-        public int EpisodeAmount { get; set; }
-        public bool isAiring { get; set; }
-        public List<Episode> Episodes { get; set; }
-    }
-
-    class Episode
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string HostSite { get; set; }
-    }
-    #endregion*@
 }
