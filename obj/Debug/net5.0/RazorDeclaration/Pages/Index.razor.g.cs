@@ -89,6 +89,27 @@ using AntDesign;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 12 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using BlazorAnimate;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 13 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using MatchFlix_Frontend.Models;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 3 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
+using MatchFlix_Frontend.Components.IconSection;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/")]
     public partial class Index : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -97,6 +118,22 @@ using AntDesign;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 59 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
+          
+        private ShowDTO[] dataSet;
+
+        protected override async Task OnInitializedAsync()
+        {
+            dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
+
+        }
+    
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }
 #pragma warning restore 1591

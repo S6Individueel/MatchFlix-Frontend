@@ -89,6 +89,34 @@ using AntDesign;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 13 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using MatchFlix_Frontend.Models;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Swiping.razor"
+using Microsoft.VisualBasic;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 3 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Swiping.razor"
+using System.Xml.Serialization;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 4 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Swiping.razor"
+using BlazorAnimate;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/swiping")]
     public partial class Swiping : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -97,6 +125,79 @@ using AntDesign;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 44 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Swiping.razor"
+       
+    private Animate myAnim;
+
+    private ShowDTO[] dataSet;
+    private ShowDTO[] topAnimes;
+
+    protected override async Task OnInitializedAsync() =>
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
+
+    private async Task LoadData(string dataURL)
+    {
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL); 
+        myAnim.Run();
+
+    }
+
+
+
+
+    (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
+
+    string message = "touch to begin";
+
+    void HandleTouchStart(TouchEventArgs t)
+    {
+        startPoint.ReferencePoint = t.TargetTouches[0];
+        startPoint.StartTime = DateTime.Now;
+    }
+
+    void HandleTouchEnd(TouchEventArgs t)
+    {
+        const double swipeThreshold = 0.8;
+        try
+        {
+            if (startPoint.ReferencePoint == null)
+            {
+                return;
+            }
+
+            var endReferencePoint = t.ChangedTouches[0];
+
+            var diffX = startPoint.ReferencePoint.ClientX - endReferencePoint.ClientX;
+            var diffY = startPoint.ReferencePoint.ClientY - endReferencePoint.ClientY;
+            var diffTime = DateTime.Now - startPoint.StartTime;
+            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+
+            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+            if (Math.Abs(velocityX - velocityY) < .5) return;
+
+            if (velocityX >= swipeThreshold)
+            {
+                message = diffX < 0 ? "right" : "left";
+            }
+            if (velocityY >= swipeThreshold)
+            {
+                message = diffY < 0 ? "down" : "up";
+            }
+        }
+
+        catch (Exception e)
+        {
+            message = e.Message;
+        }
+    }
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }
 #pragma warning restore 1591

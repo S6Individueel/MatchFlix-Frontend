@@ -89,6 +89,20 @@ using AntDesign;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 12 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using BlazorAnimate;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 13 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using MatchFlix_Frontend.Models;
+
+#line default
+#line hidden
+#nullable disable
     public partial class SurveyPrompt : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998

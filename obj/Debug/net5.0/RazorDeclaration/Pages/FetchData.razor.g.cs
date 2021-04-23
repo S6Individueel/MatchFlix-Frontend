@@ -83,6 +83,20 @@ using AntDesign;
 #line hidden
 #nullable disable
 #nullable restore
+#line 12 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using BlazorAnimate;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 13 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+using MatchFlix_Frontend.Models;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
 using System.Net.Http;
 
@@ -98,37 +112,13 @@ using System.Net.Http;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 38 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+#line 37 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
        
     private ShowDTO[] dataSet;
 
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 43 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
-                                                                                                               
-
     private async Task LoadData(string dataURL)
     {
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 47 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
-                           
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL); //Todo: Replace with dynamic URL
-    }
-
-    public class ShowDTO
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Media_type { get; set; }
-        public string Description { get; set; }
-        public string Release_date { get; set; }
-        public string Image_url { get; set; }
     }
 
 #line default

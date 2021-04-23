@@ -1,10 +1,9 @@
 ﻿@page "/counter"
-
 <h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
 
 <Button Type="primary" @onclick="IncrementCount">click me!</Button>
+
 <div style="background:#ECECEC; padding:30px">
     <Card Bordered="false" Title=@("Card title") Style="width: 300px">
         <Body>
@@ -17,7 +16,9 @@
 
 
 
+
 @code {
+
     private int currentCount = 0;
 
     private void IncrementCount()

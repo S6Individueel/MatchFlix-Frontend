@@ -1,9 +1,67 @@
 ﻿@page "/"
+@inject HttpClient Http
+@using MatchFlix_Frontend.Components.IconSection;
 
-<h1>Welcome to MatchFlix</h1>
+<div class="carousel">
+    @if (dataSet is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="bannerbase">
+            <div class="texts">
 
-<p>Swipe. Match. Watch.</p>
+                <h1 id="bannertitle">MatchFlix</h1>
+                <Animate Animation="Animations.FadeRight" Easing="Easings.EaseInOutSine" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.5)" IsManual="false">
+                    <h2 id="bannerslogan">Match, Swipe, Watch</h2>
+                </Animate>
+            </div>
+            <div class="matchbtn">
+                <Button Shape="round" Size="large" id="matchBtn">Match!</Button>
+            </div>
+        </div>
+        <Carousel Autoplay="TimeSpan.FromSeconds(5)">
+            <CarouselSlick>
+                <image src="/images/MOANA.JPG"></image>
+            </CarouselSlick>
+            <CarouselSlick>
+                <image src="/images/OP.JPG"></image>
+            </CarouselSlick>
+            <CarouselSlick>
+                <image src="/images/PB.JPG"></image>
+            </CarouselSlick>
+            <CarouselSlick>
+                <image src="/images/QB.JPG"></image>
+            </CarouselSlick>
+        </Carousel>
+    }
+</div>
+<div class="matchSection">
+    <Button Size="large" >
+        <image src="/images/relationshipclr.png"></image>
+        <p class="iconText">Match with friends and family</p>
+    </Button>
+    <Button Size="large" Ghost>
+        <image src="/images/swipeclr.png"></image>
+        <p class="iconText">Swipe your favourite shows</p>
+    </Button>
+    <Button Size="large">
+        <image src="/images/watchingclr2.png"></image>
+        <p class="iconText">Compare and watch your matched shows!</p>
+    </Button>
 
-@code{
 
-}
+</div>
+    @*<IconSection></IconSection>*@
+
+
+    @code{
+        private ShowDTO[] dataSet;
+
+        protected override async Task OnInitializedAsync()
+        {
+            dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
+
+        }
+    }
