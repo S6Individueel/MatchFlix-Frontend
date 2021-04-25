@@ -3,12 +3,6 @@
 @using MatchFlix_Frontend.Components.IconSection;
 
 <div class="carousel">
-    @if (dataSet is null)
-    {
-        <p>Loading...</p>
-    }
-    else
-    {
         <div class="bannerbase">
             <div class="texts">
 
@@ -35,8 +29,8 @@
                 <image src="/images/QB.JPG"></image>
             </CarouselSlick>
         </Carousel>
-    }
 </div>
+
 <div class="matchSection">
     <Button Size="large" >
         <image src="/images/relationshipclr.png"></image>
@@ -57,11 +51,4 @@
 
 
     @code{
-        private ShowDTO[] dataSet;
-
-        protected override async Task OnInitializedAsync()
-        {
-            dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
-
-        }
     }

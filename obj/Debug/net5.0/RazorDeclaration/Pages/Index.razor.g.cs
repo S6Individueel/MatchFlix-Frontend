@@ -118,21 +118,6 @@ using MatchFlix_Frontend.Components.IconSection;
         {
         }
         #pragma warning restore 1998
-#nullable restore
-#line 59 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
-          
-        private ShowDTO[] dataSet;
-
-        protected override async Task OnInitializedAsync()
-        {
-            dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
-
-        }
-    
-
-#line default
-#line hidden
-#nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }
