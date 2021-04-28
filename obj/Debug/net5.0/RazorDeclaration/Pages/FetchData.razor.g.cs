@@ -112,7 +112,7 @@ using System.Net.Http;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 37 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
+#line 39 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\FetchData.razor"
        
     private ShowDTO[] dataSet;
 

@@ -126,7 +126,7 @@ using BlazorAnimate;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 44 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 38 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Swiping.razor"
        
     private Animate myAnim;
 
@@ -134,11 +134,11 @@ using BlazorAnimate;
     private ShowDTO[] topAnimes;
 
     protected override async Task OnInitializedAsync() =>
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
 
     private async Task LoadData(string dataURL)
     {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL); 
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL);
         myAnim.Run();
 
     }

@@ -7,33 +7,27 @@
 
 
 <Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(1.5)" @ref="myAnim" IsManual="false">
-    <h1>Swipe away boi</h1>
+    <h1>Swipe.</h1>
 </Animate>
-
-
 <p class="alert alert-info">@message</p>
 @if (dataSet == null)
 {
-    <div class="card" style="width: 18rem;" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
-        <img class="card-img-top" src="https://via.placeholder.com/286x180.png" alt="Card image cap">
-        <div class="card-body">
-            <h5 class="card-title">title here </h5>
-            <p class="card-text">Description here</p>
-            @*<a href="#" class="btn btn-primary">Go somewhere</a>*@
-        </div>
-    </div>
+    <Card Loading="dataSet == null ? true : false" Style="width: 300px; margin-top: 16px">
+        <CardMeta Avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  Title="Card title"
+                  Description="This is the description" />
+    </Card>
 
 }
 else
 {
-    @foreach (var anime in topAnimes)
+    @foreach (var show in dataSet)
     {
-        <div class="card" style="width: 18rem;" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
-            <img class="card-img-top" src="@anime.Image_url" alt="Card image cap">
+        <div class="card" style="width: 18rem; margin: 2em" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
+            <img class="card-img-top" src="@show.Image_url" alt="Card image cap">
             <div class="card-body">
-                <h5 class="card-title">@anime.Title</h5>
-                <p class="card-text">@anime.Description</p>
-                @*<a href="#" class="btn btn-primary">Go somewhere</a>*@
+                <h5 class="card-title">@show.Title</h5>
+                <p class="card-text">@show.Description</p>
             </div>
         </div>
     }
@@ -48,11 +42,11 @@ else
     private ShowDTO[] topAnimes;
 
     protected override async Task OnInitializedAsync() =>
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topanime");
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
 
     private async Task LoadData(string dataURL)
     {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL); 
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL);
         myAnim.Run();
 
     }

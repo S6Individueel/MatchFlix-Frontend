@@ -118,6 +118,22 @@ using MatchFlix_Frontend.Components.IconSection;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 55 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
+      
+    void ToSwiping()
+    {
+        NavigationManager.NavigateTo("swiping");
+    }
+    void ToFetch()
+    {
+        NavigationManager.NavigateTo("fetchdata");
+    }
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }
