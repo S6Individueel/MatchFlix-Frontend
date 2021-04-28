@@ -2,8 +2,13 @@
 @inject HttpClient Http
 @using MatchFlix_Frontend.Components.IconSection;
 @inject NavigationManager NavigationManager
-
+@inject MessageService message;
 <div class="carousel">
+    <div class="navbar">
+        <a>About</a>
+        <a>FAQ</a>
+        <a>Home</a>
+    </div>
     <div class="bannerbase">
         <div class="texts">
 
@@ -32,7 +37,7 @@
     </Carousel>
 </div>
 
-<div class="matchSection">
+<div class="iconSection">
     <Button Size="large" Ghost OnClick="ToFetch">
         <image src="/images/relationshipclr.png"></image>
         <p class="iconText">Match with friends and family</p>
@@ -46,8 +51,14 @@
         <p class="iconText">Compare and watch your matched shows!</p>
     </Button>
 </div>
-<div style="  height: 100vh; background-color: white;">
-
+<div class="matchSection">
+    <div class="hostBox">
+        <h1>Host</h1>
+    </div>
+    <div class="joinBox">
+        <h1>Join</h1>
+        <Search Placeholder="Friend Code" Size="@InputSize.Large" EnterButton="@("Join")" @bind-Value="@txtValue" OnSearch="OnSearch" Class="joinInput"/>
+    </div>
 </div>
 
 
@@ -60,5 +71,17 @@
     void ToFetch()
     {
         NavigationManager.NavigateTo("fetchdata");
+    }
+
+    private string txtValue { get; set; }
+
+    private void Handle(string value)
+    {
+        Console.WriteLine(value);
+    }
+
+    public async Task OnSearch()
+    {
+        await message.Loading($"searching {txtValue}", 2);
     }
 }

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API-Gateway", "..\API-Gatew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMDB-Service", "..\OMDB-Service\OMDB-Service.csproj", "{2F50E9EE-EDF6-43A6-A9CF-FCDEC7440633}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingService", "..\MatchingService\MatchingService.csproj", "{55129380-4315-4EB4-860F-5F438AD60C70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2F50E9EE-EDF6-43A6-A9CF-FCDEC7440633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F50E9EE-EDF6-43A6-A9CF-FCDEC7440633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F50E9EE-EDF6-43A6-A9CF-FCDEC7440633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55129380-4315-4EB4-860F-5F438AD60C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55129380-4315-4EB4-860F-5F438AD60C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55129380-4315-4EB4-860F-5F438AD60C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55129380-4315-4EB4-860F-5F438AD60C70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
