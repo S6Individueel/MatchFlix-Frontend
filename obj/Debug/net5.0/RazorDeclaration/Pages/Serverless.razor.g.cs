@@ -104,14 +104,14 @@ using MatchFlix_Frontend.Models;
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
-using MatchFlix_Frontend.Components.IconSection;
+#line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Serverless.razor"
+using Microsoft.AspNetCore.SignalR.Client;
 
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/")]
-    public partial class Index : Microsoft.AspNetCore.Components.ComponentBase
+    [Microsoft.AspNetCore.Components.RouteAttribute("/serverless")]
+    public partial class Serverless : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
@@ -119,55 +119,62 @@ using MatchFlix_Frontend.Components.IconSection;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 69 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
-      
+#line 29 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Serverless.razor"
+       
+    private HubConnection hubConnection; //for connecting to SignalR
+    private List<ClientMessage> messages = new List<ClientMessage>(); //List of messages to display
+    private string userInput; //username
+    private string messageInput; //message
+    private readonly HttpClient _httpClient = new HttpClient(); //HttpClient for posting messages
 
-    private string txtJoinValue { get; set; }
-    private string hostName { get; set; }
-    public string roomName { get; set; }
+    private readonly string functionAppBaseUri = "http://localhost:7071/api/"; //URL for function app. Leave this as is for now.
 
-    private async Task PostHostRoom()
+    protected override async Task OnInitializedAsync() //actions to do when the page is initialized
     {
-        ReturnModel result = await Http.GetFromJsonAsync<ReturnModel>("https://localhost:5031/anime/host/" + hostName);
-        ToHosting(result.name, result.roomName);
+        //create a hub connection to the function app as we'll go via the function for everything SignalR.
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(functionAppBaseUri)
+            .Build();
+
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 50 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Serverless.razor"
+         
+
+        await hubConnection.StartAsync(); //start connection!
     }
 
-    void ToHosting(string _hostName, string _roomName)
+    //send our message to the function app
+    async Task SendAsync()
     {
-        NavigationManager.NavigateTo("room" + "/" + _hostName + "/" + _roomName);
-    }
 
-    void ToSwiping()
-    {
-        NavigationManager.NavigateTo("swiping");
-    }
-
-    public async Task OnSearch()
-    {
-        await message.Loading($"Joining {txtJoinValue}", 2);
-    }
-
-    public class ReturnModel
-    {
-        public ReturnModel()
+        var msg = new ClientMessage
         {
+            Name = userInput,
+            Message = messageInput
+        };
 
-        }
-        public ReturnModel(string _name, string _roomName)
-        {
-            name = _name;
-            roomName = _roomName;
-        }
-        public string name { get; set; }
-        public string roomName { get; set; }
+        await _httpClient.PostAsJsonAsync($"{functionAppBaseUri}messages", msg); // post to the function app
+        messageInput = string.Empty; // clear the message from the textbox
+        StateHasChanged(); //update the UI
+    }
+
+    //Check we're connected
+    public bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
+
+    public class ClientMessage
+    {
+        public string Name { get; set; }
+        public string Message { get; set; }
     }
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private MessageService message { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }
 #pragma warning restore 1591

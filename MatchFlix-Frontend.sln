@@ -15,6 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMDB-Service", "..\OMDB-Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingService", "..\MatchingService\MatchingService.csproj", "{55129380-4315-4EB4-860F-5F438AD60C70}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSignalR.Server", "..\..\EXAMPLES\BlazorSignalR\Server\BlazorSignalR.Server.csproj", "{D717D61D-D6BD-4ACA-8AD3-D1EC941CB375}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSignalR.Client", "..\..\EXAMPLES\BlazorSignalR\Client\BlazorSignalR.Client.csproj", "{CE511E14-9A38-4C9E-8DB0-53EBE3D9D595}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchFunction", "..\MatchFunction\MatchFunction.csproj", "{4791779E-7C1A-48A3-B052-0E1BEE169418}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +51,18 @@ Global
 		{55129380-4315-4EB4-860F-5F438AD60C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55129380-4315-4EB4-860F-5F438AD60C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55129380-4315-4EB4-860F-5F438AD60C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D717D61D-D6BD-4ACA-8AD3-D1EC941CB375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D717D61D-D6BD-4ACA-8AD3-D1EC941CB375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D717D61D-D6BD-4ACA-8AD3-D1EC941CB375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D717D61D-D6BD-4ACA-8AD3-D1EC941CB375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE511E14-9A38-4C9E-8DB0-53EBE3D9D595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE511E14-9A38-4C9E-8DB0-53EBE3D9D595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE511E14-9A38-4C9E-8DB0-53EBE3D9D595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE511E14-9A38-4C9E-8DB0-53EBE3D9D595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4791779E-7C1A-48A3-B052-0E1BEE169418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4791779E-7C1A-48A3-B052-0E1BEE169418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4791779E-7C1A-48A3-B052-0E1BEE169418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4791779E-7C1A-48A3-B052-0E1BEE169418}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

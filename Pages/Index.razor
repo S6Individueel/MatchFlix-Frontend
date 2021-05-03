@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject MessageService message;
 <div class="carousel">
+    <div class="containerTop">
     <div class="navbar">
         <a>About</a>
         <a>FAQ</a>
@@ -35,10 +36,11 @@
             <image src="/images/QB.JPG"></image>
         </CarouselSlick>
     </Carousel>
+    </div>
 </div>
 
 <div class="iconSection">
-    <Button Size="large" Ghost OnClick="ToFetch">
+    <Button Size="large" Ghost>
         <image src="/images/relationshipclr.png"></image>
         <p class="iconText">Match with friends and family</p>
     </Button>
@@ -54,34 +56,55 @@
 <div class="matchSection">
     <div class="hostBox">
         <h1>Host</h1>
+        <Search Placeholder="Your Name" Size="@InputSize.Large" EnterButton="@("Host")" @bind-Value="@hostName" OnSearch="PostHostRoom" Class="joinInput" />
     </div>
     <div class="joinBox">
         <h1>Join</h1>
-        <Search Placeholder="Friend Code" Size="@InputSize.Large" EnterButton="@("Join")" @bind-Value="@txtValue" OnSearch="OnSearch" Class="joinInput"/>
+        <Search Placeholder="Friend Code" Size="@InputSize.Large" EnterButton="@("Join")" @bind-Value="@txtJoinValue" OnSearch="OnSearch" Class="joinInput"/>
     </div>
 </div>
 
 
 
 @code{
+
+    private string txtJoinValue { get; set; }
+    private string hostName { get; set; }
+    public string roomName { get; set; }
+
+    private async Task PostHostRoom()
+    {
+        ReturnModel result = await Http.GetFromJsonAsync<ReturnModel>("https://localhost:5031/anime/host/" + hostName);
+        ToHosting(result.name, result.roomName);
+    }
+
+    void ToHosting(string _hostName, string _roomName)
+    {
+        NavigationManager.NavigateTo("room" + "/" + _hostName + "/" + _roomName);
+    }
+
     void ToSwiping()
     {
         NavigationManager.NavigateTo("swiping");
     }
-    void ToFetch()
-    {
-        NavigationManager.NavigateTo("fetchdata");
-    }
-
-    private string txtValue { get; set; }
-
-    private void Handle(string value)
-    {
-        Console.WriteLine(value);
-    }
 
     public async Task OnSearch()
     {
-        await message.Loading($"searching {txtValue}", 2);
+        await message.Loading($"Joining {txtJoinValue}", 2);
+    }
+
+    public class ReturnModel
+    {
+        public ReturnModel()
+        {
+
+        }
+        public ReturnModel(string _name, string _roomName)
+        {
+            name = _name;
+            roomName = _roomName;
+        }
+        public string name { get; set; }
+        public string roomName { get; set; }
     }
 }

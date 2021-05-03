@@ -673,3 +673,9 @@ C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Fronte
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\kn3WQCh+.gz
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\nOR17Ijp.gz
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\DUJBnmok.gz
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Room.razor.g.cs
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Room.razor.g.cs
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Serverless.razor.g.cs
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Test.razor.g.cs
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Serverless.razor.g.cs
+C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Test.razor.g.cs

@@ -104,14 +104,14 @@ using MatchFlix_Frontend.Models;
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
-using MatchFlix_Frontend.Components.IconSection;
+#line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Test.razor"
+using Microsoft.AspNetCore.SignalR.Client;
 
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/")]
-    public partial class Index : Microsoft.AspNetCore.Components.ComponentBase
+    [Microsoft.AspNetCore.Components.RouteAttribute("/test")]
+    public partial class Test : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
@@ -119,55 +119,32 @@ using MatchFlix_Frontend.Components.IconSection;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 69 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Index.razor"
-      
+#line 13 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Test.razor"
+       
+    private HubConnection hubConnection;
+    private List<Quote> quotes = new List<Quote>();
 
-    private string txtJoinValue { get; set; }
-    private string hostName { get; set; }
-    public string roomName { get; set; }
-
-    private async Task PostHostRoom()
+    protected override async Task OnInitializedAsync()
     {
-        ReturnModel result = await Http.GetFromJsonAsync<ReturnModel>("https://localhost:5031/anime/host/" + hostName);
-        ToHosting(result.name, result.roomName);
-    }
-
-    void ToHosting(string _hostName, string _roomName)
-    {
-        NavigationManager.NavigateTo("room" + "/" + _hostName + "/" + _roomName);
-    }
-
-    void ToSwiping()
-    {
-        NavigationManager.NavigateTo("swiping");
-    }
-
-    public async Task OnSearch()
-    {
-        await message.Loading($"Joining {txtJoinValue}", 2);
-    }
-
-    public class ReturnModel
-    {
-        public ReturnModel()
+        hubConnection = new HubConnectionBuilder().WithUrl("http://localhost:7071/api").Build();
+        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
         {
+            quotes.Add(IncomingQuote);
+            StateHasChanged();
+        });
+        await hubConnection.StartAsync();
+    }
 
-        }
-        public ReturnModel(string _name, string _roomName)
-        {
-            name = _name;
-            roomName = _roomName;
-        }
-        public string name { get; set; }
-        public string roomName { get; set; }
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    public class Quote{
+        public string author { get; set; }
+        public string body { get; set; }
     }
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private MessageService message { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }
 #pragma warning restore 1591

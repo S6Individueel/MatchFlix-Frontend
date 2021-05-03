@@ -266,7 +266,7 @@ a, .btn-link {
     flex-direction:row;
 }
 .hostBox {
-    width: 60vw;
+    width: 50vw;
     background-color: white;
     display: flex;
     justify-content: center;
@@ -275,12 +275,12 @@ a, .btn-link {
 }
 
 .joinBox {
-    width: 40vw;
-    background-color: #d3adf7;
+    width: 50vw;
+    background-color: #b37feb;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction:column;
+    flex-direction: column;
 }
 
 .joinBox h1, h2, p {
@@ -299,4 +299,7 @@ a, .btn-link {
 }
 .joinInput {
     width: 25vw;
+}
+.ant-input-search > .ant-input-group > .ant-input-group-addon:last-child{
+    left: 0px !important;
 }
