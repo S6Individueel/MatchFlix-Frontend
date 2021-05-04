@@ -13,99 +13,106 @@ namespace MatchFlix_Frontend.Pages
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 1 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 2 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using System.Net.Http.Json;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 3 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 4 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 5 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 6 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 7 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 8 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 9 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using MatchFlix_Frontend;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 10 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using MatchFlix_Frontend.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 11 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using AntDesign;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 12 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 12 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using BlazorAnimate;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 13 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\_Imports.razor"
+#line 13 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using MatchFlix_Frontend.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Socket.razor"
+#line 2 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
 using Microsoft.AspNetCore.SignalR.Client;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 6 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+using System.Text.Json;
 
 #line default
 #line hidden
@@ -119,43 +126,74 @@ using Microsoft.AspNetCore.SignalR.Client;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 29 "C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\Pages\Socket.razor"
+#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     private HubConnection hubConnection;
-    private List<string> messages = new List<string>();
-    private string userInput;
-    private string messageInput;
+    private List<Quote> messages = new List<Quote>();
+    private List<Quote> quotes = new List<Quote>();
+    private string message = "";
+    private string dynamicGroup = "";
+    private string dynamicUserId = "";
+
+    private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
 
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("https://localhost:6969/chathub"))
+            .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"))
             .Build();
 
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
         {
-            var encodedMsg = $"{user}: {message}";
-            messages.Add(encodedMsg);
+            quotes.Add(IncomingQuote);
             StateHasChanged();
         });
 
+        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
+        {
+            quotes.Add(IncomingQuote);
+            StateHasChanged();
+        });
         await hubConnection.StartAsync();
     }
 
-    async Task Send() =>
-        await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+    public async Task Send() =>
+        await hubConnection.SendAsync("SendMessageToGroup", message, dynamicGroup);
+    //await client.GetFromJsonAsync<string>($"{baseURI}/SendQuote");
+
+    public async Task SendToGroup() =>
+    //await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", "{'message': '" + message + "'}");
+    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(message));
+
+    public async Task AddToGroup()
+    {
+        hubConnection.On<Quote>(dynamicGroup, (message) =>
+        {
+            messages.Add(message);//Replace later with a message model
+        StateHasChanged();
+        });
+
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
+    }
+
 
     public bool IsConnected =>
-        hubConnection.State == HubConnectionState.Connected;
+    hubConnection.State == HubConnectionState.Connected;
 
     public async ValueTask DisposeAsync()
     {
         await hubConnection.DisposeAsync();
     }
+    public class Quote
+    {
+        public string author { get; set; }
+        public string body { get; set; }
+    }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient client { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
     }
 }

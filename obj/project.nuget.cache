@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8CJScOhUgnOyPFhRkFgdIDn/CFG5KRW/tfqlSN8p7YmVCelDqJHujx2FTyzUrm2GK8x8T7otoGSc+5vUHYYGcg==",
+  "dgSpecHash": "rq9OgiJ1S7lNVO0fuGWck4lvhqZ/Nzw6TP94DgCxYRcMAwujMes2TpVMCA+m7YpFWoN8W3bSRKYLh9H3K3XdfA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ander\\Documents\\SCHOOL\\SEMESTER 6\\INDIVIDUEEL\\PROJECTS\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
+  "projectFilePath": "C:\\Users\\ander\\Desktop\\frontend\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ander\\.nuget\\packages\\antdesign\\0.8.0\\antdesign.0.8.0.nupkg.sha512",
     "C:\\Users\\ander\\.nuget\\packages\\blazoranimate\\3.0.0\\blazoranimate.3.0.0.nupkg.sha512",

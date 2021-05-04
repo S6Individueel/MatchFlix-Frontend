@@ -8265,11 +8265,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ander\\Documents\\SCHOOL\\SEMESTER 6\\INDIVIDUEEL\\PROJECTS\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
+      "projectUniqueName": "C:\\Users\\ander\\Desktop\\frontend\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
       "projectName": "MatchFlix-Frontend",
-      "projectPath": "C:\\Users\\ander\\Documents\\SCHOOL\\SEMESTER 6\\INDIVIDUEEL\\PROJECTS\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
+      "projectPath": "C:\\Users\\ander\\Desktop\\frontend\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
       "packagesPath": "C:\\Users\\ander\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ander\\Documents\\SCHOOL\\SEMESTER 6\\INDIVIDUEEL\\PROJECTS\\MatchFlix-Frontend\\obj\\",
+      "outputPath": "C:\\Users\\ander\\Desktop\\frontend\\MatchFlix-Frontend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
