@@ -130,6 +130,7 @@ using System.Text.Json;
        
     private HubConnection hubConnection;
     private List<Quote> messages = new List<Quote>();
+    private List<MatchList> matches = new List<MatchList>();
     private List<Quote> quotes = new List<Quote>();
 
     //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
@@ -143,6 +144,8 @@ using System.Text.Json;
 
     private List<string> allAnswers = new List<string>();
     private List<string> comparedList = new List<string>();
+    private List<string> myAnswers = new List<string>();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -158,7 +161,7 @@ using System.Text.Json;
 #line hidden
 #nullable disable
 #nullable restore
-#line 89 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 92 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                                                
     }
 
@@ -174,12 +177,11 @@ using System.Text.Json;
     //await client.GetFromJsonAsync<string>($"{baseURI}/SendQuote");
 
     public async Task SendToGroup() =>
-    //await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", "{'message': '" + message + "'}");
+        //await hubConnection.SendAsync("SendMessageToGroup", message, dynamicGroup);
     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(message));
 
     public async Task SendAnswers(List<string> answers) =>
-    //await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", "{'message': '" + message + "'}");
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(answers));
+    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
 
     public async Task AddToGroup()
     {
@@ -194,15 +196,20 @@ using System.Text.Json;
             quotes.Add(IncomingQuote);
             StateHasChanged();
         });
-        hubConnection.On<Quote>(dynamicGroup, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
+        hubConnection.On<MatchList>("incomingList", (incomingList) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
         {
-            messages.Add(message);//TODO: Replace later with a message model
-            ParseAnswer(message.body);
+            matches.Add(incomingList);//TODO: Replace later with a message model
+            ParseAnswer(incomingList.MatchResults);
             //allAnswers.Add(message.body); //TODO: should be in seperate hub connection if I want to implement chat or have some differentiator headers/string b4 msg/idk
             if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
             {
-                CalculateResults(); 
+                CalculateResults();
             }
+            StateHasChanged();
+        });
+        hubConnection.On<Quote>(dynamicGroup, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
+        {
+            messages.Add(message);//TODO: Replace later with a message model
             StateHasChanged();
         });
 

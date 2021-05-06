@@ -18,7 +18,7 @@
 <p class="alert alert-info">@message</p>
 @if (dataSet == null)
 {
-    <Card Loading="dataSet == null ? true : false" Style="width: 300px; margin-top: 16px">
+    <Card Loading="true" Style="width: 300px; margin-top: 16px">
         <CardMeta Avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                   Title="Card title"
                   Description="This is the description" />
@@ -48,9 +48,9 @@ else
 
     private Animate myAnim;
 
-    private ShowDTO[] dataSet;
-
     private List<string> myAnswers = new List<string>();
+
+    private ShowDTO[] dataSet;
 
     protected override async Task OnInitializedAsync() =>
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
@@ -59,7 +59,6 @@ else
     {
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL);
         myAnim.Run();
-
     }
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;

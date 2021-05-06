@@ -139,9 +139,9 @@ using System.Text.Json;
 
     private Animate myAnim;
 
-    private ShowDTO[] dataSet;
-
     private List<string> myAnswers = new List<string>();
+
+    private ShowDTO[] dataSet;
 
     protected override async Task OnInitializedAsync() =>
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
@@ -150,7 +150,6 @@ using System.Text.Json;
     {
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL);
         myAnim.Run();
-
     }
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
