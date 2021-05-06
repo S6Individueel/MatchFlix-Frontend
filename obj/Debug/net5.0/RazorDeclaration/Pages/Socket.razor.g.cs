@@ -155,14 +155,6 @@ using System.Text.Json;
                 options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
             })
             .Build();
-        
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 92 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
-                                               
     }
 
     private void ToggleChat()
@@ -171,17 +163,45 @@ using System.Text.Json;
         toggleText = isChat ? "Hide" : "Show";
     }
 
-
-    public async Task Send() =>
-        await hubConnection.SendAsync("SendMessageToGroup", message, dynamicGroup);
-    //await client.GetFromJsonAsync<string>($"{baseURI}/SendQuote");
-
     public async Task SendToGroup() =>
-        //await hubConnection.SendAsync("SendMessageToGroup", message, dynamicGroup);
     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(message));
 
     public async Task SendAnswers(List<string> answers) =>
     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
+
+    public async Task HostGroup()
+    {
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
+        {
+            options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
+        })
+        .Build();
+        hubConnection.On<string>("incomingHost", (incomingHost) =>
+        {
+            hubConnection.On<Quote>(incomingHost, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
+            {
+                messages.Add(message);//TODO: Replace later with a message model
+                StateHasChanged();
+            });
+            dynamicGroup = incomingHost;
+            StateHasChanged();
+        });
+        hubConnection.On<MatchList>("incomingList", (incomingList) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
+        {
+            matches.Add(incomingList);//TODO: Replace later with a message model
+            ParseAnswer(incomingList.MatchResults);
+            if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
+            {
+                CalculateResults();
+            }
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+        await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
+
+    }
 
     public async Task AddToGroup()
     {
@@ -200,7 +220,6 @@ using System.Text.Json;
         {
             matches.Add(incomingList);//TODO: Replace later with a message model
             ParseAnswer(incomingList.MatchResults);
-            //allAnswers.Add(message.body); //TODO: should be in seperate hub connection if I want to implement chat or have some differentiator headers/string b4 msg/idk
             if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
             {
                 CalculateResults();
