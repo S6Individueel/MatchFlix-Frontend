@@ -119,16 +119,16 @@ using MatchFlix_Frontend.Components.IconSection;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 69 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
+#line 70 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
       
 
-    private string txtJoinValue { get; set; }
-    private string hostName { get; set; }
-    public string roomName { get; set; }
+    private string joinUserName { get; set; }
+    private string joinFriendCode { get; set; }
+    private string hostUserName { get; set; }
 
     private async Task PostHostRoom()
     {
-        ReturnModel result = await Http.GetFromJsonAsync<ReturnModel>("https://localhost:5031/anime/host/" + hostName);
+        ForwardModel result = await Http.GetFromJsonAsync<ForwardModel>("https://localhost:5031/anime/host/" + hostUserName);
         ToHosting(result.name, result.roomName);
     }
 
@@ -144,16 +144,16 @@ using MatchFlix_Frontend.Components.IconSection;
 
     public async Task OnSearch()
     {
-        await message.Loading($"Joining {txtJoinValue}", 2);
+        await message.Loading($"Joining {joinUserName}", 2);
     }
 
-    public class ReturnModel
+    public class ForwardModel
     {
-        public ReturnModel()
+        public ForwardModel()
         {
 
         }
-        public ReturnModel(string _name, string _roomName)
+        public ForwardModel(string _name, string _roomName)
         {
             name = _name;
             roomName = _roomName;

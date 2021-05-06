@@ -56,11 +56,12 @@
 <div class="matchSection">
     <div class="hostBox">
         <h1>Host</h1>
-        <Search Placeholder="Your Name" Size="@InputSize.Large" EnterButton="@("Host")" @bind-Value="@hostName" OnSearch="PostHostRoom" Class="joinInput" />
+        <Search Placeholder="Insert Username..." Size="@InputSize.Large" EnterButton="@("Host")" @bind-Value="@hostUserName" OnSearch="PostHostRoom" Class="joinInput" />
     </div>
     <div class="joinBox">
         <h1>Join</h1>
-        <Search Placeholder="Friend Code" Size="@InputSize.Large" EnterButton="@("Join")" @bind-Value="@txtJoinValue" OnSearch="OnSearch" Class="joinInput"/>
+        <Input Placeholder="Insert Username..." @bind-Value="@joinUserName" Class="joinInput"/>
+        <Search Placeholder="Insert Friend Code..." Size="@InputSize.Large" EnterButton="@("Join")" @bind-Value="@joinFriendCode" OnSearch="OnSearch" Class="joinInput" />
     </div>
 </div>
 
@@ -68,13 +69,13 @@
 
 @code{
 
-    private string txtJoinValue { get; set; }
-    private string hostName { get; set; }
-    public string roomName { get; set; }
+    private string joinUserName { get; set; }
+    private string joinFriendCode { get; set; }
+    private string hostUserName { get; set; }
 
     private async Task PostHostRoom()
     {
-        ReturnModel result = await Http.GetFromJsonAsync<ReturnModel>("https://localhost:5031/anime/host/" + hostName);
+        ForwardModel result = await Http.GetFromJsonAsync<ForwardModel>("https://localhost:5031/anime/host/" + hostUserName);
         ToHosting(result.name, result.roomName);
     }
 
@@ -90,16 +91,16 @@
 
     public async Task OnSearch()
     {
-        await message.Loading($"Joining {txtJoinValue}", 2);
+        await message.Loading($"Joining {joinUserName}", 2);
     }
 
-    public class ReturnModel
+    public class ForwardModel
     {
-        public ReturnModel()
+        public ForwardModel()
         {
 
         }
-        public ReturnModel(string _name, string _roomName)
+        public ForwardModel(string _name, string _roomName)
         {
             name = _name;
             roomName = _roomName;

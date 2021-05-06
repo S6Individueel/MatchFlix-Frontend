@@ -6,11 +6,14 @@
 @using System.Text.Json
 
 
-<Socket @ref="mySocket" ></Socket>
+<Socket @ref="mySocket" ShowList="dataSet"></Socket>
 
-<Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(1.5)" @ref="myAnim" IsManual="false">
+<Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(1.5)" IsManual="false">
     <h1>Swipe.</h1>
 </Animate>
+<h2>Selected trend: @selectedData</h2>
+<Button Type="primary" @onclick="@(() => LoadData("topanime", "Anime"))">Anime</Button>
+<Button Type="primary" @onclick="@(() => LoadData("topmovie", "Movies"))">Movies</Button>
 
 <Button OnClick="ShowAnswers">Show Answers</Button>
 <Button OnClick="SendAnswers">Send Answers</Button>
@@ -44,21 +47,25 @@ else
 
 
 @code {
+
+
     private Socket mySocket;
 
-    private Animate myAnim;
+    private string selectedData = "";
 
     private List<string> myAnswers = new List<string>();
 
     private ShowDTO[] dataSet;
 
-    protected override async Task OnInitializedAsync() =>
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
+    private readonly string baseApiUri = "https://localhost:5021";
 
-    private async Task LoadData(string dataURL)
+    protected override async Task OnInitializedAsync() =>
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/topanime");
+
+    public async Task LoadData(string dataURL, string _selectedData)
     {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL);
-        myAnim.Run();
+        selectedData = _selectedData;
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/{dataURL}");
     }
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;

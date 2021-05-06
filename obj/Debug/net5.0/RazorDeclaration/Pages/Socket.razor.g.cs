@@ -126,8 +126,11 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 62 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 83 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
+    [Parameter]
+    public IReadOnlyList<ShowDTO> ShowList { get; set; }
+
     private HubConnection hubConnection;
     private List<ChatMessage> messages = new List<ChatMessage>();
     private List<MatchList> matches = new List<MatchList>();
@@ -138,6 +141,7 @@ using System.Text.Json;
     private string dynamicGroup = "";
     private string dynamicUserId = "";
 
+    private bool isDone = false;
     private bool isChat = true;
     private string toggleText = "Hide";
 
@@ -146,6 +150,7 @@ using System.Text.Json;
     private List<string> myAnswers = new List<string>();
     private List<string> allUsers = new List<string>();
 
+    private List<ShowDTO> endList = new List<ShowDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,6 +164,7 @@ using System.Text.Json;
         isChat = isChat ? false : true;
         toggleText = isChat ? "Hide" : "Show";
     }
+
 
     public async Task SendToGroup() =>
     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
@@ -196,6 +202,7 @@ using System.Text.Json;
             allUsers.Add(dynamicUserId);
             hubConnection.On<string>("incomingHost", (incomingHost) =>
             {
+                dynamicGroup = incomingHost;
                 hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
                 {
                     messages.Add(message); //Make it special list message or somethgin color idk
@@ -209,7 +216,7 @@ using System.Text.Json;
                     messages.Add(message);
                     StateHasChanged();
                 });
-                dynamicGroup = incomingHost;
+
                 StateHasChanged();
             });
         }
@@ -227,8 +234,8 @@ using System.Text.Json;
             {
                 matches.Add(incomingList);
                 ParseAnswer(incomingList.MatchResults);
-                if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
-            {
+                if (allAnswers.Count == ShowList.Count * allUsers.Count)
+                {
                     CalculateResults();
                 }
                 StateHasChanged();
@@ -256,18 +263,37 @@ using System.Text.Json;
         }
     }
 
+    private void ShowResults() //For displaying the results in cards.
+    {
+        for (int answerCount = 0; answerCount < comparedList.Count; answerCount++)
+        {
+            if (comparedList[answerCount] == "yes")
+            {
+                endList.Add(ShowList[answerCount]);
+            }
+        }
+        isDone = true;
+    }
+
     public void CalculateResults()
     {
-        for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
-        {
-            int halfpoint = 20 / 2;
 
-            if (allAnswers[answerCount] == "yes" && allAnswers[halfpoint + answerCount] == "yes")
+        for (int answerCount = 0; answerCount < ShowList.Count; answerCount++)
+        {
+            for (int NxtUsrIndex = 0; NxtUsrIndex < allAnswers.Count; NxtUsrIndex += ShowList.Count) //For every user
             {
-                comparedList.Add("yes");
+                if (allAnswers[answerCount + NxtUsrIndex] == "yes")
+                {
+                    ShowList[answerCount].Yes_Count++;
+                }
+                else
+                {
+                    ShowList[answerCount].No_Count++;
+                }
             }
-            else { comparedList.Add("no"); }
+            endList.Add(ShowList[answerCount]);
         }
+        isDone = true;
     }
 
     public bool IsConnected =>

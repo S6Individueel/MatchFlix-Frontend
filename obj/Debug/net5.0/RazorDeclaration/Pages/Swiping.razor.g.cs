@@ -133,23 +133,27 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 49 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
        
+
+
     private Socket mySocket;
 
-    private Animate myAnim;
+    private string selectedData = "";
 
     private List<string> myAnswers = new List<string>();
 
     private ShowDTO[] dataSet;
 
-    protected override async Task OnInitializedAsync() =>
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
+    private readonly string baseApiUri = "https://localhost:5021";
 
-    private async Task LoadData(string dataURL)
+    protected override async Task OnInitializedAsync() =>
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/topanime");
+
+    public async Task LoadData(string dataURL, string _selectedData)
     {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>(dataURL);
-        myAnim.Run();
+        selectedData = _selectedData;
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/{dataURL}");
     }
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
