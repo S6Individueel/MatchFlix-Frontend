@@ -133,7 +133,7 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 54 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
        
     private Socket mySocket;
 
@@ -141,7 +141,7 @@ using System.Text.Json;
 
     private ShowDTO[] dataSet;
 
-    private List<string> answers = new List<string>();
+    private List<string> myAnswers = new List<string>();
 
     protected override async Task OnInitializedAsync() =>
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
@@ -201,23 +201,23 @@ using System.Text.Json;
 
     void ChooseLeft()
     {
-        answers.Add("yes");
+        myAnswers.Add("yes");
     }
 
     void ChooseRight()
     {
-        answers.Add("no");
+        myAnswers.Add("no");
     }
 
     void ShowAnswers()
     {
-        message = JsonSerializer.Serialize(answers);
+        message = JsonSerializer.Serialize(myAnswers);
     }
 
     async Task SendAnswers()
     {
 
-        await mySocket.SendAnswers(answers);
+        await mySocket.SendAnswers(myAnswers);
     }
 
 

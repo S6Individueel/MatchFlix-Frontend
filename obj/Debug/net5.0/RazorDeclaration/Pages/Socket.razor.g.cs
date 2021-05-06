@@ -126,17 +126,23 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 59 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     private HubConnection hubConnection;
     private List<Quote> messages = new List<Quote>();
     private List<Quote> quotes = new List<Quote>();
+
+    //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
+    private static readonly string baseURI = "http://localhost:7071/api";
     private string message = "";
     private string dynamicGroup = "";
     private string dynamicUserId = "";
 
-    //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
-    private static readonly string baseURI = "http://localhost:7071/api";
+    private bool isChat = true;
+    private string toggleText = "Hide";
+
+    private List<string> allAnswers = new List<string>();
+    private List<string> comparedList = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -146,14 +152,22 @@ using System.Text.Json;
                 options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
             })
             .Build();
+        
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 70 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
-                                           
+#line 89 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                                               
     }
+
+    private void ToggleChat()
+    {
+        isChat = isChat ? false : true;
+        toggleText = isChat ? "Hide" : "Show";
+    }
+
 
     public async Task Send() =>
         await hubConnection.SendAsync("SendMessageToGroup", message, dynamicGroup);
@@ -180,14 +194,47 @@ using System.Text.Json;
             quotes.Add(IncomingQuote);
             StateHasChanged();
         });
-        hubConnection.On<Quote>(dynamicGroup, (message) =>
+        hubConnection.On<Quote>(dynamicGroup, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
         {
-            messages.Add(message);//Replace later with a message model
+            messages.Add(message);//TODO: Replace later with a message model
+            ParseAnswer(message.body);
+            //allAnswers.Add(message.body); //TODO: should be in seperate hub connection if I want to implement chat or have some differentiator headers/string b4 msg/idk
+            if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
+            {
+                CalculateResults(); 
+            }
             StateHasChanged();
         });
 
         await hubConnection.StartAsync();
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
+    }
+    public void ParseAnswer(string messageBody) //Parse
+    {
+        List<string> answers = JsonSerializer.Deserialize<List<string>>(messageBody);
+        foreach (var item in answers)
+        {
+            allAnswers.Add(item);
+        }
+    }
+
+    public void CalculateResults()
+    {
+        for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
+        {
+            int halfpoint = 20 / 2;
+            //TODO: Use a dictionary with K/V = UserName/List<string>myAnswers
+            CompareTwoAnswers(allAnswers[answerCount], allAnswers[halfpoint + answerCount]);
+        }
+    }
+
+    public void CompareTwoAnswers(string userOne, string userTwo)
+    {
+        if (userOne == "yes" && userTwo == "yes")
+        {
+            comparedList.Add("yes");
+        }
+        else { comparedList.Add("no"); }
     }
 
     public bool IsConnected =>

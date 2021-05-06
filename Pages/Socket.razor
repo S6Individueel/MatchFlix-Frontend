@@ -25,34 +25,53 @@
     </label>
 </div>
 
+
 <button @onclick="Send">Send</button>
 <button @onclick="SendToGroup">SendToGroup</button>
 <button @onclick="AddToGroup">AddToGroup</button>
+<button @onclick="ToggleChat">@toggleText chat</button>
 
 <hr>
+<h2>Compared list:</h2>
+<h3>AllAnswers: @allAnswers.Count</h3>
+<h3>ComparedList: @comparedList.Count</h3>
+@foreach (var answer in comparedList) //Should have access to dataSet in order to show the completed list.
+{
+    <li>@answer.ToString()</li>
+}
+@if (isChat)
+{
+    <h1>Chat</h1>
+    <ul id="messagesList">
+        @foreach (var message in messages)
+        {
+            <li>@message.body</li>
+        }
+        @foreach (var quote in quotes)
+        {
+            <li>@quote.author</li>
+            <li>@quote.body</li>
+        }
+    </ul>
+}
 
-<ul id="messagesList">
-    @foreach (var message in messages)
-    {
-        <li>@message.body</li>
-    }
-    @foreach (var quote in quotes)
-    {
-        <li>@quote.author</li>
-        <li>@quote.body</li>
-    }
-</ul>
 
 @code {
     private HubConnection hubConnection;
     private List<Quote> messages = new List<Quote>();
     private List<Quote> quotes = new List<Quote>();
+
+    //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
+    private static readonly string baseURI = "http://localhost:7071/api";
     private string message = "";
     private string dynamicGroup = "";
     private string dynamicUserId = "";
 
-    //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
-    private static readonly string baseURI = "http://localhost:7071/api";
+    private bool isChat = true;
+    private string toggleText = "Hide";
+
+    private List<string> allAnswers = new List<string>();
+    private List<string> comparedList = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,13 +81,20 @@
                 options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
             })
             .Build();
-@*        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
-        {
-            quotes.Add(IncomingQuote);
-            StateHasChanged();
-        });
-        await hubConnection.StartAsync();*@
+        @*        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
+            {
+                quotes.Add(IncomingQuote);
+                StateHasChanged();
+            });
+            await hubConnection.StartAsync();*@
     }
+
+    private void ToggleChat()
+    {
+        isChat = isChat ? false : true;
+        toggleText = isChat ? "Hide" : "Show";
+    }
+
 
     public async Task Send() =>
         await hubConnection.SendAsync("SendMessageToGroup", message, dynamicGroup);
@@ -95,14 +121,47 @@
             quotes.Add(IncomingQuote);
             StateHasChanged();
         });
-        hubConnection.On<Quote>(dynamicGroup, (message) =>
+        hubConnection.On<Quote>(dynamicGroup, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
         {
-            messages.Add(message);//Replace later with a message model
+            messages.Add(message);//TODO: Replace later with a message model
+            ParseAnswer(message.body);
+            //allAnswers.Add(message.body); //TODO: should be in seperate hub connection if I want to implement chat or have some differentiator headers/string b4 msg/idk
+            if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
+            {
+                CalculateResults(); 
+            }
             StateHasChanged();
         });
 
         await hubConnection.StartAsync();
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
+    }
+    public void ParseAnswer(string messageBody) //Parse
+    {
+        List<string> answers = JsonSerializer.Deserialize<List<string>>(messageBody);
+        foreach (var item in answers)
+        {
+            allAnswers.Add(item);
+        }
+    }
+
+    public void CalculateResults()
+    {
+        for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
+        {
+            int halfpoint = 20 / 2;
+            //TODO: Use a dictionary with K/V = UserName/List<string>myAnswers
+            CompareTwoAnswers(allAnswers[answerCount], allAnswers[halfpoint + answerCount]);
+        }
+    }
+
+    public void CompareTwoAnswers(string userOne, string userTwo)
+    {
+        if (userOne == "yes" && userTwo == "yes")
+        {
+            comparedList.Add("yes");
+        }
+        else { comparedList.Add("no"); }
     }
 
     public bool IsConnected =>
