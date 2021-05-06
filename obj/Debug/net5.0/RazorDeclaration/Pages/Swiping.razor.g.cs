@@ -117,6 +117,13 @@ using BlazorAnimate;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 6 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+using System.Text.Json;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/swiping")]
     public partial class Swiping : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -126,12 +133,15 @@ using BlazorAnimate;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 38 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 54 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
        
+    private Socket mySocket;
+
     private Animate myAnim;
 
     private ShowDTO[] dataSet;
-    private ShowDTO[] topAnimes;
+
+    private List<string> answers = new List<string>();
 
     protected override async Task OnInitializedAsync() =>
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
@@ -142,9 +152,6 @@ using BlazorAnimate;
         myAnim.Run();
 
     }
-
-
-
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
 
@@ -180,11 +187,9 @@ using BlazorAnimate;
 
             if (velocityX >= swipeThreshold)
             {
-                message = diffX < 0 ? "right" : "left";
-            }
-            if (velocityY >= swipeThreshold)
-            {
-                message = diffY < 0 ? "down" : "up";
+                if (diffX < 0)
+                { ChooseRight(); }
+                else { ChooseLeft(); }
             }
         }
 
@@ -193,6 +198,28 @@ using BlazorAnimate;
             message = e.Message;
         }
     }
+
+    void ChooseLeft()
+    {
+        answers.Add("yes");
+    }
+
+    void ChooseRight()
+    {
+        answers.Add("no");
+    }
+
+    void ShowAnswers()
+    {
+        message = JsonSerializer.Serialize(answers);
+    }
+
+    async Task SendAnswers()
+    {
+
+        await mySocket.SendAnswers(answers);
+    }
+
 
 #line default
 #line hidden

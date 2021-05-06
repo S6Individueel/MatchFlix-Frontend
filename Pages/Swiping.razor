@@ -3,12 +3,18 @@
 @using System.Xml.Serialization
 @using BlazorAnimate
 @inject HttpClient Http
+@using System.Text.Json
 
 
+<Socket @ref="mySocket"></Socket>
 
 <Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(1.5)" @ref="myAnim" IsManual="false">
     <h1>Swipe.</h1>
 </Animate>
+
+<Button OnClick="ShowAnswers">Show Answers</Button>
+<Button OnClick="SendAnswers">Send Answers</Button>
+
 <p class="alert alert-info">@message</p>
 @if (dataSet == null)
 {
@@ -25,21 +31,34 @@ else
     {
         <div class="card" style="width: 18rem; margin: 2em" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
             <img class="card-img-top" src="@show.Image_url" alt="Card image cap">
+
             <div class="card-body">
                 <h5 class="card-title">@show.Title</h5>
                 <p class="card-text">@show.Description</p>
+                <Button OnClick="ChooseLeft">Yes</Button>
+                <Button OnClick="ChooseRight">No</Button>
             </div>
         </div>
     }
 }
+<div class="card" style="width: 18rem; margin: 2em" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
+    <img class="card-img-top" src="https://via.placeholder.com/350x150" alt="Card image cap">
+    <div class="card-body">
+        <h5 class="card-title">Placeholder Title</h5>
+        <p class="card-text">Lorem Ipsum DolorLorem Ipsum DolorLorem Ipsum DolorLorem Ipsum DolorLorem Ipsum DolorLorem Ipsum Dolor</p>
+    </div>
+</div>
 
 
 
 @code {
+    private Socket mySocket;
+
     private Animate myAnim;
 
     private ShowDTO[] dataSet;
-    private ShowDTO[] topAnimes;
+
+    private List<string> answers = new List<string>();
 
     protected override async Task OnInitializedAsync() =>
         dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
@@ -50,9 +69,6 @@ else
         myAnim.Run();
 
     }
-
-
-
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
 
@@ -88,11 +104,9 @@ else
 
             if (velocityX >= swipeThreshold)
             {
-                message = diffX < 0 ? "right" : "left";
-            }
-            if (velocityY >= swipeThreshold)
-            {
-                message = diffY < 0 ? "down" : "up";
+                if (diffX < 0)
+                { ChooseRight(); }
+                else { ChooseLeft(); }
             }
         }
 
@@ -101,4 +115,26 @@ else
             message = e.Message;
         }
     }
+
+    void ChooseLeft()
+    {
+        answers.Add("yes");
+    }
+
+    void ChooseRight()
+    {
+        answers.Add("no");
+    }
+
+    void ShowAnswers()
+    {
+        message = JsonSerializer.Serialize(answers);
+    }
+
+    async Task SendAnswers()
+    {
+
+        await mySocket.SendAnswers(answers);
+    }
+
 }

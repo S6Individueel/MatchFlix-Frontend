@@ -135,26 +135,24 @@ using System.Text.Json;
     private string dynamicGroup = "";
     private string dynamicUserId = "";
 
-    private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
+    //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
+    private static readonly string baseURI = "http://localhost:7071/api";
 
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"))
+            .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
+            {
+                options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
+            })
             .Build();
 
-        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
-        {
-            quotes.Add(IncomingQuote);
-            StateHasChanged();
-        });
-
-        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
-        {
-            quotes.Add(IncomingQuote);
-            StateHasChanged();
-        });
-        await hubConnection.StartAsync();
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 70 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                                           
     }
 
     public async Task Send() =>
@@ -165,17 +163,32 @@ using System.Text.Json;
     //await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", "{'message': '" + message + "'}");
     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(message));
 
+    public async Task SendAnswers(List<string> answers) =>
+    //await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", "{'message': '" + message + "'}");
+    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(answers));
+
     public async Task AddToGroup()
     {
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
+        {
+            options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
+        })
+        .Build();
+        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
+        {
+            quotes.Add(IncomingQuote);
+            StateHasChanged();
+        });
         hubConnection.On<Quote>(dynamicGroup, (message) =>
         {
             messages.Add(message);//Replace later with a message model
-        StateHasChanged();
+            StateHasChanged();
         });
 
+        await hubConnection.StartAsync();
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
     }
-
 
     public bool IsConnected =>
     hubConnection.State == HubConnectionState.Connected;

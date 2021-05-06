@@ -103,8 +103,8 @@ using MatchFlix_Frontend.Models;
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/test")]
-    public partial class Test : Microsoft.AspNetCore.Components.ComponentBase
+    [Microsoft.AspNetCore.Components.RouteAttribute("/cat")]
+    public partial class Cat : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
@@ -112,35 +112,21 @@ using MatchFlix_Frontend.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 195 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+#line 291 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
        
-    private ShowDTO[] dataSet;
-
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            return JS.InvokeVoidAsync("initCards").AsTask(); //Gets the cards
+            return JS.InvokeVoidAsync("cat.init").AsTask();
         }
-            JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
+
         return Task.CompletedTask;
     }
-    protected override async Task OnInitializedAsync()
-    {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
-
-    }
-
-    async Task LoadAsync()
-    {
-        await JS.InvokeVoidAsync("initCards");
-    }
-
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JS { get; set; }
     }
 }
