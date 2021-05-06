@@ -126,12 +126,11 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 59 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 54 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     private HubConnection hubConnection;
-    private List<Quote> messages = new List<Quote>();
+    private List<ChatMessage> messages = new List<ChatMessage>();
     private List<MatchList> matches = new List<MatchList>();
-    private List<Quote> quotes = new List<Quote>();
 
     //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
     private static readonly string baseURI = "http://localhost:7071/api";
@@ -164,7 +163,7 @@ using System.Text.Json;
     }
 
     public async Task SendToGroup() =>
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send", JsonSerializer.Serialize(message));
+    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
 
     public async Task SendAnswers(List<string> answers) =>
     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
@@ -177,19 +176,53 @@ using System.Text.Json;
             options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
         })
         .Build();
+    await ListenerBuilder(true, false, true);
+    await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
+
+}
+
+public async Task AddToGroup()
+{
+    hubConnection = new HubConnectionBuilder()
+    .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
+    {
+        options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
+    })
+    .Build();
+    await ListenerBuilder(false, true, true);
+    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
+}
+
+
+public async Task ListenerBuilder(bool host, bool chat, bool answers)
+{
+    if (host)
+    {
+        chat = false; //Makes sure to disable extra chat listener if forgotten in config.
         hubConnection.On<string>("incomingHost", (incomingHost) =>
         {
-            hubConnection.On<Quote>(incomingHost, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
+            hubConnection.On<ChatMessage>(incomingHost, (message) =>
             {
-                messages.Add(message);//TODO: Replace later with a message model
+                messages.Add(message);
                 StateHasChanged();
             });
             dynamicGroup = incomingHost;
             StateHasChanged();
         });
-        hubConnection.On<MatchList>("incomingList", (incomingList) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
+    }
+    if (chat)
+    {
+        hubConnection.On<ChatMessage>(dynamicGroup, (message) =>
         {
-            matches.Add(incomingList);//TODO: Replace later with a message model
+            messages.Add(message);
+            StateHasChanged();
+        });
+    }
+    if (answers)
+    {
+        hubConnection.On<MatchList>("incomingList", (incomingList) =>
+        {
+            matches.Add(incomingList);
             ParseAnswer(incomingList.MatchResults);
             if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
             {
@@ -197,84 +230,44 @@ using System.Text.Json;
             }
             StateHasChanged();
         });
-
-        await hubConnection.StartAsync();
-        await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
-
     }
+    await hubConnection.StartAsync();
+}
 
-    public async Task AddToGroup()
+public void ParseAnswer(string messageBody)
+{
+    List<string> answers = JsonSerializer.Deserialize<List<string>>(messageBody);
+    foreach (var item in answers)
     {
-        hubConnection = new HubConnectionBuilder()
-        .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
-        {
-            options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
-        })
-        .Build();
-        hubConnection.On<Quote>("incomingQuote", (IncomingQuote) =>
-        {
-            quotes.Add(IncomingQuote);
-            StateHasChanged();
-        });
-        hubConnection.On<MatchList>("incomingList", (incomingList) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
-        {
-            matches.Add(incomingList);//TODO: Replace later with a message model
-            ParseAnswer(incomingList.MatchResults);
-            if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
-            {
-                CalculateResults();
-            }
-            StateHasChanged();
-        });
-        hubConnection.On<Quote>(dynamicGroup, (message) => //PROBLEM = ENTRIES GET ADDED AS 1 NOT PER ANSWER, SHOULD DESERIALIZE THE STRING
-        {
-            messages.Add(message);//TODO: Replace later with a message model
-            StateHasChanged();
-        });
+        allAnswers.Add(item);
+    }
+}
 
-        await hubConnection.StartAsync();
-        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
-    }
-    public void ParseAnswer(string messageBody) //Parse
+public void CalculateResults()
+{
+    for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
     {
-        List<string> answers = JsonSerializer.Deserialize<List<string>>(messageBody);
-        foreach (var item in answers)
-        {
-            allAnswers.Add(item);
-        }
+        int halfpoint = 20 / 2;
+        CompareTwoAnswers(allAnswers[answerCount], allAnswers[halfpoint + answerCount]);
     }
+}
 
-    public void CalculateResults()
+public void CompareTwoAnswers(string userOne, string userTwo)
+{
+    if (userOne == "yes" && userTwo == "yes")
     {
-        for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
-        {
-            int halfpoint = 20 / 2;
-            //TODO: Use a dictionary with K/V = UserName/List<string>myAnswers
-            CompareTwoAnswers(allAnswers[answerCount], allAnswers[halfpoint + answerCount]);
-        }
+        comparedList.Add("yes");
     }
+    else { comparedList.Add("no"); }
+}
 
-    public void CompareTwoAnswers(string userOne, string userTwo)
-    {
-        if (userOne == "yes" && userTwo == "yes")
-        {
-            comparedList.Add("yes");
-        }
-        else { comparedList.Add("no"); }
-    }
+public bool IsConnected =>
+hubConnection.State == HubConnectionState.Connected;
 
-    public bool IsConnected =>
-    hubConnection.State == HubConnectionState.Connected;
-
-    public async ValueTask DisposeAsync()
-    {
-        await hubConnection.DisposeAsync();
-    }
-    public class Quote
-    {
-        public string author { get; set; }
-        public string body { get; set; }
-    }
+public async ValueTask DisposeAsync()
+{
+    await hubConnection.DisposeAsync();
+}
 
 #line default
 #line hidden
