@@ -126,7 +126,7 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 54 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 62 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     private HubConnection hubConnection;
     private List<ChatMessage> messages = new List<ChatMessage>();
@@ -144,15 +144,13 @@ using System.Text.Json;
     private List<string> allAnswers = new List<string>();
     private List<string> comparedList = new List<string>();
     private List<string> myAnswers = new List<string>();
+    private List<string> allUsers = new List<string>();
 
 
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
-            {
-                options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
-            })
+            .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"))
             .Build();
     }
 
@@ -170,104 +168,115 @@ using System.Text.Json;
 
     public async Task HostGroup()
     {
+        await ListenerBuilder(true, false, true, true);
+        await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
+
+    }
+
+    public async Task JoinGroup()
+    {
+        await ListenerBuilder(false, true, true, true);
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updatehost", dynamicUserId);
+    }
+
+
+    public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo)
+    {
         hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
         {
             options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
         })
         .Build();
-    await ListenerBuilder(true, false, true);
-    await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
-
-}
-
-public async Task AddToGroup()
-{
-    hubConnection = new HubConnectionBuilder()
-    .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
-    {
-        options.Headers.Add("x-ms-signalr-userid", $"{dynamicUserId}");
-    })
-    .Build();
-    await ListenerBuilder(false, true, true);
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
-}
-
-
-public async Task ListenerBuilder(bool host, bool chat, bool answers)
-{
-    if (host)
-    {
-        chat = false; //Makes sure to disable extra chat listener if forgotten in config.
-        hubConnection.On<string>("incomingHost", (incomingHost) =>
+        if (host) //Host has some special configurations regarding listeners since the host is the first one to join a room.
         {
-            hubConnection.On<ChatMessage>(incomingHost, (message) =>
+            chat = false; //Makes sure to disable extra chat listener if forgotten in config.
+            usersInfo = false;
+            allUsers.Add(dynamicUserId);
+            hubConnection.On<string>("incomingHost", (incomingHost) =>
+            {
+                hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
+                {
+                    messages.Add(message); //Make it special list message or somethgin color idk
+                allUsers.Add(message.UserName);
+                    message.UsersList = allUsers;
+                    StateHasChanged();
+                    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updategroup", JsonSerializer.Serialize(message));
+                });
+                hubConnection.On<ChatMessage>(incomingHost, (message) =>
+                {
+                    messages.Add(message);
+                    StateHasChanged();
+                });
+                dynamicGroup = incomingHost;
+                StateHasChanged();
+            });
+        }
+        if (chat)
+        {
+            hubConnection.On<ChatMessage>(dynamicGroup, (message) =>
             {
                 messages.Add(message);
                 StateHasChanged();
             });
-            dynamicGroup = incomingHost;
-            StateHasChanged();
-        });
-    }
-    if (chat)
-    {
-        hubConnection.On<ChatMessage>(dynamicGroup, (message) =>
+        }
+        if (answers)
         {
-            messages.Add(message);
-            StateHasChanged();
-        });
-    }
-    if (answers)
-    {
-        hubConnection.On<MatchList>("incomingList", (incomingList) =>
-        {
-            matches.Add(incomingList);
-            ParseAnswer(incomingList.MatchResults);
-            if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
+            hubConnection.On<MatchList>("incomingList", (incomingList) =>
             {
-                CalculateResults();
-            }
+                matches.Add(incomingList);
+                ParseAnswer(incomingList.MatchResults);
+                if (allAnswers.Count == 20) //Replace with (amount * connected users in group) for user support
+            {
+                    CalculateResults();
+                }
+                StateHasChanged();
+            });
+        }
+        if (usersInfo)
+        {
+            hubConnection.On<ChatMessage>("incomingUser", (message) =>
+            {
+                messages.Add(message); //Takes latest user and funny entrance, Make it special list message or somethgin color idk
+
+            allUsers = message.UsersList; //latest user from server.
             StateHasChanged();
-        });
+            });
+        }
+        await hubConnection.StartAsync();
     }
-    await hubConnection.StartAsync();
-}
 
-public void ParseAnswer(string messageBody)
-{
-    List<string> answers = JsonSerializer.Deserialize<List<string>>(messageBody);
-    foreach (var item in answers)
+    public void ParseAnswer(string messageBody)
     {
-        allAnswers.Add(item);
+        List<string> answers = JsonSerializer.Deserialize<List<string>>(messageBody);
+        foreach (var item in answers)
+        {
+            allAnswers.Add(item);
+        }
     }
-}
 
-public void CalculateResults()
-{
-    for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
+    public void CalculateResults()
     {
-        int halfpoint = 20 / 2;
-        CompareTwoAnswers(allAnswers[answerCount], allAnswers[halfpoint + answerCount]);
-    }
-}
+        for (int answerCount = 0; answerCount < (20 / 2); answerCount++) //Replace with (amount * connected users in group) for user support
+        {
+            int halfpoint = 20 / 2;
 
-public void CompareTwoAnswers(string userOne, string userTwo)
-{
-    if (userOne == "yes" && userTwo == "yes")
+            if (allAnswers[answerCount] == "yes" && allAnswers[halfpoint + answerCount] == "yes")
+            {
+                comparedList.Add("yes");
+            }
+            else { comparedList.Add("no"); }
+        }
+    }
+
+    public bool IsConnected =>
+    hubConnection.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
     {
-        comparedList.Add("yes");
+        await hubConnection.DisposeAsync();
     }
-    else { comparedList.Add("no"); }
-}
-
-public bool IsConnected =>
-hubConnection.State == HubConnectionState.Connected;
-
-public async ValueTask DisposeAsync()
-{
-    await hubConnection.DisposeAsync();
-}
 
 #line default
 #line hidden
