@@ -126,7 +126,7 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 83 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 100 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     [Parameter]
     public IReadOnlyList<ShowDTO> ShowList { get; set; }
@@ -176,7 +176,6 @@ using System.Text.Json;
     {
         await ListenerBuilder(true, false, true, true);
         await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
-
     }
 
     public async Task JoinGroup()
@@ -186,7 +185,7 @@ using System.Text.Json;
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updatehost", dynamicUserId);
     }
 
-
+    //TODO: Host should send a message containing the list of shows that will be swiped to every user when start button is clicked.
     public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo)
     {
         hubConnection = new HubConnectionBuilder()
@@ -303,6 +302,92 @@ using System.Text.Json;
     {
         await hubConnection.DisposeAsync();
     }
+
+    //Current users dropdown menu
+    private RenderFragment _overlayMenu =>
+
+#line default
+#line hidden
+#nullable disable
+        (__builder2) => {
+            __builder2.OpenElement(0, "Menu");
+            __builder2.AddMarkupContent(1, "\r\n");
+#nullable restore
+#line 278 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+         foreach (var user in allUsers)
+        {
+
+#line default
+#line hidden
+#nullable disable
+            __builder2.AddContent(2, "            ");
+            __builder2.OpenElement(3, "MenuItem");
+            __builder2.OpenElement(4, "a");
+            __builder2.AddAttribute(5, "style", "color:#6D5AB3;");
+            __builder2.AddContent(6, 
+#nullable restore
+#line 280 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                                                 user.ToString()
+
+#line default
+#line hidden
+#nullable disable
+            );
+            __builder2.CloseElement();
+            __builder2.CloseElement();
+            __builder2.AddMarkupContent(7, "\r\n");
+#nullable restore
+#line 281 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+        }
+
+#line default
+#line hidden
+#nullable disable
+            __builder2.AddContent(8, "    ");
+            __builder2.CloseElement();
+        }
+#nullable restore
+#line 282 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+           ;
+
+    private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
+     {
+         return 
+
+#line default
+#line hidden
+#nullable disable
+        (__builder2) => {
+            __builder2.OpenElement(9, "Template");
+            __builder2.AddMarkupContent(10, "\r\n    ");
+            __builder2.OpenElement(11, "span");
+            __builder2.AddContent(12, 
+#nullable restore
+#line 287 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+           leftButton
+
+#line default
+#line hidden
+#nullable disable
+            );
+            __builder2.CloseElement();
+            __builder2.AddMarkupContent(13, "\r\n    ");
+            __builder2.AddContent(14, 
+#nullable restore
+#line 288 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+     rightButton
+
+#line default
+#line hidden
+#nullable disable
+            );
+            __builder2.AddMarkupContent(15, " \r\n");
+            __builder2.CloseElement();
+        }
+#nullable restore
+#line 289 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+           ;
+}
 
 #line default
 #line hidden

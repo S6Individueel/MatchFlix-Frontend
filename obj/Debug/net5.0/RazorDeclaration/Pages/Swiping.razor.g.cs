@@ -133,27 +133,41 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 49 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
        
 
 
     private Socket mySocket;
 
     private string selectedData = "";
+    private bool animeCheck;
+    private bool movieCheck;
 
     private List<string> myAnswers = new List<string>();
 
-    private ShowDTO[] dataSet;
+    private List<ShowDTO> dataSet;
 
     private readonly string baseApiUri = "https://localhost:5021";
-
-    protected override async Task OnInitializedAsync() =>
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/topanime");
 
     public async Task LoadData(string dataURL, string _selectedData)
     {
         selectedData = _selectedData;
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/{dataURL}");
+        dataSet = await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/{dataURL}");
+    }
+
+    public async Task LoadSelectedData()
+    {
+        Console.WriteLine("Enter");
+        if (animeCheck)
+        {
+            Console.WriteLine("Anime Check");
+            dataSet.AddRange(await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/topanime"));
+        }
+        if (movieCheck)
+        {
+            Console.WriteLine("MovieCheck");
+            dataSet.AddRange(await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/topmovie"));
+        }
     }
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;

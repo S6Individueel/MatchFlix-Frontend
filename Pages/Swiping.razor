@@ -8,12 +8,10 @@
 
 <Socket @ref="mySocket" ShowList="dataSet"></Socket>
 
-<Animate Animation="Animations.ZoomIn" Duration="TimeSpan.FromSeconds(1.5)" IsManual="false">
-    <h1>Swipe.</h1>
-</Animate>
 <h2>Selected trend: @selectedData</h2>
 <Button Type="primary" @onclick="@(() => LoadData("topanime", "Anime"))">Anime</Button>
 <Button Type="primary" @onclick="@(() => LoadData("topmovie", "Movies"))">Movies</Button>
+
 
 <Button OnClick="ShowAnswers">Show Answers</Button>
 <Button OnClick="SendAnswers">Send Answers</Button>
@@ -26,7 +24,6 @@
                   Title="Card title"
                   Description="This is the description" />
     </Card>
-
 }
 else
 {
@@ -52,20 +49,34 @@ else
     private Socket mySocket;
 
     private string selectedData = "";
+    private bool animeCheck;
+    private bool movieCheck;
 
     private List<string> myAnswers = new List<string>();
 
-    private ShowDTO[] dataSet;
+    private List<ShowDTO> dataSet;
 
     private readonly string baseApiUri = "https://localhost:5021";
-
-    protected override async Task OnInitializedAsync() =>
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/topanime");
 
     public async Task LoadData(string dataURL, string _selectedData)
     {
         selectedData = _selectedData;
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>($"{baseApiUri}/{dataURL}");
+        dataSet = await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/{dataURL}");
+    }
+
+    public async Task LoadSelectedData()
+    {
+        Console.WriteLine("Enter");
+        if (animeCheck)
+        {
+            Console.WriteLine("Anime Check");
+            dataSet.AddRange(await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/topanime"));
+        }
+        if (movieCheck)
+        {
+            Console.WriteLine("MovieCheck");
+            dataSet.AddRange(await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/topmovie"));
+        }
     }
 
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;

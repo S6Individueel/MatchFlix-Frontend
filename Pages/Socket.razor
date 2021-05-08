@@ -6,78 +6,95 @@
 @using System.Text.Json
 
 <h1> @hubConnection.State</h1>
-<div class="form-group">
-    <label>
-        User:
-        <input @bind="dynamicUserId" />
-        Current: @dynamicUserId
-    </label>
-</div>
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="message" size="50" />
-    </label>
-    <label>
-        Group:
-        <input @bind="dynamicGroup" size="50" />
-        Current: @dynamicGroup
-    </label>
-</div>
+<div class="swipingPage">
 
+    <div class="settings">
+        <div class="inputGroup">
+            <Input Size="@InputSize.Large" Placeholder="Username" @bind-Value="@dynamicUserId"><Prefix><Icon Type="user" /></Prefix></Input>
+            <Input Size="@InputSize.Large" Placeholder="Room pin" @bind-Value="@dynamicGroup"><Prefix><Icon Type="usergroup-add" /></Prefix></Input>
+        </div>
+        <div class="buttonGroup">
 
-<button @onclick="SendToGroup">Send Chat</button>
-<button @onclick="JoinGroup">Join Group</button>
-<button @onclick="HostGroup">Host Group</button>
-<button @onclick="ToggleChat">@toggleText Chat</button>
+            <Button @onclick="JoinGroup" Type="primary">Join Group</Button>
+            <Button @onclick="HostGroup" Type="primary">Host Group</Button>
+            <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
 
-<h2>Compared list:</h2>
-<h3>AllAnswers: @allAnswers.Count</h3>
-<h3>ComparedList: @comparedList.Count</h3>
-@foreach (var answer in comparedList) //Should have access to dataSet in order to show the completed list.
-{
-    <li>@answer.ToString()</li>
-}
-@if (isChat)
-{
+            <Button Type="primary">Start</Button>
+        </div>
+    </div>
 
-    <h2>Current Users: @allUsers.Count</h2>
-    <ul id="userList">
-        @foreach (var user in allUsers)
-        {
-            <li>@user.ToString()</li>
-        }
-    </ul>
-    <h1>Chat</h1>
-    <ul id="messagesList">
-        @foreach (var message in messages)
-        {
-            <li>@message.UserName: @message.Content</li>
-        }
-    </ul>
-}
-@if (endList == null)
-{
-    <Spin />
-}
-else
-{
-
-    @foreach (ShowDTO endShow in endList)
+    @if (isChat)
     {
-        <div class="card" style="width: 18rem; margin: 2em">
-            <img class="card-img-top" src="@endShow.Image_url" alt="Card image cap">
-
-            <div class="card-body">
-                <h5 class="card-title">@endShow.Title</h5>
-                <p class="card-text">@endShow.Description</p>
+        <div class="chatComponent">
+            <div class="chatView">
+                <div class="chatMessageContainer">
+                    <div class="userList">
+                        <DropdownButton Icon="user">
+                            <Overlay>
+                                @_overlayMenu
+                            </Overlay>
+                            <ChildContent>
+                                @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
+                            </ChildContent>
+                        </DropdownButton>
+                    </div>
+                    <ul id="messagesList">
+                        @foreach (var message in messages)
+                        {
+                            <li>@message.UserName: @message.Content</li>
+                        }
+                    </ul>
+                </div>
             </div>
-            <p style="color:black">Yes Votes: @endShow.Yes_Count</p>
-            <p style="color:black">No Votes: @endShow.No_Count</p>
+            <div class="sendMessageBar">
+                <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> @*<Icon Type="send" Theme="outline"/>*@
+            </div>
         </div>
     }
-}
 
+
+    @if (!isDone)
+    {
+@*        <div>
+            <Steps Percent="60" Current="1">
+                <Step Title="Finished" Description="This is a description." />
+                <Step Title="In Progress" Description="This is a description." />
+                <Step Title="Waiting" Description="This is a description." />
+            </Steps>
+        </div>*@
+    }
+    else
+    {
+        @foreach (var answer in comparedList)
+        {
+            <li>@answer.ToString()</li>
+        }
+    }
+
+
+
+    @if (endList == null)
+    {
+        <Spin />
+    }
+    else
+    {
+        @foreach (ShowDTO endShow in endList)
+        {
+            <div class="card" style="width: 18rem; margin: 2em">
+                <img class="card-img-top" src="@endShow.Image_url" alt="Card image cap">
+
+                <div class="card-body">
+                    <h5 class="card-title">@endShow.Title</h5>
+                    <p class="card-text">@endShow.Description</p>
+                </div>
+                <p style="color:black">Yes Votes: @endShow.Yes_Count</p>
+                <p style="color:black">No Votes: @endShow.No_Count</p>
+            </div>
+        }
+    }
+
+</div>
 
 
 @code {
@@ -129,7 +146,6 @@ else
     {
         await ListenerBuilder(true, false, true, true);
         await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
-
     }
 
     public async Task JoinGroup()
@@ -139,7 +155,7 @@ else
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updatehost", dynamicUserId);
     }
 
-
+    //TODO: Host should send a message containing the list of shows that will be swiped to every user when start button is clicked.
     public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo)
     {
         hubConnection = new HubConnectionBuilder()
@@ -256,4 +272,20 @@ else
     {
         await hubConnection.DisposeAsync();
     }
+
+    //Current users dropdown menu
+    private RenderFragment _overlayMenu =>@<Menu>
+        @foreach (var user in allUsers)
+        {
+            <MenuItem><a style="color:#6D5AB3;">@user.ToString()</a></MenuItem>
+        }
+    </Menu>;
+
+    private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
+     {
+         return @<Template>
+    <span>@leftButton</span>
+    @rightButton 
+</Template>;
+}
 }

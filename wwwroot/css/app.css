@@ -157,11 +157,7 @@ a, .btn-link {
     color: grey;
 }
 
-.ant-btn:focus, .ant-btn:hover { /*Overrides Antdesign CSS, currently can't do it from centralized place*/
-    color: #b37feb !important;
-    background: #fff;
-    border-color: #b37feb !important;
-}
+
 
 .loader,
 .loader:before,
@@ -241,22 +237,50 @@ a, .btn-link {
     }
 }
 
-.ant-spin-dot-item{
-    background-color: #b37feb !important;
+/*ANTDESIGN*/
+.ant-btn:focus, .ant-btn:hover { /*Overrides Antdesign CSS, currently can't do it from centralized place*/
+    color: #b37feb !important;
+    background: #fff;
+    border-color: #b37feb !important;
 }
 
-.navbar {
-    color: rgb(255, 255, 255);
-    text-shadow: rgb(0 0 0) 1px 1px 1px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 17px;
-    position: absolute;
-    z-index: 11;
-    display: flex;
-    justify-content: flex-end;
-    width: 98vw;
+.ant-switch {
+    width: 100px;
 }
+.ant-switch-checked {
+    background-color: #6D5AB3 !important;
+}
+
+.ant-spin-dot-item {
+    background-color: #b37feb !important;
+}
+.ant-input-search .ant-input:focus, .ant-input-search .ant-input:hover{
+    border-color: #b37feb !important;
+}
+.ant-input-focused, .ant-input:focus {
+    box-shadow: 0 0 0 2px rgba(179, 127, 235, .2) !important;
+}
+
+.ant-input-affix-wrapper-focused, .ant-input-affix-wrapper:focus {
+    border-color: #b37feb !important;
+    box-shadow: 0 0 0 2px rgba(179, 127, 235, .2) !important;
+}
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+    border-color: #b37feb !important;
+}
+
+    .navbar {
+        color: rgb(255, 255, 255);
+        text-shadow: rgb(0 0 0) 1px 1px 1px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 17px;
+        position: absolute;
+        z-index: 11;
+        display: flex;
+        justify-content: flex-end;
+        width: 98vw;
+    }
 
 .navbar a {
     margin: 5px;
@@ -290,9 +314,6 @@ a, .btn-link {
     color: white;
 }
 
-.ant-input-group-wrapper {
-    width: 35vw !important;
-}
 .ant-btn-primary {
     background: #6D5AB3 !important;
     border-color: #6D5AB3 !important;
@@ -310,4 +331,72 @@ a, .btn-link {
 .card-text {
     color: black;
 }
-/*TestPage Tinder swipe*/
+/*ChatRoom*/
+.swipingPage{
+    display:flex;
+    align-items: center;
+    flex-direction:row;
+    justify-content:space-around;
+    width:100vw;
+}
+
+.chatComponent {
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    background-color: white;
+    width: 60vw;
+}
+
+.chatView {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    background-color: rgba(246, 246, 246, 0.50);
+    width: 100%;
+    min-height: 50vh;
+}
+.chatMessageContainer{
+    width:100%;
+}
+.sendMessageBar{
+    width:100%;
+}
+.userList {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
+}
+/*Send Chat button*/
+.ant-input-search > .ant-input-group > .ant-input-group-addon:last-child {
+    left: -1px !important;
+}
+/*room settings*/
+.settings {
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:space-around;
+    width: 25vw;
+    min-height: 50vh;
+}
+
+.inputGroup {
+    width:80%;
+}
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+}
+
+.buttonGroup .ant-btn-primary{
+    margin:1% ;
+}
+
+.settings .ant-btn-primary {
+    width: 80%;
+}

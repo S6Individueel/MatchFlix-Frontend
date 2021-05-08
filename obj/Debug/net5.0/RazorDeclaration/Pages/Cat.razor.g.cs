@@ -103,7 +103,6 @@ using MatchFlix_Frontend.Models;
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/cat")]
     public partial class Cat : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -111,23 +110,6 @@ using MatchFlix_Frontend.Models;
         {
         }
         #pragma warning restore 1998
-#nullable restore
-#line 291 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
-       
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            return JS.InvokeVoidAsync("cat.init").AsTask();
-        }
-
-        return Task.CompletedTask;
-    }
-
-#line default
-#line hidden
-#nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JS { get; set; }
     }
 }
 #pragma warning restore 1591
