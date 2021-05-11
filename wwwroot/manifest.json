@@ -1,0 +1,15 @@
+{
+  "name": "MatchFlix Web App",
+  "short_name": "MatchFlix",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#03173d",
+  "icons": [
+    {
+      "src": "watching-tv-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
