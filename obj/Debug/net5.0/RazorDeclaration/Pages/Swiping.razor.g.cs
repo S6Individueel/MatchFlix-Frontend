@@ -62,13 +62,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Http;
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using Microsoft.JSInterop;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
 #line 9 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
 using MatchFlix_Frontend;
 
@@ -124,6 +117,13 @@ using System.Text.Json;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 7 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+using Microsoft.JSInterop;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/uxswipe")]
     public partial class Swiping : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -133,12 +133,20 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 49 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 60 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
       
-    private string cursorGrab;
+    List<string> collection = new List<string>(){"One","Two", "Three" };
 
+    void Delete()
+    {
+        collection.RemoveAt(0);
+        StateHasChanged();
+    }
+
+    private string cursorGrab;
     ((double, double) tupleMouse, DateTime StartTime) mousePoint;
     bool pressedDown;
+
     void HandleMouseDown(MouseEventArgs m)
     {
         cursorGrab = "-webkit-grabbing;";
@@ -203,7 +211,7 @@ using System.Text.Json;
 #line hidden
 #nullable disable
 #nullable restore
-#line 116 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 135 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
        
     string mvmt;
     string rotation;
@@ -301,6 +309,7 @@ using System.Text.Json;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }

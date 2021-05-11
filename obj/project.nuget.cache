@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sr+rkd0W3PHyIwVWY98yRj+uI82lnP/89PSoQKqyD875LvEX/jvZ8jw/wKK7Rjs8PDVz8/cwrEIqTZ9n94dqSQ==",
+  "dgSpecHash": "rq9OgiJ1S7lNVO0fuGWck4lvhqZ/Nzw6TP94DgCxYRcMAwujMes2TpVMCA+m7YpFWoN8W3bSRKYLh9H3K3XdfA==",
   "success": true,
   "projectFilePath": "C:\\Users\\ander\\Desktop\\frontend\\MatchFlix-Frontend\\MatchFlix-Frontend.csproj",
   "expectedPackageFiles": [
@@ -136,7 +136,7 @@
     "C:\\Users\\ander\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\ander\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\ander\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\ander\\.nuget\\packages\\microsoft.netcore.app.runtime.browser-wasm\\5.0.4\\microsoft.netcore.app.runtime.browser-wasm.5.0.4.nupkg.sha512"
+    "C:\\Users\\ander\\.nuget\\packages\\microsoft.netcore.app.runtime.browser-wasm\\5.0.3\\microsoft.netcore.app.runtime.browser-wasm.5.0.3.nupkg.sha512"
   ],
   "logs": []
 }

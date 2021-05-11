@@ -162,7 +162,8 @@
 
     @if (isSwiping)
     {
-<div class="isSwiping">
+<div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
+     @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
     @if (dataSet == null)
     {
         <Card Loading="true" Style="width: 300px; margin-top: 16px">
@@ -173,20 +174,26 @@
     }
     else
     {
-        @foreach (var show in dataSet)
+        @for (int i = 0; i < dataSet.Count; i++)
         {
-            <div class="card" style="width: 18rem; margin: 2em" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
-                <img class="card-img-top" src="@show.Image_url" alt="Card image cap">
+            if (i == 0)
+            {
+                <div style="display:flex;justify-content:center;">
+                    <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
 
-                <div class="card-body">
-                    <h5 class="card-title">@show.Title</h5>
-                    <p class="card-text">@show.Description</p>
-                    <div class="card-vote-choice">
-                        <Button @onclick="() => ChooseLeft(show.Id)">Yes</Button>
-                        <Button @onclick="() => ChooseLeft(show.Id)">No</Button>
+                        <img class="card-img-top" src="@dataSet[0].Image_url" alt="Card image cap">
+
+
+                        <div class="card-body">
+                            <h5 class="card-title">@dataSet[0].Title</h5>
+                            <p class="card-text">@dataSet[0].Description</p>
+                            <Button @onclick="() => ChooseLeft(dataSet[0].Id)">Yes</Button>
+                            <Button @onclick="() => ChooseRight(dataSet[0].Id)">No</Button>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            }
         }
     }
 
@@ -202,10 +209,85 @@
             <Button @onclick="@(() => SendAnswers(myAnswers))" Type="primary">Finish!</Button>
         </div>
     }
-    
-</div>
+
+    </div>
     }
 </div>
+
+@code {
+    string mvmt;
+    string rotation;
+
+    string mvmtReset = "";
+    string rotationReset = "";
+
+    private bool animeCheck;
+    private bool movieCheck;
+    private string cursorGrab;
+    ((double, double) tupleMouse, DateTime StartTime) mousePoint;
+    bool pressedDown;
+
+    void HandleMouseDown(MouseEventArgs m)
+    {
+        cursorGrab = "-webkit-grabbing;";
+        pressedDown = true;
+        (double, double) pos = (m.ClientX, m.ClientY);
+        mousePoint.StartTime = DateTime.Now;
+        mousePoint.tupleMouse = pos;
+    }
+
+    void HandleMouseMove(MouseEventArgs m)
+    {
+        if (pressedDown == true)
+        {
+            mvmtReset = "";
+            double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+            mvmt = difference + "px";
+            rotation = (difference / 10) + "deg";
+        }
+    }
+
+    void HandleMouseUp(MouseEventArgs m)
+    {
+        pressedDown = false;
+        cursorGrab = "";
+        mvmt = "";
+        mvmtReset = "transform 0.5s";
+        const double swipeThreshold = 0.8;
+        try
+        {
+            if (mousePoint.Equals(default))
+            {
+                return;
+            }
+
+
+            var diffX = mousePoint.tupleMouse.Item1 - m.ClientX;
+            var diffY = mousePoint.tupleMouse.Item2 - m.ClientY;
+            var diffTime = DateTime.Now - mousePoint.StartTime;
+            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+            if (Math.Abs(velocityX - velocityY) < .5) return;
+
+            if (velocityX >= swipeThreshold)
+            {
+                if (diffX < 0)
+                { ChooseRight(dataSet[0].Id); }
+                else { ChooseLeft(dataSet[0].Id); }
+            }
+        }
+
+        catch (Exception e)
+        {
+            message = e.Message;
+        }
+    }
+}
+
+
+
 @code {
     #region Swiping
     private List<ShowDTO> dataSet;
@@ -223,10 +305,23 @@
     {
         startPoint.ReferencePoint = t.TargetTouches[0];
         startPoint.StartTime = DateTime.Now;
+        cursorGrab = "-webkit-grabbing;";
     }
+
+    void HandleTouchMove(TouchEventArgs t) //A list of TouchPoint for every point of contact currently touching the surface.
+    {
+        mvmtReset = "";
+        double difference = t.TargetTouches[0].ClientX - startPoint.ReferencePoint.ClientX;
+        mvmt = difference + "px";
+        rotation = (difference / 10) + "deg";
+    }
+
 
     void HandleTouchEnd(TouchEventArgs t)
     {
+        mvmt = "";
+        mvmtReset = "transform 0.5s";
+        cursorGrab = "";
         const double swipeThreshold = 0.8;
         try
         {
@@ -243,21 +338,20 @@
             var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
             var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
 
-
             if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
             if (Math.Abs(velocityX - velocityY) < .5) return;
 
             if (velocityX >= swipeThreshold)
             {
                 if (diffX < 0)
-                { ChooseRight(dataSet[0].Id); } //Quick fix, when displaying it should be the first one always.
+                { ChooseRight(dataSet[0].Id); }
                 else { ChooseLeft(dataSet[0].Id); }
             }
         }
 
         catch (Exception e)
         {
-            swipingMessage = e.Message;
+            message = e.Message;
         }
     }
 
@@ -335,12 +429,12 @@
 
     void ToSwiping()
     {
-@*        NavigationManager.NavigateTo("swiping");
+        NavigationManager.NavigateTo("/");
         InvokeAsync(() =>
         {
-            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            uriHelper.NavigateTo(uriHelper.Uri);
 
-        });*@
+        });
     }
 
     private void ToggleChat()

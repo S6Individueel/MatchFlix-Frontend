@@ -126,7 +126,83 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 209 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 217 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+       
+    string mvmt;
+    string rotation;
+
+    string mvmtReset = "";
+    string rotationReset = "";
+
+    private bool animeCheck;
+    private bool movieCheck;
+    private string cursorGrab;
+    ((double, double) tupleMouse, DateTime StartTime) mousePoint;
+    bool pressedDown;
+
+    void HandleMouseDown(MouseEventArgs m)
+    {
+        cursorGrab = "-webkit-grabbing;";
+        pressedDown = true;
+        (double, double) pos = (m.ClientX, m.ClientY);
+        mousePoint.StartTime = DateTime.Now;
+        mousePoint.tupleMouse = pos;
+    }
+
+    void HandleMouseMove(MouseEventArgs m)
+    {
+        if (pressedDown == true)
+        {
+            mvmtReset = "";
+            double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+            mvmt = difference + "px";
+            rotation = (difference / 10) + "deg";
+        }
+    }
+
+    void HandleMouseUp(MouseEventArgs m)
+    {
+        pressedDown = false;
+        cursorGrab = "";
+        mvmt = "";
+        mvmtReset = "transform 0.5s";
+        const double swipeThreshold = 0.8;
+        try
+        {
+            if (mousePoint.Equals(default))
+            {
+                return;
+            }
+
+
+            var diffX = mousePoint.tupleMouse.Item1 - m.ClientX;
+            var diffY = mousePoint.tupleMouse.Item2 - m.ClientY;
+            var diffTime = DateTime.Now - mousePoint.StartTime;
+            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+            if (Math.Abs(velocityX - velocityY) < .5) return;
+
+            if (velocityX >= swipeThreshold)
+            {
+                if (diffX < 0)
+                { ChooseRight(dataSet[0].Id); }
+                else { ChooseLeft(dataSet[0].Id); }
+            }
+        }
+
+        catch (Exception e)
+        {
+            message = e.Message;
+        }
+    }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 291 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     #region Swiping
     private List<ShowDTO> dataSet;
@@ -144,10 +220,23 @@ using System.Text.Json;
     {
         startPoint.ReferencePoint = t.TargetTouches[0];
         startPoint.StartTime = DateTime.Now;
+        cursorGrab = "-webkit-grabbing;";
     }
+
+    void HandleTouchMove(TouchEventArgs t) //A list of TouchPoint for every point of contact currently touching the surface.
+    {
+        mvmtReset = "";
+        double difference = t.TargetTouches[0].ClientX - startPoint.ReferencePoint.ClientX;
+        mvmt = difference + "px";
+        rotation = (difference / 10) + "deg";
+    }
+
 
     void HandleTouchEnd(TouchEventArgs t)
     {
+        mvmt = "";
+        mvmtReset = "transform 0.5s";
+        cursorGrab = "";
         const double swipeThreshold = 0.8;
         try
         {
@@ -164,21 +253,20 @@ using System.Text.Json;
             var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
             var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
 
-
             if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
             if (Math.Abs(velocityX - velocityY) < .5) return;
 
             if (velocityX >= swipeThreshold)
             {
                 if (diffX < 0)
-                { ChooseRight(dataSet[0].Id); } //Quick fix, when displaying it should be the first one always.
+                { ChooseRight(dataSet[0].Id); }
                 else { ChooseLeft(dataSet[0].Id); }
             }
         }
 
         catch (Exception e)
         {
-            swipingMessage = e.Message;
+            message = e.Message;
         }
     }
 
@@ -256,13 +344,12 @@ using System.Text.Json;
 
     void ToSwiping()
     {
+        NavigationManager.NavigateTo("/");
+        InvokeAsync(() =>
+        {
+            uriHelper.NavigateTo(uriHelper.Uri);
 
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 343 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
-             
+        });
     }
 
     private void ToggleChat()
@@ -468,7 +555,7 @@ using System.Text.Json;
             __builder2.OpenElement(0, "Menu");
             __builder2.AddMarkupContent(1, "\r\n");
 #nullable restore
-#line 541 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 635 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
          foreach (var user in allUsers)
         {
 
@@ -481,7 +568,7 @@ using System.Text.Json;
             __builder2.AddAttribute(5, "style", "color:#6D5AB3;");
             __builder2.AddContent(6, 
 #nullable restore
-#line 543 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 637 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                                                  user.ToString()
 
 #line default
@@ -492,7 +579,7 @@ using System.Text.Json;
             __builder2.CloseElement();
             __builder2.AddMarkupContent(7, "\r\n");
 #nullable restore
-#line 544 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 638 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
         }
 
 #line default
@@ -502,7 +589,7 @@ using System.Text.Json;
             __builder2.CloseElement();
         }
 #nullable restore
-#line 545 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 639 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 
 private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
@@ -518,7 +605,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.OpenElement(11, "span");
             __builder2.AddContent(12, 
 #nullable restore
-#line 550 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 644 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            leftButton
 
 #line default
@@ -529,7 +616,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.AddMarkupContent(13, "\r\n    ");
             __builder2.AddContent(14, 
 #nullable restore
-#line 551 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 645 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
      rightButton
 
 #line default
@@ -540,7 +627,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.CloseElement();
         }
 #nullable restore
-#line 552 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 646 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 }
 
@@ -553,7 +640,7 @@ private RenderFragment iconUser =>
             __builder2.AddMarkupContent(16, "<Icon Type=\"user\"></Icon>");
         }
 #nullable restore
-#line 556 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 650 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                      ;
 private RenderFragment iconGroup =>
 
@@ -564,7 +651,7 @@ private RenderFragment iconGroup =>
             __builder2.AddMarkupContent(17, "<Icon Type=\"usergroup-add\"></Icon>");
         }
 #nullable restore
-#line 558 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 652 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                               ;
 
 #line default

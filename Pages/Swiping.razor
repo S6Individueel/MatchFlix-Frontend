@@ -4,53 +4,72 @@
 @using BlazorAnimate
 @inject HttpClient Http
 @using System.Text.Json
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
 
-
-<div @onmouseup="HandleMouseUp">
+<div @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
+     @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove>
 
     <p class="alert alert-info">@message</p>
     <p class="alert alert-info">@pressedDown</p>
 
 
-    <div style="display:flex;justify-content:center;">
-        <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset"
-             @ontouchstart="HandleTouchStart" @onkeypress:preventDefault="true" @ontouchmove="HandleTouchMove" @ontouchend="HandleTouchEnd">
-            <img class="card-img-top" src="https://via.placeholder.com/350x150" alt="Card image cap">
+    @for(int i = 0; i < collection.Count;i++)
+    {
+        if (i == 0)
+        {
+            <div style="display:flex;justify-content:center;">
+                <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
 
-            <div class="card-body">
-                <h5 class="card-title">Placeholder Title</h5>
-                <p class="card-text">Placeholder Description,Placeholder Description, Placeholder Description, Placeholder Description</p>
-                <Button >Yes</Button>
-                <Button>No</Button>
+                    <img class="card-img-top" src="https://via.placeholder.com/350x150" alt="Card image cap">
+
+
+                    <div class="card-body">
+                        <h5 class="card-title">@collection[0]</h5>
+                        <p class="card-text">Placeholder Description,Placeholder Description, Placeholder Description, Placeholder Description</p>
+                        <Button @onclick="Delete">Yes</Button>
+                        <Button>No</Button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        }
+    }
 
-    <div style="display:flex;justify-content:center;">
-        <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab"
-             @ontouchstart="HandleTouchStart" @onkeypress:preventDefault="true" @ontouchmove="HandleTouchMove" @ontouchend="HandleTouchEnd"
-             @onmousedown="HandleMouseDown" @onmousemove="HandleMouseMove" >
+    @*    @for (int i = 0; i < 3; i++)
+        {
 
-            <img class="card-img-top" src="https://via.placeholder.com/350x150" alt="Card image cap">
+            <div style="display:flex;justify-content:center;">
+                <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
+
+                    <img class="card-img-top" src="https://via.placeholder.com/350x150" alt="Card image cap">
 
 
-            <div class="card-body">
-                <h5 class="card-title">Placeholder Title</h5>
-                <p class="card-text">Placeholder Description,Placeholder Description, Placeholder Description, Placeholder Description</p>
-                <Button >Yes</Button>
-                <Button>No</Button>
+                    <div class="card-body">
+                        <h5 class="card-title">Placeholder Title</h5>
+                        <p class="card-text">Placeholder Description,Placeholder Description, Placeholder Description, Placeholder Description</p>
+                        <Button>Yes</Button>
+                        <Button>No</Button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        }*@
 
 </div>
 
 
 @code{
-    private string cursorGrab;
+    List<string> collection = new List<string>(){"One","Two", "Three" };
 
+    void Delete()
+    {
+        collection.RemoveAt(0);
+        StateHasChanged();
+    }
+
+    private string cursorGrab;
     ((double, double) tupleMouse, DateTime StartTime) mousePoint;
     bool pressedDown;
+
     void HandleMouseDown(MouseEventArgs m)
     {
         cursorGrab = "-webkit-grabbing;";
