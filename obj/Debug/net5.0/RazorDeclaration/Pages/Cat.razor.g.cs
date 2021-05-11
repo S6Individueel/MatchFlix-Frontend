@@ -103,6 +103,7 @@ using MatchFlix_Frontend.Models;
 #line default
 #line hidden
 #nullable disable
+    [Microsoft.AspNetCore.Components.RouteAttribute("/swipetest")]
     public partial class Cat : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -110,6 +111,21 @@ using MatchFlix_Frontend.Models;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
+      
+    private List<ShowDTO> endList = new List<ShowDTO>();
+    private bool isHidden { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        endList = await client.GetFromJsonAsync<List<ShowDTO>>("https://localhost:5021/topmovie");
+    }
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient client { get; set; }
     }
 }
 #pragma warning restore 1591

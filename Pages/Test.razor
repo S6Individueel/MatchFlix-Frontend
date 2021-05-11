@@ -2,8 +2,28 @@
 @inject IJSRuntime JS;
 @inject HttpClient Http
 
-<Button OnClick="LoadAsync"> Start</Button>
+<Button OnClick="ReStockCards"> Start</Button>
+<div draggable="true"
+     @ondragend="OnDragEnd" ondragstart="OnDragStart"
+     style="position:absolute; top: @(offsetY)px; left: @(offsetX)px; border-color: black;">
+    <div>your content</div>
+</div>
 
+@code {
+    private double startX, startY, offsetX, offsetY;
+
+    private void OnDragStart(DragEventArgs args)
+    {
+        startX = args.ClientX;
+        startY = args.ClientY;
+    }
+
+    private void OnDragEnd(DragEventArgs args)
+    {
+        offsetX += args.ClientX - startX;
+        offsetY += args.ClientY - startY;
+    }
+}
 <div class="tinder">
     <div class="tinder--status">
         <i class="fa fa-remove"></i>
@@ -22,7 +42,7 @@
         }
         else
         {
-            @for (int i = 0; i < 5; i++)
+            @for (int i = startInt; i < endInt; i++)
             {
                 <div class="tinder--card">
                     <img src="@dataSet[i].Image_url">
@@ -30,14 +50,14 @@
                     <p>@dataSet[i].Description</p>
                 </div>
             }
-@*            @foreach (var show in dataSet)
-            {
-                <div class="tinder--card">
-                    <img src="@show.Image_url">
-                    <h3>@show.Title</h3>
-                    <p>@show.Description</p>
-                </div>
-            }*@
+            @*            @foreach (var show in dataSet)
+                {
+                    <div class="tinder--card">
+                        <img src="@show.Image_url">
+                        <h3>@show.Title</h3>
+                        <p>@show.Description</p>
+                    </div>
+                }*@
         }
 
     </div>
@@ -47,7 +67,34 @@
         <button id="love"><i class="fa fa-heart"></i></button>
     </div>
 </div>
+@code {
+    private ShowDTO[] dataSet;
+    private int startInt = 0;
+    private int endInt = 5;
 
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            return JS.InvokeVoidAsync("initCards").AsTask(); //Gets the cards
+        }
+        JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
+        return Task.CompletedTask;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
+
+    }
+
+    private void ReStockCards()
+    {
+        startInt += 5;
+        endInt += 5;
+        StateHasChanged();
+    }
+
+}
 <style>
     *, *:before, *:after {
         box-sizing: border-box;
@@ -192,27 +239,4 @@
         color: #CDD6DD;
     }
 </style>
-@code {
-    private ShowDTO[] dataSet;
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            return JS.InvokeVoidAsync("initCards").AsTask(); //Gets the cards
-        }
-            JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
-        return Task.CompletedTask;
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
-
-    }
-
-    async Task LoadAsync()
-    {
-        await JS.InvokeVoidAsync("initCards");
-    }
-
-}

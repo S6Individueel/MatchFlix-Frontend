@@ -1,30 +1,132 @@
-﻿@page "/socket"
+﻿@page "/swiping"
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
+@inject NavigationManager uriHelper
 @implements IAsyncDisposable
 @inject HttpClient client
 @using System.Text.Json
+@inject MessageService _message
 
-<h1> @hubConnection.State</h1>
-<div class="swipingPage">
 
-    <div class="settings">
-        <div class="inputGroup">
-            <Input Size="@InputSize.Large" Placeholder="Username" @bind-Value="@dynamicUserId"><Prefix><Icon Type="user" /></Prefix></Input>
-            <Input Size="@InputSize.Large" Placeholder="Room pin" @bind-Value="@dynamicGroup"><Prefix><Icon Type="usergroup-add" /></Prefix></Input>
-        </div>
-        <div class="buttonGroup">
+<div class="swipingContentPage">
 
-            <Button @onclick="JoinGroup" Type="primary">Join Group</Button>
-            <Button @onclick="HostGroup" Type="primary">Host Group</Button>
-            <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
-
-            <Button Type="primary">Start</Button>
-        </div>
-    </div>
-
-    @if (isChat)
+    @if (isPreLoadLobby)
     {
+
+        <div class="swipingPage">
+            <div class="roomInfo">
+                @if (IsConnected && isHost)
+                {
+                    <div class="pageInfo">
+                        <h4>Swipe away @selectedData at room pin: </h4>
+                        <Paragraph Copyable Style="font-size:4em;" Strong>@dynamicGroup</Paragraph>
+                    </div>
+                }
+            </div>
+            <div class="connectGroup">
+                <div class="settings">
+                    <div class="inputGroup">
+                        <Input Size="@InputSize.Large" Placeholder="Username" @bind-Value="@dynamicUserId" Prefix="iconUser" />
+                        <Input Size="@InputSize.Large" Placeholder="Room pin" @bind-Value="@dynamicGroup" Prefix="iconGroup" />
+                    </div>
+                    <div class="buttonGroup">
+                        <div class="optionsButtonGroup">
+                            <Button @onclick="JoinGroup" Type="primary">Join Group</Button>
+                            <Button @onclick="HostGroup" Type="primary">Host Group</Button>
+                            <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
+                            @if (isHost)
+                            {<Button Type="primary" @onclick="ToggleSwiping">Start</Button>}
+                        </div>
+                        @if (isHost)
+                        {
+                    <div class="trendButtonGroup">
+                        <Button Type="default" @onclick="@(() => LoadData("topanime", "Anime"))">Anime</Button> @*https://antblazor.com/en-US/components/tag*@
+                        <Button Type="default" @onclick="@(() => LoadData("topmovie", "Movies"))">Movies</Button>
+                    </div>
+                        }
+                    </div>
+                </div>
+
+            @if (isChat)
+            {
+                <div class="chatComponent">
+                    <div class="chatView">
+                        <div class="chatMessageContainer">
+                            <div class="userList">
+                                <DropdownButton Icon="user">
+                                    <Overlay>
+                                        @_overlayMenu
+                                    </Overlay>
+                                    <ChildContent>
+                                        @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
+                                    </ChildContent>
+                                </DropdownButton>
+                            </div>
+                            <ul id="messagesList">
+                                @foreach (var message in messages)
+                                {
+                                    <li>@message.UserName: @message.Content</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sendMessageBar">
+                        <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> @*<Icon Type="send" Theme="outline"/>*@
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    }
+
+
+
+
+    @if (isDoneSwiping)
+    {
+<div class="doneContent">
+
+    @if (isEndResult)
+    {
+
+        <div class="endListContainer">
+
+                @foreach (ShowDTO endShow in endList)
+                {
+                        <div class="card">
+                            <img class="card-img-top" src="@endShow.Image_url" alt="Card image cap">
+
+                            <div class="card-body">
+                                <h5 class="card-title">@endShow.Title</h5>
+                                <p class="card-text">@endShow.Description</p>
+                            </div>
+                            <div class="endVotes">
+                                <div><Icon Type="check-circle" Theme="fill" Style="color:forestgreen" /> @endShow.Yes_Count</div>
+                                <div><Icon Type="close-circle" Theme="fill" Style="color:red" /> @endShow.No_Count</div>
+                            </div>
+                        </div>
+                }
+        </div>
+            <div>
+                <Button Type="primary" OnClick="ToSwiping"><Icon Type="home" Theme="outline" /></Button>
+            </div>
+
+    }
+    else
+    { 
+    <div class="waitingContent">
+        <div>
+            <Steps>
+                <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
+                <Step Status="process" Title="Swiping" Icon="loading" />
+                <Step Status="wait" Title="Discuss results!" Icon="smile" />
+            </Steps>
+        </div>
+
+        <div style="display:flex;justify-content:center;">
+            <h1>Chat while you're waiting</h1>
+        </div>
+
         <div class="chatComponent">
             <div class="chatView">
                 <div class="chatMessageContainer">
@@ -47,59 +149,155 @@
                 </div>
             </div>
             <div class="sendMessageBar">
-                <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> @*<Icon Type="send" Theme="outline"/>*@
+                <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> 
             </div>
         </div>
-    }
 
 
-    @if (!isDone)
-    {
-@*        <div>
-            <Steps Percent="60" Current="1">
-                <Step Title="Finished" Description="This is a description." />
-                <Step Title="In Progress" Description="This is a description." />
-                <Step Title="Waiting" Description="This is a description." />
-            </Steps>
-        </div>*@
-    }
-    else
-    {
-        @foreach (var answer in comparedList)
-        {
-            <li>@answer.ToString()</li>
+    </div>
         }
+
+</div>
     }
 
-
-
-    @if (endList == null)
+    @if (isSwiping)
     {
-        <Spin />
+<div class="isSwiping">
+    @if (dataSet == null)
+    {
+        <Card Loading="true" Style="width: 300px; margin-top: 16px">
+            <CardMeta Avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                      Title="Card title"
+                      Description="This is the description" />
+        </Card>
     }
     else
     {
-        @foreach (ShowDTO endShow in endList)
+        @foreach (var show in dataSet)
         {
-            <div class="card" style="width: 18rem; margin: 2em">
-                <img class="card-img-top" src="@endShow.Image_url" alt="Card image cap">
+            <div class="card" style="width: 18rem; margin: 2em" @ontouchstart="HandleTouchStart" @ontouchend="HandleTouchEnd" @onkeypress:preventDefault="true">
+                <img class="card-img-top" src="@show.Image_url" alt="Card image cap">
 
                 <div class="card-body">
-                    <h5 class="card-title">@endShow.Title</h5>
-                    <p class="card-text">@endShow.Description</p>
+                    <h5 class="card-title">@show.Title</h5>
+                    <p class="card-text">@show.Description</p>
+                    <div class="card-vote-choice">
+                        <Button @onclick="() => ChooseLeft(show.Id)">Yes</Button>
+                        <Button @onclick="() => ChooseLeft(show.Id)">No</Button>
+                    </div>
                 </div>
-                <p style="color:black">Yes Votes: @endShow.Yes_Count</p>
-                <p style="color:black">No Votes: @endShow.No_Count</p>
             </div>
         }
     }
 
+    @if (dataSet.Count <= 0 && isDoneMessage)
+    {
+        <div class="finishMessage">
+            <h1>You're Done!</h1>
+            <lord-icon src="https://cdn.lordicon.com//lupuorrc.json"
+                       trigger="loop"
+                       colors="primary:#FFFFFF,secondary:#6D5AB3"
+                       style="width:250px;height:250px">
+            </lord-icon>
+            <Button @onclick="@(() => SendAnswers(myAnswers))" Type="primary">Finish!</Button>
+        </div>
+    }
+    
 </div>
-
-
+    }
+</div>
 @code {
-    [Parameter]
-    public IReadOnlyList<ShowDTO> ShowList { get; set; }
+    #region Swiping
+    private List<ShowDTO> dataSet;
+    private List<ShowDTO> swipedSet = new List<ShowDTO>();
+    private int dataCount = 0;
+    private readonly string baseApiUri = "https://localhost:5021";
+    private string selectedData = "";
+
+
+    (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
+
+    string swipingMessage = "touch to begin";
+
+    void HandleTouchStart(TouchEventArgs t)
+    {
+        startPoint.ReferencePoint = t.TargetTouches[0];
+        startPoint.StartTime = DateTime.Now;
+    }
+
+    void HandleTouchEnd(TouchEventArgs t)
+    {
+        const double swipeThreshold = 0.8;
+        try
+        {
+            if (startPoint.ReferencePoint == null)
+            {
+                return;
+            }
+
+            var endReferencePoint = t.ChangedTouches[0];
+
+            var diffX = startPoint.ReferencePoint.ClientX - endReferencePoint.ClientX;
+            var diffY = startPoint.ReferencePoint.ClientY - endReferencePoint.ClientY;
+            var diffTime = DateTime.Now - startPoint.StartTime;
+            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+
+            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+            if (Math.Abs(velocityX - velocityY) < .5) return;
+
+            if (velocityX >= swipeThreshold)
+            {
+                if (diffX < 0)
+                { ChooseRight(dataSet[0].Id); } //Quick fix, when displaying it should be the first one always.
+                else { ChooseLeft(dataSet[0].Id); }
+            }
+        }
+
+        catch (Exception e)
+        {
+            swipingMessage = e.Message;
+        }
+    }
+
+    void SearchAndAdd(int id, string answer)
+    {
+        foreach (ShowDTO show in dataSet)
+        {
+            if (show.Id == id)
+            {
+                swipedSet.Add(show);
+                myAnswers.Add(answer);
+                dataSet.Remove(show);
+                return;
+            }
+        }
+    }
+
+    void ChooseLeft(int id)
+    {
+        SearchAndAdd(id, "yes");
+    }
+
+    void ChooseRight(int id)
+    {
+        SearchAndAdd(id, "no");
+    }
+
+    void ShowAnswers()
+    {
+        message = JsonSerializer.Serialize(myAnswers);
+    }
+    public async Task LoadData(string dataURL, string _selectedData)
+    {
+        selectedData = _selectedData;
+        dataSet = await client.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/{dataURL}");
+        dataCount = dataSet.Count;
+    }
+
+    #endregion
+
 
     private HubConnection hubConnection;
     private List<ChatMessage> messages = new List<ChatMessage>();
@@ -111,8 +309,14 @@
     private string dynamicGroup = "";
     private string dynamicUserId = "";
 
-    private bool isDone = false;
+    private bool isDoneSwiping = false;
     private bool isChat = true;
+    private bool isSwiping = false;
+    private bool isHost = false;
+    private bool isGuest = true;
+    private bool isEndResult = false;
+    private bool isPreLoadLobby = true;
+    private bool isDoneMessage = true;
     private string toggleText = "Hide";
 
     private List<string> allAnswers = new List<string>();
@@ -129,34 +333,78 @@
             .Build();
     }
 
+    void ToSwiping()
+    {
+@*        NavigationManager.NavigateTo("swiping");
+        InvokeAsync(() =>
+        {
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+
+        });*@
+    }
+
     private void ToggleChat()
     {
         isChat = isChat ? false : true;
         toggleText = isChat ? "Hide" : "Show";
     }
 
+    private async Task ToggleSwiping()
+    {
+        if (dataSet != null && allUsers.Count >= 2)
+        {
+            isSwiping = true;
+            isPreLoadLobby = false;
+            await client.PostAsJsonAsync<bool>($"{baseURI}/{dynamicGroup}/start/{selectedData}", isHost);
+        }
+    }
 
-    public async Task SendToGroup() =>
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
+    public async Task SendToGroup()
+    {
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
+        message = "";
+    }
 
-    public async Task SendAnswers(List<string> answers) =>
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
+    public async Task SendAnswers(List<string> answers)
+    {
+        isDoneSwiping = true;
+        isDoneMessage = false;
+        isSwiping = false;
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
+    }
 
     public async Task HostGroup()
     {
-        await ListenerBuilder(true, false, true, true);
+        var task = _message.Loading(CreateMessage("Connecting to server...", 0));
+        isHost = true;
+        await ListenerBuilder(isHost, false, true, true, true);
         await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
+        task.Start();
+        await _message.Success("Successfully connected");
+    }
+
+    private MessageConfig CreateMessage(string content, int duration)
+    {
+        return new MessageConfig()
+        {
+            Content = content,
+            Duration = duration
+        };
     }
 
     public async Task JoinGroup()
     {
-        await ListenerBuilder(false, true, true, true);
+        var task = _message.Loading(CreateMessage($"Connecting to {dynamicGroup}...", 0));
+        isGuest = true;
+        await ListenerBuilder(isHost, true, true, true, true);
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updatehost", dynamicUserId);
+        task.Start();
+        await _message.Success("Successfully connected");
     }
 
     //TODO: Host should send a message containing the list of shows that will be swiped to every user when start button is clicked.
-    public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo)
+    public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo, bool swipeData)
     {
         hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
@@ -175,8 +423,9 @@
                 hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
                 {
                     messages.Add(message); //Make it special list message or somethgin color idk
-                allUsers.Add(message.UserName);
+                    allUsers.Add(message.UserName);
                     message.UsersList = allUsers;
+                    message.ShowChoice = selectedData;//Doesn't allow for dynamic change of data.
                     StateHasChanged();
                     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updategroup", JsonSerializer.Serialize(message));
                 });
@@ -203,7 +452,9 @@
             {
                 matches.Add(incomingList);
                 ParseAnswer(incomingList.MatchResults);
-                if (allAnswers.Count == ShowList.Count * allUsers.Count)
+                Console.WriteLine("AllAnswers");
+                Console.WriteLine(allAnswers.Count);
+                if (allAnswers.Count == dataCount * allUsers.Count)
                 {
                     CalculateResults();
                 }
@@ -215,11 +466,32 @@
             hubConnection.On<ChatMessage>("incomingUser", (message) =>
             {
                 messages.Add(message); //Takes latest user and funny entrance, Make it special list message or somethgin color idk
-
-            allUsers = message.UsersList; //latest user from server.
-            StateHasChanged();
+                selectedData = message.ShowChoice;
+                allUsers = message.UsersList; //latest user from server.
+                StateHasChanged();
             });
         }
+        if (swipeData)
+        {
+            hubConnection.On<string>("incomingData", async (message) =>
+            {
+                selectedData = message.ToString();
+                if (selectedData == "Anime")
+                {
+                    await LoadData("topanime", selectedData);
+                    dataCount = dataSet.Count;
+                }
+                else if (selectedData == "Movies")
+                {
+                    await LoadData("topmovie", selectedData);
+                    dataCount = dataSet.Count;
+                }
+                isPreLoadLobby = false;
+                isSwiping = true;
+                StateHasChanged();
+            });
+        }
+
         await hubConnection.StartAsync();
     }
 
@@ -232,37 +504,28 @@
         }
     }
 
-    private void ShowResults() //For displaying the results in cards.
-    {
-        for (int answerCount = 0; answerCount < comparedList.Count; answerCount++)
-        {
-            if (comparedList[answerCount] == "yes")
-            {
-                endList.Add(ShowList[answerCount]);
-            }
-        }
-        isDone = true;
-    }
-
     public void CalculateResults()
     {
 
-        for (int answerCount = 0; answerCount < ShowList.Count; answerCount++)
+        for (int answerCount = 0; answerCount < dataCount; answerCount++)
         {
-            for (int NxtUsrIndex = 0; NxtUsrIndex < allAnswers.Count; NxtUsrIndex += ShowList.Count) //For every user
+            for (int NxtUsrIndex = 0; NxtUsrIndex < allAnswers.Count; NxtUsrIndex += dataCount) //For every user
             {
                 if (allAnswers[answerCount + NxtUsrIndex] == "yes")
                 {
-                    ShowList[answerCount].Yes_Count++;
+                    swipedSet[answerCount].Yes_Count++;
                 }
                 else
                 {
-                    ShowList[answerCount].No_Count++;
+                    swipedSet[answerCount].No_Count++;
                 }
             }
-            endList.Add(ShowList[answerCount]);
+            endList.Add(swipedSet[answerCount]);
         }
-        isDone = true;
+        Console.WriteLine(endList.Count);
+        isSwiping = false;
+        isDoneSwiping = true;
+        isEndResult = true;
     }
 
     public bool IsConnected =>
@@ -281,11 +544,16 @@
         }
     </Menu>;
 
-    private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
-     {
-         return @<Template>
+private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
+{
+ return @<Template>
     <span>@leftButton</span>
-    @rightButton 
+    @rightButton
 </Template>;
 }
+
+private RenderFragment iconUser =>
+@<Icon Type="user" />;
+private RenderFragment iconGroup =>
+@<Icon Type="usergroup-add" />;
 }

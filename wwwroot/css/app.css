@@ -301,6 +301,32 @@ a, .btn-link {
     flex-direction: column;
 }
 
+.hostExplanationBox {
+    border: 1px solid #b37feb;
+    border-radius: 15px;
+    width: 50%;
+    padding: 5%;
+}
+
+.hostExplanationBox p {
+    color: black;
+}
+
+.hostTitle {
+    display:flex;
+    justify-content:center;
+}
+
+.hostText{
+    font-size:large;
+    font-weight:300;
+}
+
+.iconWithText {
+    display: flex;
+    align-items: center;
+}
+
 .joinBox {
     width: 50vw;
     background-color: #b37feb;
@@ -310,10 +336,26 @@ a, .btn-link {
     flex-direction: column;
 }
 
+.joinExplanationBox {
+    border: 1px solid white;
+    border-radius: 15px;
+    width: 50%;
+    padding: 5%;
+}
+
 .joinBox h1, h2, p {
     color: white;
 }
 
+.joinTitle {
+    display:flex;
+    justify-content:center;
+}
+.joinText {
+    color: white;
+    font-size: large;
+    font-weight: 300;
+}
 .ant-btn-primary {
     background: #6D5AB3 !important;
     border-color: #6D5AB3 !important;
@@ -327,17 +369,74 @@ a, .btn-link {
 .ant-input-search > .ant-input-group > .ant-input-group-addon:last-child{
     left: 0px !important;
 }
+.card {
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
+}
 
+    .card:hover {
+        cursor: -webkit-grab;
+    }
+.card-img-top{
+    height: 70%;
+    width: 70%;
+    margin: 5%;
+
+}
 .card-text {
     color: black;
+/*    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;*/
 }
+
 /*ChatRoom*/
 .swipingPage{
     display:flex;
-    align-items: center;
+    flex-direction:column;
+    justify-content:center;
+    width:100vw;
+    height:100vh;
+}
+.roomInfo{
+    height:20%;
+}
+
+.connectGroup{
+    display:flex;
     flex-direction:row;
     justify-content:space-around;
-    width:100vw;
+}
+.swipingContentPage {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .chatComponent {
@@ -373,6 +472,7 @@ a, .btn-link {
 }
 /*room settings*/
 .settings {
+    background-color:white;
     border: 1px solid #e2e2e2;
     border-radius: 5px;
     display: flex;
@@ -396,7 +496,110 @@ a, .btn-link {
 .buttonGroup .ant-btn-primary{
     margin:1% ;
 }
+.trendButtonGroup{
+    margin-top: 10%;
+    display:flex;
+    justify-content: space-between;
+}
+.trendButtonGroup .ant-btn {
+    width: 50%;
+}
 
-.settings .ant-btn-primary {
+.optionsButtonGroup{
+    width:80%;
+}
+
+.optionsButtonGroup .ant-btn-primary {
+    width: 100%;
+}
+
+.connectionIcon{
+    display:flex;
+    align-items:center;
+}
+
+.pageInfo {
+    width:100vw;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+.isSwiping{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    overflow-y:auto;
+    min-height:100vh;
+}
+
+.endVotes{
+    display:flex;
+    justify-content:space-evenly;
+    width:100%;
+}
+
+.doneContent {
+    height:100vh;
+    width:100vw;
+    display:flex;
+    justify-content:center;
+}
+
+.endListContainer {
+    width: 50vw;
+/*    display: flex;
+    justify-content: center;*/
+    display:flex;
+    flex-wrap:wrap;
+    overflow-y: auto;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+}
+
+.endListContainer .card{
+    width: 40%;
+    height:auto;
+    padding:1em;
+}
+
+.endListContainer::-webkit-scrollbar {
+        display: none;
+}
+
+.card-vote-choice{
+    display:flex;
+    justify-content:space-evenly;
+    width:100%;
+}
+
+.finishMessage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    align-content: space-around;
+}
+
+.finishMessage h1 {
+    color: white;
+}
+.finishMessage .ant-btn-primary {
+    margin-top:10%;
     width: 80%;
+}
+.waitingContent{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-around;
+}
+
+.waitingContent h1 {
+    color:white;
+}
+
+.waitingContent .anticon svg {
+    color: white !important;
 }

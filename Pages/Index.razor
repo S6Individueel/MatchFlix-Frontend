@@ -55,16 +55,49 @@
 </div>
 <div class="matchSection">
     <div class="hostBox">
-        <h1>Host</h1>
-        <Search Placeholder="Insert Username..." Size="@InputSize.Large" EnterButton="@("Host")" @bind-Value="@hostUserName" OnSearch="PostHostRoom" Class="joinInput" />
+        <div class="hostExplanationBox">
+            <div class="hostTitle">
+                <h1>HOST</h1>
+            </div>
+            <div class="hostText">
+                <div class="iconWithText">
+                    <Icon Type="usergroup-add" Theme="outline" /> Host a group
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="share-alt" Theme="outline" /> Share your room pin
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="split-cells" Theme="outline" /> Swipe away!
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="message" Theme="outline" /> Discuss the results
+                </div>
+            </div>
+        </div>
     </div>
     <div class="joinBox">
-        <h1>Join</h1>
-        <Input Placeholder="Insert Username..." @bind-Value="@joinUserName" Class="joinInput"/>
-        <Search Placeholder="Insert Friend Code..." Size="@InputSize.Large" EnterButton="@("Join")" @bind-Value="@joinFriendCode" OnSearch="OnSearch" Class="joinInput" />
+        <div class="joinExplanationBox">
+            <div class="joinTitle">
+                <h1>JOIN</h1>
+            </div>
+            <div class="joinText">
+                <div class="iconWithText">
+                    <Icon Type="borderless-table" Theme="outline" /> Join a group using a room pin
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="smile" Theme="outline" /> Socialize in the lobby
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="split-cells" Theme="outline" /> Swipe away!
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="message" Theme="outline" /> Discuss the results
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
+<BackTop></BackTop>
 
 
 @code{

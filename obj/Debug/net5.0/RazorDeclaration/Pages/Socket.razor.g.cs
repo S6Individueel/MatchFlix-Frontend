@@ -111,13 +111,13 @@ using Microsoft.AspNetCore.SignalR.Client;
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 7 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
 using System.Text.Json;
 
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/socket")]
+    [Microsoft.AspNetCore.Components.RouteAttribute("/swiping")]
     public partial class Socket : Microsoft.AspNetCore.Components.ComponentBase, IAsyncDisposable
     {
         #pragma warning disable 1998
@@ -126,10 +126,99 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 100 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 209 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
-    [Parameter]
-    public IReadOnlyList<ShowDTO> ShowList { get; set; }
+    #region Swiping
+    private List<ShowDTO> dataSet;
+    private List<ShowDTO> swipedSet = new List<ShowDTO>();
+    private int dataCount = 0;
+    private readonly string baseApiUri = "https://localhost:5021";
+    private string selectedData = "";
+
+
+    (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
+
+    string swipingMessage = "touch to begin";
+
+    void HandleTouchStart(TouchEventArgs t)
+    {
+        startPoint.ReferencePoint = t.TargetTouches[0];
+        startPoint.StartTime = DateTime.Now;
+    }
+
+    void HandleTouchEnd(TouchEventArgs t)
+    {
+        const double swipeThreshold = 0.8;
+        try
+        {
+            if (startPoint.ReferencePoint == null)
+            {
+                return;
+            }
+
+            var endReferencePoint = t.ChangedTouches[0];
+
+            var diffX = startPoint.ReferencePoint.ClientX - endReferencePoint.ClientX;
+            var diffY = startPoint.ReferencePoint.ClientY - endReferencePoint.ClientY;
+            var diffTime = DateTime.Now - startPoint.StartTime;
+            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+
+            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+            if (Math.Abs(velocityX - velocityY) < .5) return;
+
+            if (velocityX >= swipeThreshold)
+            {
+                if (diffX < 0)
+                { ChooseRight(dataSet[0].Id); } //Quick fix, when displaying it should be the first one always.
+                else { ChooseLeft(dataSet[0].Id); }
+            }
+        }
+
+        catch (Exception e)
+        {
+            swipingMessage = e.Message;
+        }
+    }
+
+    void SearchAndAdd(int id, string answer)
+    {
+        foreach (ShowDTO show in dataSet)
+        {
+            if (show.Id == id)
+            {
+                swipedSet.Add(show);
+                myAnswers.Add(answer);
+                dataSet.Remove(show);
+                return;
+            }
+        }
+    }
+
+    void ChooseLeft(int id)
+    {
+        SearchAndAdd(id, "yes");
+    }
+
+    void ChooseRight(int id)
+    {
+        SearchAndAdd(id, "no");
+    }
+
+    void ShowAnswers()
+    {
+        message = JsonSerializer.Serialize(myAnswers);
+    }
+    public async Task LoadData(string dataURL, string _selectedData)
+    {
+        selectedData = _selectedData;
+        dataSet = await client.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/{dataURL}");
+        dataCount = dataSet.Count;
+    }
+
+    #endregion
+
 
     private HubConnection hubConnection;
     private List<ChatMessage> messages = new List<ChatMessage>();
@@ -141,8 +230,14 @@ using System.Text.Json;
     private string dynamicGroup = "";
     private string dynamicUserId = "";
 
-    private bool isDone = false;
+    private bool isDoneSwiping = false;
     private bool isChat = true;
+    private bool isSwiping = false;
+    private bool isHost = false;
+    private bool isGuest = true;
+    private bool isEndResult = false;
+    private bool isPreLoadLobby = true;
+    private bool isDoneMessage = true;
     private string toggleText = "Hide";
 
     private List<string> allAnswers = new List<string>();
@@ -159,34 +254,79 @@ using System.Text.Json;
             .Build();
     }
 
+    void ToSwiping()
+    {
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 343 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+             
+    }
+
     private void ToggleChat()
     {
         isChat = isChat ? false : true;
         toggleText = isChat ? "Hide" : "Show";
     }
 
+    private async Task ToggleSwiping()
+    {
+        if (dataSet != null && allUsers.Count >= 2)
+        {
+            isSwiping = true;
+            isPreLoadLobby = false;
+            await client.PostAsJsonAsync<bool>($"{baseURI}/{dynamicGroup}/start/{selectedData}", isHost);
+        }
+    }
 
-    public async Task SendToGroup() =>
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
+    public async Task SendToGroup()
+    {
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
+        message = "";
+    }
 
-    public async Task SendAnswers(List<string> answers) =>
-    await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
+    public async Task SendAnswers(List<string> answers)
+    {
+        isDoneSwiping = true;
+        isDoneMessage = false;
+        isSwiping = false;
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/send/answers", JsonSerializer.Serialize(answers));
+    }
 
     public async Task HostGroup()
     {
-        await ListenerBuilder(true, false, true, true);
+        var task = _message.Loading(CreateMessage("Connecting to server...", 0));
+        isHost = true;
+        await ListenerBuilder(isHost, false, true, true, true);
         await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
+        task.Start();
+        await _message.Success("Successfully connected");
+    }
+
+    private MessageConfig CreateMessage(string content, int duration)
+    {
+        return new MessageConfig()
+        {
+            Content = content,
+            Duration = duration
+        };
     }
 
     public async Task JoinGroup()
     {
-        await ListenerBuilder(false, true, true, true);
+        var task = _message.Loading(CreateMessage($"Connecting to {dynamicGroup}...", 0));
+        isGuest = true;
+        await ListenerBuilder(isHost, true, true, true, true);
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/add/{dynamicUserId}", dynamicGroup);
         await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updatehost", dynamicUserId);
+        task.Start();
+        await _message.Success("Successfully connected");
     }
 
     //TODO: Host should send a message containing the list of shows that will be swiped to every user when start button is clicked.
-    public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo)
+    public async Task ListenerBuilder(bool host, bool chat, bool answers, bool usersInfo, bool swipeData)
     {
         hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri($"{baseURI}"), options =>
@@ -205,8 +345,9 @@ using System.Text.Json;
                 hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
                 {
                     messages.Add(message); //Make it special list message or somethgin color idk
-                allUsers.Add(message.UserName);
+                    allUsers.Add(message.UserName);
                     message.UsersList = allUsers;
+                    message.ShowChoice = selectedData;//Doesn't allow for dynamic change of data.
                     StateHasChanged();
                     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updategroup", JsonSerializer.Serialize(message));
                 });
@@ -233,7 +374,9 @@ using System.Text.Json;
             {
                 matches.Add(incomingList);
                 ParseAnswer(incomingList.MatchResults);
-                if (allAnswers.Count == ShowList.Count * allUsers.Count)
+                Console.WriteLine("AllAnswers");
+                Console.WriteLine(allAnswers.Count);
+                if (allAnswers.Count == dataCount * allUsers.Count)
                 {
                     CalculateResults();
                 }
@@ -245,11 +388,32 @@ using System.Text.Json;
             hubConnection.On<ChatMessage>("incomingUser", (message) =>
             {
                 messages.Add(message); //Takes latest user and funny entrance, Make it special list message or somethgin color idk
-
-            allUsers = message.UsersList; //latest user from server.
-            StateHasChanged();
+                selectedData = message.ShowChoice;
+                allUsers = message.UsersList; //latest user from server.
+                StateHasChanged();
             });
         }
+        if (swipeData)
+        {
+            hubConnection.On<string>("incomingData", async (message) =>
+            {
+                selectedData = message.ToString();
+                if (selectedData == "Anime")
+                {
+                    await LoadData("topanime", selectedData);
+                    dataCount = dataSet.Count;
+                }
+                else if (selectedData == "Movies")
+                {
+                    await LoadData("topmovie", selectedData);
+                    dataCount = dataSet.Count;
+                }
+                isPreLoadLobby = false;
+                isSwiping = true;
+                StateHasChanged();
+            });
+        }
+
         await hubConnection.StartAsync();
     }
 
@@ -262,37 +426,28 @@ using System.Text.Json;
         }
     }
 
-    private void ShowResults() //For displaying the results in cards.
-    {
-        for (int answerCount = 0; answerCount < comparedList.Count; answerCount++)
-        {
-            if (comparedList[answerCount] == "yes")
-            {
-                endList.Add(ShowList[answerCount]);
-            }
-        }
-        isDone = true;
-    }
-
     public void CalculateResults()
     {
 
-        for (int answerCount = 0; answerCount < ShowList.Count; answerCount++)
+        for (int answerCount = 0; answerCount < dataCount; answerCount++)
         {
-            for (int NxtUsrIndex = 0; NxtUsrIndex < allAnswers.Count; NxtUsrIndex += ShowList.Count) //For every user
+            for (int NxtUsrIndex = 0; NxtUsrIndex < allAnswers.Count; NxtUsrIndex += dataCount) //For every user
             {
                 if (allAnswers[answerCount + NxtUsrIndex] == "yes")
                 {
-                    ShowList[answerCount].Yes_Count++;
+                    swipedSet[answerCount].Yes_Count++;
                 }
                 else
                 {
-                    ShowList[answerCount].No_Count++;
+                    swipedSet[answerCount].No_Count++;
                 }
             }
-            endList.Add(ShowList[answerCount]);
+            endList.Add(swipedSet[answerCount]);
         }
-        isDone = true;
+        Console.WriteLine(endList.Count);
+        isSwiping = false;
+        isDoneSwiping = true;
+        isEndResult = true;
     }
 
     public bool IsConnected =>
@@ -313,7 +468,7 @@ using System.Text.Json;
             __builder2.OpenElement(0, "Menu");
             __builder2.AddMarkupContent(1, "\r\n");
 #nullable restore
-#line 278 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 541 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
          foreach (var user in allUsers)
         {
 
@@ -326,7 +481,7 @@ using System.Text.Json;
             __builder2.AddAttribute(5, "style", "color:#6D5AB3;");
             __builder2.AddContent(6, 
 #nullable restore
-#line 280 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 543 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                                                  user.ToString()
 
 #line default
@@ -337,7 +492,7 @@ using System.Text.Json;
             __builder2.CloseElement();
             __builder2.AddMarkupContent(7, "\r\n");
 #nullable restore
-#line 281 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 544 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
         }
 
 #line default
@@ -347,12 +502,12 @@ using System.Text.Json;
             __builder2.CloseElement();
         }
 #nullable restore
-#line 282 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 545 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 
-    private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
-     {
-         return 
+private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
+{
+ return 
 
 #line default
 #line hidden
@@ -363,7 +518,7 @@ using System.Text.Json;
             __builder2.OpenElement(11, "span");
             __builder2.AddContent(12, 
 #nullable restore
-#line 287 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 550 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            leftButton
 
 #line default
@@ -374,25 +529,50 @@ using System.Text.Json;
             __builder2.AddMarkupContent(13, "\r\n    ");
             __builder2.AddContent(14, 
 #nullable restore
-#line 288 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 551 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
      rightButton
 
 #line default
 #line hidden
 #nullable disable
             );
-            __builder2.AddMarkupContent(15, " \r\n");
+            __builder2.AddMarkupContent(15, "\r\n");
             __builder2.CloseElement();
         }
 #nullable restore
-#line 289 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 552 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 }
+
+private RenderFragment iconUser =>
 
 #line default
 #line hidden
 #nullable disable
+        (__builder2) => {
+            __builder2.AddMarkupContent(16, "<Icon Type=\"user\"></Icon>");
+        }
+#nullable restore
+#line 556 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                     ;
+private RenderFragment iconGroup =>
+
+#line default
+#line hidden
+#nullable disable
+        (__builder2) => {
+            __builder2.AddMarkupContent(17, "<Icon Type=\"usergroup-add\"></Icon>");
+        }
+#nullable restore
+#line 558 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                              ;
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private MessageService _message { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient client { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager uriHelper { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
     }
 }

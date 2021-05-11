@@ -112,9 +112,31 @@ using MatchFlix_Frontend.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 195 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+#line 12 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+       
+    private double startX, startY, offsetX, offsetY;
+
+    private void OnDragStart(DragEventArgs args)
+    {
+        startX = args.ClientX;
+        startY = args.ClientY;
+    }
+
+    private void OnDragEnd(DragEventArgs args)
+    {
+        offsetX += args.ClientX - startX;
+        offsetY += args.ClientY - startY;
+    }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 70 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
        
     private ShowDTO[] dataSet;
+    private int startInt = 0;
+    private int endInt = 5;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -122,7 +144,7 @@ using MatchFlix_Frontend.Models;
         {
             return JS.InvokeVoidAsync("initCards").AsTask(); //Gets the cards
         }
-            JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
+        JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
         return Task.CompletedTask;
     }
     protected override async Task OnInitializedAsync()
@@ -131,9 +153,11 @@ using MatchFlix_Frontend.Models;
 
     }
 
-    async Task LoadAsync()
+    private void ReStockCards()
     {
-        await JS.InvokeVoidAsync("initCards");
+        startInt += 5;
+        endInt += 5;
+        StateHasChanged();
     }
 
 

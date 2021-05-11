@@ -19,5 +19,6 @@ namespace MatchFlix_Frontend.Models
         public string UserName { get; set; }
         public string Content { get; set; }
         public List<string> UsersList { get; set; }
+        public string ShowChoice { get; set; }
     }
 }

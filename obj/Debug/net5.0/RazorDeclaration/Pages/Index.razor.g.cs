@@ -119,7 +119,7 @@ using MatchFlix_Frontend.Components.IconSection;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 70 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
+#line 103 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
       
 
     private string joinUserName { get; set; }
