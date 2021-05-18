@@ -39,42 +39,41 @@
                         </div>
                         @if (isHost)
                         {
-                    <div class="trendButtonGroup">
-                        <Button Type="default" @onclick="@(() => LoadData("topanime", "Anime"))">Anime</Button> @*https://antblazor.com/en-US/components/tag*@
-                        <Button Type="default" @onclick="@(() => LoadData("topmovie", "Movies"))">Movies</Button>
-                    </div>
+                            <div class="trendButtonGroup">
+                                <Button Type="default" @onclick="@(() => LoadData("topanime", "Anime"))">Anime</Button> @*https://antblazor.com/en-US/components/tag*@
+                                <Button Type="default" @onclick="@(() => LoadData("topmovie", "Movies"))">Movies</Button>
+                            </div>
                         }
                     </div>
                 </div>
-
-            @if (isChat)
-            {
-                <div class="chatComponent">
-                    <div class="chatView">
-                        <div class="chatMessageContainer">
-                            <div class="userList">
-                                <DropdownButton Icon="user">
-                                    <Overlay>
-                                        @_overlayMenu
-                                    </Overlay>
-                                    <ChildContent>
-                                        @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
-                                    </ChildContent>
-                                </DropdownButton>
+                @if (isChat)
+                {
+                    <div class="chatComponent">
+                        <div class="chatView">
+                            <div class="chatMessageContainer">
+                                <div class="userList">
+                                    <DropdownButton Icon="user">
+                                        <Overlay>
+                                            @_overlayMenu
+                                        </Overlay>
+                                        <ChildContent>
+                                            @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
+                                        </ChildContent>
+                                    </DropdownButton>
+                                </div>
+                                <ul id="messagesList">
+                                    @foreach (var message in messages)
+                                    {
+                                        <li>@message.UserName: @message.Content</li>
+                                    }
+                                </ul>
                             </div>
-                            <ul id="messagesList">
-                                @foreach (var message in messages)
-                                {
-                                    <li>@message.UserName: @message.Content</li>
-                                }
-                            </ul>
+                        </div>
+                        <div class="sendMessageBar">
+                            <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> @*<Icon Type="send" Theme="outline"/>*@
                         </div>
                     </div>
-                    <div class="sendMessageBar">
-                        <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> @*<Icon Type="send" Theme="outline"/>*@
-                    </div>
-                </div>
-            }
+                }
             </div>
         </div>
     }
@@ -84,15 +83,15 @@
 
     @if (isDoneSwiping)
     {
-<div class="doneContent">
+        <div class="doneContent">
 
-    @if (isEndResult)
-    {
+            @if (isEndResult)
+            {
 
-        <div class="endListContainer">
+                <div class="endListContainer">
 
-                @foreach (ShowDTO endShow in endList)
-                {
+                    @foreach (ShowDTO endShow in endList)
+                    {
                         <div class="card">
                             <img class="card-img-top" src="@endShow.Image_url" alt="Card image cap">
 
@@ -105,112 +104,118 @@
                                 <div><Icon Type="close-circle" Theme="fill" Style="color:red" /> @endShow.No_Count</div>
                             </div>
                         </div>
-                }
-        </div>
-            <div>
-                <Button Type="primary" OnClick="ToSwiping"><Icon Type="home" Theme="outline" /></Button>
-            </div>
-
-    }
-    else
-    { 
-    <div class="waitingContent">
-        <div>
-            <Steps>
-                <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
-                <Step Status="process" Title="Swiping" Icon="loading" />
-                <Step Status="wait" Title="Discuss results!" Icon="smile" />
-            </Steps>
-        </div>
-
-        <div style="display:flex;justify-content:center;">
-            <h1>Chat while you're waiting</h1>
-        </div>
-
-        <div class="chatComponent">
-            <div class="chatView">
-                <div class="chatMessageContainer">
-                    <div class="userList">
-                        <DropdownButton Icon="user">
-                            <Overlay>
-                                @_overlayMenu
-                            </Overlay>
-                            <ChildContent>
-                                @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
-                            </ChildContent>
-                        </DropdownButton>
-                    </div>
-                    <ul id="messagesList">
-                        @foreach (var message in messages)
-                        {
-                            <li>@message.UserName: @message.Content</li>
-                        }
-                    </ul>
+                    }
                 </div>
-            </div>
-            <div class="sendMessageBar">
-                <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> 
-            </div>
+                <div>
+                    <Button Type="primary" OnClick="ToSwiping"><Icon Type="home" Theme="outline" /></Button>
+                </div>
+
+            }
+            else
+            {
+                <div class="waitingContent">
+                    <div>
+                        <Steps>
+                            <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
+                            <Step Status="process" Title="Swiping" Icon="loading" />
+                            <Step Status="wait" Title="Discuss results!" Icon="smile" />
+                        </Steps>
+                    </div>
+
+                    <div style="display:flex;justify-content:center;">
+                        <h1>Chat while you're waiting</h1>
+                    </div>
+
+                    <div class="chatComponent">
+                        <div class="chatView">
+                            <div class="chatMessageContainer">
+                                <div class="userList">
+                                    <DropdownButton Icon="user">
+                                        <Overlay>
+                                            @_overlayMenu
+                                        </Overlay>
+                                        <ChildContent>
+                                            @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
+                                        </ChildContent>
+                                    </DropdownButton>
+                                </div>
+                                <ul id="messagesList">
+                                    @foreach (var message in messages)
+                                    {
+                                        <li>@message.UserName: @message.Content</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sendMessageBar">
+                            <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" />
+                        </div>
+                    </div>
+
+
+                </div>
+            }
+
         </div>
-
-
-    </div>
-        }
-
-</div>
     }
 
     @if (isSwiping)
     {
-<div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
-     @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
-    @if (dataSet == null)
-    {
-        <Card Loading="true" Style="width: 300px; margin-top: 16px">
-            <CardMeta Avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                      Title="Card title"
-                      Description="This is the description" />
-        </Card>
-    }
-    else
-    {
-        @for (int i = 0; i < dataSet.Count; i++)
-        {
-            if (i == 0)
+        <div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
+             @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
+            @if (dataSet == null)
             {
-                <div style="display:flex;justify-content:center;">
-                    <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
-
-                        <img class="card-img-top" src="@dataSet[0].Image_url" alt="Card image cap">
-
-
-                        <div class="card-body">
-                            <h5 class="card-title">@dataSet[0].Title</h5>
-                            <p class="card-text">@dataSet[0].Description</p>
-                            <Button @onclick="() => ChooseLeft(dataSet[0].Id)">Yes</Button>
-                            <Button @onclick="() => ChooseRight(dataSet[0].Id)">No</Button>
-                        </div>
-                    </div>
-                </div>
-
+                <Card Loading="true" Style="width: 300px; margin-top: 16px">
+                    <CardMeta Avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                              Title="Card title"
+                              Description="This is the description" />
+                </Card>
             }
-        }
-    }
+            else
+            {
+                @for (int i = 0; i < dataSet.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <div style="display:flex;justify-content:center;">
+                            <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
 
-    @if (dataSet.Count <= 0 && isDoneMessage)
-    {
-        <div class="finishMessage">
-            <h1>You're Done!</h1>
-            <lord-icon src="https://cdn.lordicon.com//lupuorrc.json"
-                       trigger="loop"
-                       colors="primary:#FFFFFF,secondary:#6D5AB3"
-                       style="width:250px;height:250px">
-            </lord-icon>
-            <Button @onclick="@(() => SendAnswers(myAnswers))" Type="primary">Finish!</Button>
+                                <img class="card-img-top" src="@dataSet[0].Image_url" alt="Card image cap">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">@dataSet[0].Title</h5>
+                                    <p class="card-text">@dataSet[0].Description</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                }
+            }
+
+            @if (dataSet.Count <= 0 && isDoneMessage)
+            {
+                <div class="finishMessage">
+                    <h1>You're Done!</h1>
+                    <lord-icon src="https://cdn.lordicon.com//lupuorrc.json"
+                               trigger="loop"
+                               colors="primary:#FFFFFF,secondary:#6D5AB3"
+                               style="width:250px;height:250px">
+                    </lord-icon>
+                    <Button @onclick="@(() => SendAnswers(myAnswers))" Type="primary">Finish!</Button>
+                </div>
+            }
+
         </div>
-    }
-
-    </div>
+        <div class="swipe-controls">
+            <div class="swipe-buttons">
+                <Button @onclick="() => ChooseLeft(dataSet[0].Id)" Type="primary" Shape="circle" Icon="heart" Size="large" />
+            </div>
+            <div class="swipe-buttons">
+                <Button @onclick="() => ChooseRight(dataSet[0].Id)" Type="primary" Shape="circle" Icon="close" Size="large" />
+            </div>
+        </div>
     }
 </div>
 
@@ -397,7 +402,7 @@
     private List<ChatMessage> messages = new List<ChatMessage>();
     private List<MatchList> matches = new List<MatchList>();
 
-    //private static readonly string baseURI = "https://matchingtest.azurewebsites.net/api";
+    //private static readonly string baseURI = "https://matchfunctionmatchflix.azurewebsites.net/api";
     private static readonly string baseURI = "http://localhost:7071/api";
     private string message = "";
     private string dynamicGroup = "";

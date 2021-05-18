@@ -384,19 +384,26 @@ a, .btn-link {
         cursor: -webkit-grab;
     }
 .card-img-top{
-    height: 70%;
-    width: 70%;
-    margin: 5%;
+    height: 100%;
+    width: 100%;
 
 }
 .card-text {
     color: black;
-/*    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;*/
+    text-align: justify;
+    border-left: 3px solid #9f8fdb9e;
+    padding-left: 10px;
+    font-size: 12px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap');
+.card-title {
+    margin-bottom: .75rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Pathway Gothic One', sans-serif;
+}
 /*ChatRoom*/
 .swipingPage{
     display:flex;
@@ -440,9 +447,6 @@ a, .btn-link {
 }
 
 .chatComponent {
-    border: 1px solid #e2e2e2;
-    border-radius: 5px;
-    background-color: white;
     width: 60vw;
 }
 
@@ -450,12 +454,14 @@ a, .btn-link {
     display: flex;
     justify-content: flex-end;
     flex-direction: row;
-    background-color: rgba(246, 246, 246, 0.50);
     width: 100%;
     min-height: 50vh;
 }
-.chatMessageContainer{
-    width:100%;
+.chatMessageContainer {
+    width: 100%;
+    border-radius: 5px;
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    box-shadow: 6px 6px 20px rgba(122,122,122,0.2);
 }
 .sendMessageBar{
     width:100%;
@@ -472,13 +478,13 @@ a, .btn-link {
 }
 /*room settings*/
 .settings {
-    background-color:white;
-    border: 1px solid #e2e2e2;
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    box-shadow: 6px 6px 20px rgba(122,122,122,0.2);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content:space-around;
+    justify-content: space-around;
     width: 25vw;
     min-height: 50vh;
 }
@@ -532,13 +538,37 @@ a, .btn-link {
     align-items:center;
     flex-direction:column;
     overflow-y:auto;
-    min-height:100vh;
+    min-height:90vh;
 }
 
-.endVotes{
-    display:flex;
-    justify-content:space-evenly;
-    width:100%;
+.swipe-controls {
+    display: flex;
+    justify-content: center;
+    min-height:10vh;
+}
+
+.swipe-buttons {
+    margin: 0em 2em 0em 2em;
+}
+
+.ant-btn-circle.ant-btn-lg {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.ant-btn-icon-only.ant-btn-lg {
+    width: 3.5em !important;
+    height: 3.5em !important;
+}
+.ant-btn-icon-only.ant-btn-lg>*{
+    font-size:2em !important;
+}
+
+.endVotes {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
 }
 
 .doneContent {

@@ -1,242 +1,222 @@
 ﻿@page "/test"
-@inject IJSRuntime JS;
-@inject HttpClient Http
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavigationManager
+@inject NavigationManager uriHelper
+@inject HttpClient client
+@using System.Text.Json
+@inject MessageService _message
+@*<div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
+         @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
+        <div class="heartSwipe">
+            <svg width="150" height="150" viewBox="0 0 200 200">
+                <g transform="translate(100 100)">
+                    <path transform="translate(-50 -50)" fill="tomato" d="M92.71,7.27L92.71,7.27c-9.71-9.69-25.46-9.69-35.18,0L50,14.79l-7.54-7.52C32.75-2.42,17-2.42,7.29,7.27v0 c-9.71,9.69-9.71,25.41,0,35.1L50,85l42.71-42.63C102.43,32.68,102.43,16.96,92.71,7.27z"></path>
+                    <animateTransform attributeName="transform"
+                                      type="scale"
+                                      values="1; 1.5; 1.25; 1.5; 1.5; 1;"
+                                      dur="1s"
+                                      repeatCount="1"
+                                      additive="sum">
+                    </animateTransform>
+                </g>
+            </svg>
+        </div>
+    </div>*@
+<div class="swipingContentPage">
 
-<Button OnClick="ReStockCards"> Start</Button>
-<div draggable="true"
-     @ondragend="OnDragEnd" ondragstart="OnDragStart"
-     style="position:absolute; top: @(offsetY)px; left: @(offsetX)px; border-color: black;">
-    <div>your content</div>
-</div>
+        <div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
+             @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
 
-@code {
-    private double startX, startY, offsetX, offsetY;
+            
+            <div class="card-choice-icon" style="display:flex;justify-content:center;">
+                
+                <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
 
-    private void OnDragStart(DragEventArgs args)
-    {
-        startX = args.ClientX;
-        startY = args.ClientY;
-    }
+                    <img class="card-img-top" src="https://via.placeholder.com/350x150" alt="Card image cap">
 
-    private void OnDragEnd(DragEventArgs args)
-    {
-        offsetX += args.ClientX - startX;
-        offsetY += args.ClientY - startY;
-    }
-}
-<div class="tinder">
-    <div class="tinder--status">
-        <i class="fa fa-remove"></i>
-        <i class="fa fa-heart"></i>
-    </div>
 
-    <div class="tinder--cards">
-        @if (dataSet == null)
-        {
-            <Card Loading="dataSet == null ? true : false" Style="width: 300px; margin-top: 16px">
-                <CardMeta Avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                          Title="Card title"
-                          Description="This is the description" />
-            </Card>
+                    <div class="card-body">
+                        <h5 class="card-title">Placeholder title</h5>
+                        <p class="card-text">Placeholder description</p>
 
-        }
-        else
-        {
-            @for (int i = startInt; i < endInt; i++)
-            {
-                <div class="tinder--card">
-                    <img src="@dataSet[i].Image_url">
-                    <h3>@dataSet[i].Title</h3>
-                    <p>@dataSet[i].Description</p>
-                </div>
-            }
-            @*            @foreach (var show in dataSet)
-                {
-                    <div class="tinder--card">
-                        <img src="@show.Image_url">
-                        <h3>@show.Title</h3>
-                        <p>@show.Description</p>
                     </div>
-                }*@
-        }
+                </div>
 
-    </div>
-
-    <div class="tinder--buttons">
-        <button id="nope"><i class="fa fa-remove"></i></button>
-        <button id="love"><i class="fa fa-heart"></i></button>
-    </div>
+            </div>
+        </div>
+        <div class="swipe-controls">
+            <div class="swipe-buttons">
+                <Button Type="primary" Shape="circle" Icon="heart" Size="large"/>
+            </div>
+            <div class="swipe-buttons">
+                <Button Type="primary" Shape="circle" Icon="close" Size="large"/>
+            </div>
+        </div>
 </div>
-@code {
-    private ShowDTO[] dataSet;
-    private int startInt = 0;
-    private int endInt = 5;
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+    @code {
+        #region Swiping
+        private List<ShowDTO> dataSet;
+        private List<ShowDTO> swipedSet = new List<ShowDTO>();
+        private int dataCount = 0;
+        private readonly string baseApiUri = "https://localhost:5021";
+        private string selectedData = "";
+
+        string mvmt;
+        string rotation;
+
+        string mvmtReset = "";
+        string rotationReset = "";
+
+        private bool animeCheck;
+        private bool movieCheck;
+        private string cursorGrab;
+        ((double, double) tupleMouse, DateTime StartTime) mousePoint;
+        bool pressedDown;
+
+        void HandleMouseDown(MouseEventArgs m)
         {
-            return JS.InvokeVoidAsync("initCards").AsTask(); //Gets the cards
-        }
-        JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
-        return Task.CompletedTask;
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
-
-    }
-
-    private void ReStockCards()
-    {
-        startInt += 5;
-        endInt += 5;
-        StateHasChanged();
-    }
-
-}
-<style>
-    *, *:before, *:after {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-    }
-
-    body {
-        background: #CCFBFE;
-        overflow: hidden;
-        font-family: sans-serif;
-    }
-
-    .tinder {
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        opacity: 0;
-        transition: opacity 0.1s ease-in-out;
-    }
-
-    .loaded.tinder {
-        opacity: 1;
-    }
-
-    .tinder--status {
-        position: absolute;
-        top: 50%;
-        margin-top: -30px;
-        z-index: 2;
-        width: 100%;
-        text-align: center;
-        pointer-events: none;
-    }
-
-        .tinder--status i {
-            font-size: 100px;
-            opacity: 0;
-            transform: scale(0.3);
-            transition: all 0.2s ease-in-out;
-            position: absolute;
-            width: 100px;
-            margin-left: -50px;
+            cursorGrab = "-webkit-grabbing;";
+            pressedDown = true;
+            (double, double) pos = (m.ClientX, m.ClientY);
+            mousePoint.StartTime = DateTime.Now;
+            mousePoint.tupleMouse = pos;
         }
 
-    .tinder_love .fa-heart {
-        opacity: 0.7;
-        transform: scale(1);
-    }
-
-    .tinder_nope .fa-remove {
-        opacity: 0.7;
-        transform: scale(1);
-    }
-
-    .tinder--cards {
-        flex-grow: 1;
-        padding-top: 40px;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        z-index: 1;
-    }
-
-    .tinder--card {
-        display: inline-block;
-        width: 90vw;
-        max-width: 400px;
-        height: 70vh;
-        background: #FFFFFF;
-        padding-bottom: 40px;
-        border-radius: 8px;
-        overflow: hidden;
-        position: absolute;
-        will-change: transform;
-        transition: all 0.3s ease-in-out;
-        cursor: -webkit-grab;
-        cursor: -moz-grab;
-        cursor: grab;
-    }
-
-    .moving.tinder--card {
-        transition: none;
-        cursor: -webkit-grabbing;
-        cursor: -moz-grabbing;
-        cursor: grabbing;
-    }
-
-    .tinder--card img {
-        max-width: 100%;
-        pointer-events: none;
-    }
-
-    .tinder--card h3 {
-        margin-top: 32px;
-        font-size: 32px;
-        padding: 0 16px;
-        pointer-events: none;
-    }
-
-    .tinder--card p {
-        margin-top: 24px;
-        font-size: 20px;
-        padding: 0 16px;
-        pointer-events: none;
-    }
-
-    .tinder--buttons {
-        flex: 0 0 100px;
-        text-align: center;
-        padding-top: 20px;
-    }
-
-        .tinder--buttons button {
-            border-radius: 50%;
-            line-height: 60px;
-            width: 60px;
-            border: 0;
-            background: #FFFFFF;
-            display: inline-block;
-            margin: 0 8px;
+        void HandleMouseMove(MouseEventArgs m)
+        {
+            if (pressedDown == true)
+            {
+                mvmtReset = "";
+                double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+                mvmt = difference + "px";
+                rotation = (difference / 10) + "deg";
+            }
         }
 
-            .tinder--buttons button:focus {
-                outline: 0;
+        void HandleMouseUp(MouseEventArgs m)
+        {
+            pressedDown = false;
+            cursorGrab = "";
+            mvmt = "";
+            mvmtReset = "transform 0.5s";
+            const double swipeThreshold = 0.8;
+            try
+            {
+                if (mousePoint.Equals(default))
+                {
+                    return;
+                }
+
+
+                var diffX = mousePoint.tupleMouse.Item1 - m.ClientX;
+                var diffY = mousePoint.tupleMouse.Item2 - m.ClientY;
+                var diffTime = DateTime.Now - mousePoint.StartTime;
+                var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+                var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+                if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+                if (Math.Abs(velocityX - velocityY) < .5) return;
+
+                if (velocityX >= swipeThreshold)
+                {
+                    if (diffX < 0)
+                    { ChooseRight(dataSet[0].Id); }
+                    else { ChooseLeft(dataSet[0].Id); }
+                }
             }
 
-        .tinder--buttons i {
-            font-size: 32px;
-            vertical-align: middle;
+            catch (Exception e)
+            {
+            }
+        }
+        (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
+
+        string swipingMessage = "touch to begin";
+
+        void HandleTouchStart(TouchEventArgs t)
+        {
+            startPoint.ReferencePoint = t.TargetTouches[0];
+            startPoint.StartTime = DateTime.Now;
+            cursorGrab = "-webkit-grabbing;";
         }
 
-    .fa-heart {
-        color: #FFACE4;
-    }
+        void HandleTouchMove(TouchEventArgs t) //A list of TouchPoint for every point of contact currently touching the surface.
+        {
+            mvmtReset = "";
+            double difference = t.TargetTouches[0].ClientX - startPoint.ReferencePoint.ClientX;
+            mvmt = difference + "px";
+            rotation = (difference / 10) + "deg";
+        }
 
-    .fa-remove {
-        color: #CDD6DD;
+
+        void HandleTouchEnd(TouchEventArgs t)
+        {
+            mvmt = "";
+            mvmtReset = "transform 0.5s";
+            cursorGrab = "";
+            const double swipeThreshold = 0.8;
+            try
+            {
+                if (startPoint.ReferencePoint == null)
+                {
+                    return;
+                }
+
+                var endReferencePoint = t.ChangedTouches[0];
+
+                var diffX = startPoint.ReferencePoint.ClientX - endReferencePoint.ClientX;
+                var diffY = startPoint.ReferencePoint.ClientY - endReferencePoint.ClientY;
+                var diffTime = DateTime.Now - startPoint.StartTime;
+                var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+                var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+                if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+                if (Math.Abs(velocityX - velocityY) < .5) return;
+
+                if (velocityX >= swipeThreshold)
+                {
+                    if (diffX < 0)
+                    { ChooseRight(dataSet[0].Id); }
+                    else { ChooseLeft(dataSet[0].Id); }
+                }
+            }
+
+            catch (Exception e)
+            {
+            }
+        }
+
+        void SearchAndAdd(int id, string answer)
+        {
+            foreach (ShowDTO show in dataSet)
+            {
+                if (show.Id == id)
+                {
+                    swipedSet.Add(show);
+                    dataSet.Remove(show);
+                    return;
+                }
+            }
+        }
+
+        void ChooseLeft(int id)
+        {
+            SearchAndAdd(id, "yes");
+        }
+
+        void ChooseRight(int id)
+        {
+            SearchAndAdd(id, "no");
+        }
+
+
+        public async Task LoadData(string dataURL, string _selectedData)
+        {
+            selectedData = _selectedData;
+            dataCount = dataSet.Count;
+        }
+
+        #endregion
     }
-</style>
 

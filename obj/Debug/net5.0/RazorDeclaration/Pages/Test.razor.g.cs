@@ -103,6 +103,20 @@ using MatchFlix_Frontend.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 2 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+using Microsoft.AspNetCore.SignalR.Client;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 6 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+using System.Text.Json;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/test")]
     public partial class Test : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -112,60 +126,180 @@ using MatchFlix_Frontend.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 12 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
-       
-    private double startX, startY, offsetX, offsetY;
+#line 57 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+           
+        #region Swiping
+        private List<ShowDTO> dataSet;
+        private List<ShowDTO> swipedSet = new List<ShowDTO>();
+        private int dataCount = 0;
+        private readonly string baseApiUri = "https://localhost:5021";
+        private string selectedData = "";
 
-    private void OnDragStart(DragEventArgs args)
-    {
-        startX = args.ClientX;
-        startY = args.ClientY;
-    }
+        string mvmt;
+        string rotation;
 
-    private void OnDragEnd(DragEventArgs args)
-    {
-        offsetX += args.ClientX - startX;
-        offsetY += args.ClientY - startY;
-    }
+        string mvmtReset = "";
+        string rotationReset = "";
 
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 70 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
-       
-    private ShowDTO[] dataSet;
-    private int startInt = 0;
-    private int endInt = 5;
+        private bool animeCheck;
+        private bool movieCheck;
+        private string cursorGrab;
+        ((double, double) tupleMouse, DateTime StartTime) mousePoint;
+        bool pressedDown;
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+        void HandleMouseDown(MouseEventArgs m)
         {
-            return JS.InvokeVoidAsync("initCards").AsTask(); //Gets the cards
+            cursorGrab = "-webkit-grabbing;";
+            pressedDown = true;
+            (double, double) pos = (m.ClientX, m.ClientY);
+            mousePoint.StartTime = DateTime.Now;
+            mousePoint.tupleMouse = pos;
         }
-        JS.InvokeVoidAsync("initCards"); //Sorts the cards in order
-        return Task.CompletedTask;
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        dataSet = await Http.GetFromJsonAsync<ShowDTO[]>("https://localhost:5021/topmovie");
 
-    }
+        void HandleMouseMove(MouseEventArgs m)
+        {
+            if (pressedDown == true)
+            {
+                mvmtReset = "";
+                double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+                mvmt = difference + "px";
+                rotation = (difference / 10) + "deg";
+            }
+        }
 
-    private void ReStockCards()
-    {
-        startInt += 5;
-        endInt += 5;
-        StateHasChanged();
-    }
+        void HandleMouseUp(MouseEventArgs m)
+        {
+            pressedDown = false;
+            cursorGrab = "";
+            mvmt = "";
+            mvmtReset = "transform 0.5s";
+            const double swipeThreshold = 0.8;
+            try
+            {
+                if (mousePoint.Equals(default))
+                {
+                    return;
+                }
 
+
+                var diffX = mousePoint.tupleMouse.Item1 - m.ClientX;
+                var diffY = mousePoint.tupleMouse.Item2 - m.ClientY;
+                var diffTime = DateTime.Now - mousePoint.StartTime;
+                var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+                var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+                if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+                if (Math.Abs(velocityX - velocityY) < .5) return;
+
+                if (velocityX >= swipeThreshold)
+                {
+                    if (diffX < 0)
+                    { ChooseRight(dataSet[0].Id); }
+                    else { ChooseLeft(dataSet[0].Id); }
+                }
+            }
+
+            catch (Exception e)
+            {
+            }
+        }
+        (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
+
+        string swipingMessage = "touch to begin";
+
+        void HandleTouchStart(TouchEventArgs t)
+        {
+            startPoint.ReferencePoint = t.TargetTouches[0];
+            startPoint.StartTime = DateTime.Now;
+            cursorGrab = "-webkit-grabbing;";
+        }
+
+        void HandleTouchMove(TouchEventArgs t) //A list of TouchPoint for every point of contact currently touching the surface.
+        {
+            mvmtReset = "";
+            double difference = t.TargetTouches[0].ClientX - startPoint.ReferencePoint.ClientX;
+            mvmt = difference + "px";
+            rotation = (difference / 10) + "deg";
+        }
+
+
+        void HandleTouchEnd(TouchEventArgs t)
+        {
+            mvmt = "";
+            mvmtReset = "transform 0.5s";
+            cursorGrab = "";
+            const double swipeThreshold = 0.8;
+            try
+            {
+                if (startPoint.ReferencePoint == null)
+                {
+                    return;
+                }
+
+                var endReferencePoint = t.ChangedTouches[0];
+
+                var diffX = startPoint.ReferencePoint.ClientX - endReferencePoint.ClientX;
+                var diffY = startPoint.ReferencePoint.ClientY - endReferencePoint.ClientY;
+                var diffTime = DateTime.Now - startPoint.StartTime;
+                var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
+                var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
+
+                if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
+                if (Math.Abs(velocityX - velocityY) < .5) return;
+
+                if (velocityX >= swipeThreshold)
+                {
+                    if (diffX < 0)
+                    { ChooseRight(dataSet[0].Id); }
+                    else { ChooseLeft(dataSet[0].Id); }
+                }
+            }
+
+            catch (Exception e)
+            {
+            }
+        }
+
+        void SearchAndAdd(int id, string answer)
+        {
+            foreach (ShowDTO show in dataSet)
+            {
+                if (show.Id == id)
+                {
+                    swipedSet.Add(show);
+                    dataSet.Remove(show);
+                    return;
+                }
+            }
+        }
+
+        void ChooseLeft(int id)
+        {
+            SearchAndAdd(id, "yes");
+        }
+
+        void ChooseRight(int id)
+        {
+            SearchAndAdd(id, "no");
+        }
+
+
+        public async Task LoadData(string dataURL, string _selectedData)
+        {
+            selectedData = _selectedData;
+            dataCount = dataSet.Count;
+        }
+
+        #endregion
+    
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JS { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private MessageService _message { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient client { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager uriHelper { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
     }
 }
 #pragma warning restore 1591
