@@ -126,7 +126,7 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 57 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+#line 66 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
            
         #region Swiping
         private List<ShowDTO> dataSet;
@@ -137,6 +137,8 @@ using System.Text.Json;
 
         string mvmt;
         string rotation;
+        double iconOpacity;
+        string iconOpacityReset= "none";
 
         string mvmtReset = "";
         string rotationReset = "";
@@ -161,8 +163,10 @@ using System.Text.Json;
             if (pressedDown == true)
             {
                 mvmtReset = "";
+                iconOpacityReset = "none";
                 double difference = m.ClientX - mousePoint.tupleMouse.Item1;
                 mvmt = difference + "px";
+                iconOpacity = difference * -1;
                 rotation = (difference / 10) + "deg";
             }
         }
@@ -172,7 +176,9 @@ using System.Text.Json;
             pressedDown = false;
             cursorGrab = "";
             mvmt = "";
+            iconOpacity = 0;
             mvmtReset = "transform 0.5s";
+            iconOpacityReset = "opacity 1s ease-in-out";
             const double swipeThreshold = 0.8;
             try
             {

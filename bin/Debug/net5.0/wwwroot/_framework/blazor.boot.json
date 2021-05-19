@@ -208,11 +208,11 @@
       "mscorlib.dll": "sha256-Fi+LybwHL\/VGD\/09OxxtYlT6exn9xVU+LdojZ9juR2c=",
       "netstandard.dll": "sha256-P8xX0ad1hKyWWbBxiXl3cYokFlDiuXwp3pqoYatH0kk=",
       "System.Private.CoreLib.dll": "sha256-2km83sNUTrumGJYdDzsN8RnJqv00vKWLCCh0UGajTB4=",
-      "MatchFlix-Frontend.dll": "sha256-9WU3XO4dSSdvoCRIQrxYL+uqYvPNweiK5zV7L8aN8jE="
+      "MatchFlix-Frontend.dll": "sha256-o2bt0ZM9kxyyhtGDUipA87t5CZFegwbgsbUkopkc0Us="
     },
     "lazyAssembly": null,
     "pdb": {
-      "MatchFlix-Frontend.pdb": "sha256-Ry2OMb9oQDZ9PS01Mld7PD2lv+fonhKwBGf8QveEdL0="
+      "MatchFlix-Frontend.pdb": "sha256-ydYaUaTbzMu75D53hnCkZrWoNsIjZmn60cDwyiTgna4="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-ibxaSjW7s3aLVssChknhzCpgMTHGu4D48Q9OLP3dfe8=",

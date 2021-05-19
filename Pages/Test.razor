@@ -23,10 +23,19 @@
         </div>
     </div>*@
 <div class="swipingContentPage">
+            <div class="swipe-icons">
+                @if (iconOpacity > 0)
+                {
+                <div style="opacity: @(iconOpacity / 200);"><Icon Type="heart" Theme="fill" Id="swipe-icon-heart" /></div>
+                }else
+                { 
+            <div style="opacity: @((iconOpacity / 200) * -1) ;"><Icon Type="close" Theme="outline" Id="swipe-icon-close" /></div>            
+                }
+            </div>
 
         <div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
              @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
-
+            
             
             <div class="card-choice-icon" style="display:flex;justify-content:center;">
                 
@@ -64,6 +73,8 @@
 
         string mvmt;
         string rotation;
+        double iconOpacity;
+        string iconOpacityReset= "none";
 
         string mvmtReset = "";
         string rotationReset = "";
@@ -88,8 +99,10 @@
             if (pressedDown == true)
             {
                 mvmtReset = "";
+                iconOpacityReset = "none";
                 double difference = m.ClientX - mousePoint.tupleMouse.Item1;
                 mvmt = difference + "px";
+                iconOpacity = difference * -1;
                 rotation = (difference / 10) + "deg";
             }
         }
@@ -99,7 +112,9 @@
             pressedDown = false;
             cursorGrab = "";
             mvmt = "";
+            iconOpacity = 0;
             mvmtReset = "transform 0.5s";
+            iconOpacityReset = "opacity 1s ease-in-out";
             const double swipeThreshold = 0.8;
             try
             {

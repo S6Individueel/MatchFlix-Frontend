@@ -1197,7 +1197,7 @@
       "url": "_content\/AntDesign\/less\/upload\/style\/rtl.less"
     },
     {
-      "hash": "sha256-schB+F464OsT6\/zSrh0wGmVZfJ2u+tk9R1qIVdmQo04=",
+      "hash": "sha256-Hem99eWzObwDakZ2NqLCaoAQaAShpGXP39YJiwj+FPQ=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -2033,11 +2033,11 @@
       "url": "_framework\/dotnet.6.0.0-preview.3.21201.4.js"
     },
     {
-      "hash": "sha256-9WU3XO4dSSdvoCRIQrxYL+uqYvPNweiK5zV7L8aN8jE=",
+      "hash": "sha256-o2bt0ZM9kxyyhtGDUipA87t5CZFegwbgsbUkopkc0Us=",
       "url": "_framework\/MatchFlix-Frontend.dll"
     },
     {
-      "hash": "sha256-Ry2OMb9oQDZ9PS01Mld7PD2lv+fonhKwBGf8QveEdL0=",
+      "hash": "sha256-ydYaUaTbzMu75D53hnCkZrWoNsIjZmn60cDwyiTgna4=",
       "url": "_framework\/MatchFlix-Frontend.pdb"
     },
     {
@@ -2877,7 +2877,7 @@
       "url": "_framework\/dotnet.6.0.0-preview.3.21201.4.js.gz"
     },
     {
-      "hash": "sha256-jg36VMOvV\/f5iMDJGlE7J04gWaIDPTmrujYyiiPVd9s=",
+      "hash": "sha256-\/djmDGty3EmxO0eoY7Wx1x0HNmhdk5ZihSdG0qSlUZQ=",
       "url": "css\/app.css"
     },
     {
@@ -3005,5 +3005,5 @@
       "url": "MatchFlix-Frontend.bundle.scp.css"
     }
   ],
-  "version": "BHhjtkg2"
+  "version": "l8ra3syU"
 };

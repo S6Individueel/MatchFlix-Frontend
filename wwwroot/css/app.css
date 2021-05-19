@@ -383,11 +383,12 @@ a, .btn-link {
     .card:hover {
         cursor: -webkit-grab;
     }
-.card-img-top{
+.card-img-top {
     height: 100%;
     width: 100%;
-
+    pointer-events: none;
 }
+
 .card-text {
     color: black;
     text-align: justify;
@@ -551,6 +552,25 @@ a, .btn-link {
     margin: 0em 2em 0em 2em;
 }
 
+.swipe-icons {
+    position: absolute;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+    font-size: 8em;
+}
+
+.swipe-icons #swipe-icon-heart path{
+    fill: rgba(255, 167, 237, 0.8) !important;
+}
+
+.swipe-icons #swipe-icon-close path {
+    fill: rgba(205, 214, 221, 0.8) !important;
+}
+
 .ant-btn-circle.ant-btn-lg {
     display: flex !important;
     justify-content: center !important;
@@ -603,6 +623,12 @@ a, .btn-link {
     display:flex;
     justify-content:space-evenly;
     width:100%;
+}
+
+.card-body {
+    overflow-y: auto;
+    max-height: 300px;
+    margin-bottom: 15px;
 }
 
 .finishMessage{
