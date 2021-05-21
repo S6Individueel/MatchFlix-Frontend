@@ -126,11 +126,17 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 222 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 234 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     string mvmt;
     string rotation;
+    double iconOpacity;
+    string iconSize;
+    string iconOpacityReset = "";
+    int opacityNormalizer = 200;
 
+    double difference;
+    bool isRight;
     string mvmtReset = "";
     string rotationReset = "";
 
@@ -154,18 +160,27 @@ using System.Text.Json;
         if (pressedDown == true)
         {
             mvmtReset = "";
-            double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+            iconOpacityReset = "";
+            difference = m.ClientX - mousePoint.tupleMouse.Item1;
+            if (difference > 0) { isRight = true; } else { isRight = false; }
+            iconSize = Math.Abs(difference / 50) + "em";
             mvmt = difference + "px";
             rotation = (difference / 10) + "deg";
+            iconOpacity = (difference) / opacityNormalizer;
         }
     }
 
     void HandleMouseUp(MouseEventArgs m)
     {
+
+
+        difference = 0;
         pressedDown = false;
         cursorGrab = "";
         mvmt = "";
+        iconOpacity = 0;
         mvmtReset = "transform 0.5s";
+        iconOpacityReset = "opacity 0.5s ease-in-out";
         const double swipeThreshold = 0.8;
         try
         {
@@ -194,7 +209,6 @@ using System.Text.Json;
 
         catch (Exception e)
         {
-            message = e.Message;
         }
     }
 
@@ -202,7 +216,7 @@ using System.Text.Json;
 #line hidden
 #nullable disable
 #nullable restore
-#line 296 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 322 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     #region Swiping
     private List<ShowDTO> dataSet;
@@ -286,12 +300,12 @@ using System.Text.Json;
 
     void ChooseLeft(int id)
     {
-        SearchAndAdd(id, "yes");
+        SearchAndAdd(id, "no");
     }
 
     void ChooseRight(int id)
     {
-        SearchAndAdd(id, "no");
+        SearchAndAdd(id, "yes");
     }
 
     void ShowAnswers()
@@ -555,7 +569,7 @@ using System.Text.Json;
             __builder2.OpenElement(0, "Menu");
             __builder2.AddMarkupContent(1, "\r\n");
 #nullable restore
-#line 640 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 666 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
          foreach (var user in allUsers)
         {
 
@@ -568,7 +582,7 @@ using System.Text.Json;
             __builder2.AddAttribute(5, "style", "color:#6D5AB3;");
             __builder2.AddContent(6, 
 #nullable restore
-#line 642 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 668 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                                                  user.ToString()
 
 #line default
@@ -579,7 +593,7 @@ using System.Text.Json;
             __builder2.CloseElement();
             __builder2.AddMarkupContent(7, "\r\n");
 #nullable restore
-#line 643 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 669 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
         }
 
 #line default
@@ -589,7 +603,7 @@ using System.Text.Json;
             __builder2.CloseElement();
         }
 #nullable restore
-#line 644 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 670 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 
 private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
@@ -605,7 +619,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.OpenElement(11, "span");
             __builder2.AddContent(12, 
 #nullable restore
-#line 649 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 675 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            leftButton
 
 #line default
@@ -616,7 +630,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.AddMarkupContent(13, "\r\n    ");
             __builder2.AddContent(14, 
 #nullable restore
-#line 650 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 676 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
      rightButton
 
 #line default
@@ -627,7 +641,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.CloseElement();
         }
 #nullable restore
-#line 651 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 677 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 }
 
@@ -640,7 +654,7 @@ private RenderFragment iconUser =>
             __builder2.AddMarkupContent(16, "<Icon Type=\"user\"></Icon>");
         }
 #nullable restore
-#line 655 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 681 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                      ;
 private RenderFragment iconGroup =>
 
@@ -651,7 +665,7 @@ private RenderFragment iconGroup =>
             __builder2.AddMarkupContent(17, "<Icon Type=\"usergroup-add\"></Icon>");
         }
 #nullable restore
-#line 657 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 683 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                               ;
 
 #line default

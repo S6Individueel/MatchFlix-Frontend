@@ -560,8 +560,8 @@ a, .btn-link {
     align-items: center;
     pointer-events: none;
     z-index: 2;
-    font-size: 8em;
-}
+/*    font-size: 8em;
+*/}
 
 .swipe-icons #swipe-icon-heart path{
     fill: rgba(255, 167, 237, 0.8) !important;

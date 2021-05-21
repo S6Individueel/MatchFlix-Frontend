@@ -5,31 +5,15 @@
 @inject HttpClient client
 @using System.Text.Json
 @inject MessageService _message
-@*<div class="isSwiping" @onmouseup="HandleMouseUp" @ontouchstart=HandleTouchStart @onkeypress:preventDefault=true @ontouchmove="HandleTouchMove"
-         @ontouchend=HandleTouchEnd @onmousedown=HandleMouseDown @onmousemove=HandleMouseMove style="overflow:hidden;">
-        <div class="heartSwipe">
-            <svg width="150" height="150" viewBox="0 0 200 200">
-                <g transform="translate(100 100)">
-                    <path transform="translate(-50 -50)" fill="tomato" d="M92.71,7.27L92.71,7.27c-9.71-9.69-25.46-9.69-35.18,0L50,14.79l-7.54-7.52C32.75-2.42,17-2.42,7.29,7.27v0 c-9.71,9.69-9.71,25.41,0,35.1L50,85l42.71-42.63C102.43,32.68,102.43,16.96,92.71,7.27z"></path>
-                    <animateTransform attributeName="transform"
-                                      type="scale"
-                                      values="1; 1.5; 1.25; 1.5; 1.5; 1;"
-                                      dur="1s"
-                                      repeatCount="1"
-                                      additive="sum">
-                    </animateTransform>
-                </g>
-            </svg>
-        </div>
-    </div>*@
+
 <div class="swipingContentPage">
-            <div class="swipe-icons">
-                @if (iconOpacity > 0)
+            <div class="swipe-icons" style="font-size: @iconSize">
+                @if (isRight)
                 {
-                <div style="opacity: @(iconOpacity / 200);"><Icon Type="heart" Theme="fill" Id="swipe-icon-heart" /></div>
+                <div style="opacity: @(iconOpacity); transition:@(iconOpacityReset)"><Icon Type="heart" Theme="fill" Id="swipe-icon-heart" /></div>
                 }else
                 { 
-            <div style="opacity: @((iconOpacity / 200) * -1) ;"><Icon Type="close" Theme="outline" Id="swipe-icon-close" /></div>            
+                <div style="opacity: @(iconOpacity * -1); transition:@(iconOpacityReset)"><Icon Type="close" Theme="outline" Id="swipe-icon-close" /></div>            
                 }
             </div>
 
@@ -55,10 +39,10 @@
         </div>
         <div class="swipe-controls">
             <div class="swipe-buttons">
-                <Button Type="primary" Shape="circle" Icon="heart" Size="large"/>
+                <Button Type="primary" Shape="circle" Icon="close" Size="large" @onclick="() => ChooseLeft(dataSet[0].Id)"/>
             </div>
             <div class="swipe-buttons">
-                <Button Type="primary" Shape="circle" Icon="close" Size="large"/>
+                <Button Type="primary" Shape="circle" Icon="heart" Size="large" @onclick="() => ChooseRight(dataSet[0].Id)"/>
             </div>
         </div>
 </div>
@@ -74,8 +58,12 @@
         string mvmt;
         string rotation;
         double iconOpacity;
-        string iconOpacityReset= "none";
+        string iconSize;
+        string iconOpacityReset= "";
+        int opacityNormalizer = 200;
 
+        double difference;
+        bool isRight;
         string mvmtReset = "";
         string rotationReset = "";
 
@@ -99,22 +87,27 @@
             if (pressedDown == true)
             {
                 mvmtReset = "";
-                iconOpacityReset = "none";
-                double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+                iconOpacityReset = "";
+                difference = m.ClientX - mousePoint.tupleMouse.Item1;
+                if (difference > 0){ isRight = true; }else{ isRight = false; }
+                iconSize = Math.Abs(difference / 50) + "em";
                 mvmt = difference + "px";
-                iconOpacity = difference * -1;
                 rotation = (difference / 10) + "deg";
+                iconOpacity = (difference) / opacityNormalizer ;
             }
         }
 
         void HandleMouseUp(MouseEventArgs m)
         {
+
+
+            difference = 0;
             pressedDown = false;
             cursorGrab = "";
             mvmt = "";
             iconOpacity = 0;
             mvmtReset = "transform 0.5s";
-            iconOpacityReset = "opacity 1s ease-in-out";
+            iconOpacityReset = "opacity 0.5s ease-in-out";
             const double swipeThreshold = 0.8;
             try
             {
@@ -217,12 +210,12 @@
 
         void ChooseLeft(int id)
         {
-            SearchAndAdd(id, "yes");
+            SearchAndAdd(id, "no");
         }
 
         void ChooseRight(int id)
         {
-            SearchAndAdd(id, "no");
+            SearchAndAdd(id, "yes");
         }
 
 

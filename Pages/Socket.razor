@@ -177,7 +177,19 @@
                 {
                     if (i == 0)
                     {
-                        <div style="display:flex;justify-content:center;">
+                        <div class="swipe-icons" style="font-size: @iconSize">
+                            @if (isRight)
+                            {
+                                <div style="opacity: @(iconOpacity); transition:@(iconOpacityReset)"><Icon Type="heart" Theme="fill" Id="swipe-icon-heart" /></div>
+                            }
+                            else
+                            {
+                                <div style="opacity: @(iconOpacity * -1); transition:@(iconOpacityReset)"><Icon Type="close" Theme="outline" Id="swipe-icon-close" /></div>
+                            }
+                        </div>
+
+                        <div class="card-choice-icon" style="display:flex;justify-content:center;">
+
                             <div class="card" style="width: 18rem; margin: 2em; transform: translateX(@mvmt) rotate(@rotation);transition: @mvmtReset; cursor: @cursorGrab;">
 
                                 <img class="card-img-top" src="@dataSet[0].Image_url" alt="Card image cap">
@@ -188,8 +200,8 @@
                                     <p class="card-text">@dataSet[0].Description</p>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     }
                 }
             }
@@ -210,10 +222,10 @@
         </div>
         <div class="swipe-controls">
             <div class="swipe-buttons">
-                <Button @onclick="() => ChooseLeft(dataSet[0].Id)" Type="primary" Shape="circle" Icon="heart" Size="large" />
+                <Button Type="primary" Shape="circle" Icon="close" Size="large" @onclick="() => ChooseLeft(dataSet[0].Id)" />
             </div>
             <div class="swipe-buttons">
-                <Button @onclick="() => ChooseRight(dataSet[0].Id)" Type="primary" Shape="circle" Icon="close" Size="large" />
+                <Button Type="primary" Shape="circle" Icon="heart" Size="large" @onclick="() => ChooseRight(dataSet[0].Id)" />
             </div>
         </div>
     }
@@ -222,7 +234,13 @@
 @code {
     string mvmt;
     string rotation;
+    double iconOpacity;
+    string iconSize;
+    string iconOpacityReset = "";
+    int opacityNormalizer = 200;
 
+    double difference;
+    bool isRight;
     string mvmtReset = "";
     string rotationReset = "";
 
@@ -246,18 +264,27 @@
         if (pressedDown == true)
         {
             mvmtReset = "";
-            double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+            iconOpacityReset = "";
+            difference = m.ClientX - mousePoint.tupleMouse.Item1;
+            if (difference > 0) { isRight = true; } else { isRight = false; }
+            iconSize = Math.Abs(difference / 50) + "em";
             mvmt = difference + "px";
             rotation = (difference / 10) + "deg";
+            iconOpacity = (difference) / opacityNormalizer;
         }
     }
 
     void HandleMouseUp(MouseEventArgs m)
     {
+
+
+        difference = 0;
         pressedDown = false;
         cursorGrab = "";
         mvmt = "";
+        iconOpacity = 0;
         mvmtReset = "transform 0.5s";
+        iconOpacityReset = "opacity 0.5s ease-in-out";
         const double swipeThreshold = 0.8;
         try
         {
@@ -286,7 +313,6 @@
 
         catch (Exception e)
         {
-            message = e.Message;
         }
     }
 }
@@ -376,12 +402,12 @@
 
     void ChooseLeft(int id)
     {
-        SearchAndAdd(id, "yes");
+        SearchAndAdd(id, "no");
     }
 
     void ChooseRight(int id)
     {
-        SearchAndAdd(id, "no");
+        SearchAndAdd(id, "yes");
     }
 
     void ShowAnswers()

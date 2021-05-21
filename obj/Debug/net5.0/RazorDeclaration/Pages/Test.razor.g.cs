@@ -126,7 +126,7 @@ using System.Text.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 66 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+#line 50 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
            
         #region Swiping
         private List<ShowDTO> dataSet;
@@ -138,8 +138,12 @@ using System.Text.Json;
         string mvmt;
         string rotation;
         double iconOpacity;
-        string iconOpacityReset= "none";
+        string iconSize;
+        string iconOpacityReset= "";
+        int opacityNormalizer = 200;
 
+        double difference;
+        bool isRight;
         string mvmtReset = "";
         string rotationReset = "";
 
@@ -163,22 +167,27 @@ using System.Text.Json;
             if (pressedDown == true)
             {
                 mvmtReset = "";
-                iconOpacityReset = "none";
-                double difference = m.ClientX - mousePoint.tupleMouse.Item1;
+                iconOpacityReset = "";
+                difference = m.ClientX - mousePoint.tupleMouse.Item1;
+                if (difference > 0){ isRight = true; }else{ isRight = false; }
+                iconSize = Math.Abs(difference / 50) + "em";
                 mvmt = difference + "px";
-                iconOpacity = difference * -1;
                 rotation = (difference / 10) + "deg";
+                iconOpacity = (difference) / opacityNormalizer ;
             }
         }
 
         void HandleMouseUp(MouseEventArgs m)
         {
+
+
+            difference = 0;
             pressedDown = false;
             cursorGrab = "";
             mvmt = "";
             iconOpacity = 0;
             mvmtReset = "transform 0.5s";
-            iconOpacityReset = "opacity 1s ease-in-out";
+            iconOpacityReset = "opacity 0.5s ease-in-out";
             const double swipeThreshold = 0.8;
             try
             {
@@ -281,12 +290,12 @@ using System.Text.Json;
 
         void ChooseLeft(int id)
         {
-            SearchAndAdd(id, "yes");
+            SearchAndAdd(id, "no");
         }
 
         void ChooseRight(int id)
         {
-            SearchAndAdd(id, "no");
+            SearchAndAdd(id, "yes");
         }
 
 
