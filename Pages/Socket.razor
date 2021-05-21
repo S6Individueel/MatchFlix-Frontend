@@ -6,7 +6,7 @@
 @inject HttpClient client
 @using System.Text.Json
 @inject MessageService _message
-
+@using MatchFlix_Frontend.Components.Chat;
 
 <div class="swipingContentPage">
 
@@ -48,31 +48,7 @@
                 </div>
                 @if (isChat)
                 {
-                    <div class="chatComponent">
-                        <div class="chatView">
-                            <div class="chatMessageContainer">
-                                <div class="userList">
-                                    <DropdownButton Icon="user">
-                                        <Overlay>
-                                            @_overlayMenu
-                                        </Overlay>
-                                        <ChildContent>
-                                            @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
-                                        </ChildContent>
-                                    </DropdownButton>
-                                </div>
-                                <ul id="messagesList">
-                                    @foreach (var message in messages)
-                                    {
-                                        <li>@message.UserName: @message.Content</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="sendMessageBar">
-                            <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" /> @*<Icon Type="send" Theme="outline"/>*@
-                        </div>
-                    </div>
+                    <Chat messages="@messages" allUsers="@allUsers" baseURI="@baseURI" dynamicGroup="@dynamicGroup" dynamicUserId="@dynamicUserId" ></Chat>
                 }
             </div>
         </div>
@@ -113,47 +89,22 @@
             }
             else
             {
-                <div class="waitingContent">
-                    <div>
-                        <Steps>
-                            <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
-                            <Step Status="process" Title="Swiping" Icon="loading" />
-                            <Step Status="wait" Title="Discuss results!" Icon="smile" />
-                        </Steps>
-                    </div>
+        <div class="waitingContent">
+            <div>
+                <Steps>
+                    <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
+                    <Step Status="process" Title="Swiping" Icon="loading" />
+                    <Step Status="wait" Title="Discuss results!" Icon="smile" />
+                </Steps>
+            </div>
 
-                    <div style="display:flex;justify-content:center;">
-                        <h1>Chat while you're waiting</h1>
-                    </div>
+            <div style="display:flex;justify-content:center;">
+                <h1>Chat while you're waiting</h1>
+            </div>
 
-                    <div class="chatComponent">
-                        <div class="chatView">
-                            <div class="chatMessageContainer">
-                                <div class="userList">
-                                    <DropdownButton Icon="user">
-                                        <Overlay>
-                                            @_overlayMenu
-                                        </Overlay>
-                                        <ChildContent>
-                                            @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
-                                        </ChildContent>
-                                    </DropdownButton>
-                                </div>
-                                <ul id="messagesList">
-                                    @foreach (var message in messages)
-                                    {
-                                        <li>@message.UserName: @message.Content</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="sendMessageBar">
-                            <Search Placeholder="Type a message" OnSearch="SendToGroup" EnterButton="@(" Send")" @bind-Value="@message" />
-                        </div>
-                    </div>
+            <Chat messages="@messages" allUsers="@allUsers" baseURI="@baseURI" dynamicGroup="@dynamicGroup" dynamicUserId="@dynamicUserId"></Chat>
 
-
-                </div>
+        </div>
             }
 
         </div>
@@ -484,12 +435,6 @@
         }
     }
 
-    public async Task SendToGroup()
-    {
-        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(message));
-        message = "";
-    }
-
     public async Task SendAnswers(List<string> answers)
     {
         isDoneSwiping = true;
@@ -548,10 +493,10 @@
                 hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
                 {
                     messages.Add(message); //Make it special list message or somethgin color idk
-                    allUsers.Add(message.UserName);
+                allUsers.Add(message.UserName);
                     message.UsersList = allUsers;
                     message.ShowChoice = selectedData;//Doesn't allow for dynamic change of data.
-                    StateHasChanged();
+                StateHasChanged();
                     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updategroup", JsonSerializer.Serialize(message));
                 });
                 hubConnection.On<ChatMessage>(incomingHost, (message) =>
@@ -591,9 +536,9 @@
             hubConnection.On<ChatMessage>("incomingUser", (message) =>
             {
                 messages.Add(message); //Takes latest user and funny entrance, Make it special list message or somethgin color idk
-                selectedData = message.ShowChoice;
+            selectedData = message.ShowChoice;
                 allUsers = message.UsersList; //latest user from server.
-                StateHasChanged();
+            StateHasChanged();
             });
         }
         if (swipeData)

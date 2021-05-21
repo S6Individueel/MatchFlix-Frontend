@@ -1,0 +1,65 @@
+﻿@inject HttpClient client
+@using System.Text.Json
+
+
+<div class="chatComponent">
+    <div class="chatView">
+        <div class="chatMessageContainer">
+            <div class="userList">
+                <DropdownButton Icon="user">
+                    <Overlay>
+                        @_overlayMenu
+                    </Overlay>
+                    <ChildContent>
+                        @allUsers.Count @((@allUsers.Count == 1) ? "User" : "Users")
+                    </ChildContent>
+                </DropdownButton>
+            </div>
+            <ul id="messagesList">
+                @foreach (var message in messages)
+                {
+                    <li>@message.UserName: @message.Content</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="sendMessageBar">
+        <Search Placeholder="Type a message" OnSearch="@(() => SendToGroup())" EnterButton="@(" Send")" @bind-Value="@msg"  />
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public List<ChatMessage> messages { get; set; }
+    [Parameter]
+    public List<string> allUsers { get; set; }
+
+    [Parameter]
+    public string baseURI { get; set; }
+    [Parameter]
+    public string dynamicGroup { get; set; }
+    [Parameter]
+    public string dynamicUserId { get; set; }
+
+    private string msg = "";
+
+    private void ClearChat()
+    {
+        msg = "";
+    }
+
+    public async Task SendToGroup()
+    {
+        await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/{dynamicUserId}/send", JsonSerializer.Serialize(msg));
+        msg = "";
+    }
+
+    //Current users dropdown menu
+    private RenderFragment _overlayMenu =>@<Menu>
+        @foreach (var user in allUsers)
+        {
+            <MenuItem><a style="color:#6D5AB3;">@user.ToString()</a></MenuItem>
+        }
+    </Menu>;
+}

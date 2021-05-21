@@ -1362,3 +1362,5 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\F5n
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\miUaH2Uo.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\f2Kk9adU.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\build-gz\93y5Oc78.gz
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\Chat\Chat.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\Chat\Chat.razor.g.cs
