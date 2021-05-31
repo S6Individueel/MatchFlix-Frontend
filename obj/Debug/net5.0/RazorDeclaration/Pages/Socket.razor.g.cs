@@ -133,7 +133,27 @@ using MatchFlix_Frontend.Components.Chat;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 185 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 236 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+       
+    private ShowDTO chosenShow = new ShowDTO();
+    public void ViewShow(string chosenTitle)
+    {
+        foreach (ShowDTO show in endList)
+        {
+            if (show.Title.Equals(chosenTitle))
+            {
+                chosenShow = show;
+                StateHasChanged();
+                return;
+            }
+        }
+    }
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 252 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     string mvmt;
     string rotation;
@@ -223,7 +243,7 @@ using MatchFlix_Frontend.Components.Chat;
 #line hidden
 #nullable disable
 #nullable restore
-#line 273 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 340 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
        
     #region Swiping
     private List<ShowDTO> dataSet;
@@ -343,7 +363,7 @@ using MatchFlix_Frontend.Components.Chat;
     private bool isChat = true;
     private bool isSwiping = false;
     private bool isHost = false;
-    private bool isGuest = true;
+    private bool isGuest = false;
     private bool isEndResult = false;
     private bool isPreLoadLobby = true;
     private bool isDoneMessage = true;
@@ -447,10 +467,10 @@ using MatchFlix_Frontend.Components.Chat;
                 hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
                 {
                     messages.Add(message); //Make it special list message or somethgin color idk
-                allUsers.Add(message.UserName);
+                    allUsers.Add(message.UserName);
                     message.UsersList = allUsers;
                     message.ShowChoice = selectedData;//Doesn't allow for dynamic change of data.
-                StateHasChanged();
+                    StateHasChanged();
                     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updategroup", JsonSerializer.Serialize(message));
                 });
                 hubConnection.On<ChatMessage>(incomingHost, (message) =>
@@ -476,8 +496,6 @@ using MatchFlix_Frontend.Components.Chat;
             {
                 matches.Add(incomingList);
                 ParseAnswer(incomingList.MatchResults);
-                Console.WriteLine("AllAnswers");
-                Console.WriteLine(allAnswers.Count);
                 if (allAnswers.Count == dataCount * allUsers.Count)
                 {
                     CalculateResults();
@@ -490,9 +508,9 @@ using MatchFlix_Frontend.Components.Chat;
             hubConnection.On<ChatMessage>("incomingUser", (message) =>
             {
                 messages.Add(message); //Takes latest user and funny entrance, Make it special list message or somethgin color idk
-            selectedData = message.ShowChoice;
+                selectedData = message.ShowChoice;
                 allUsers = message.UsersList; //latest user from server.
-            StateHasChanged();
+                StateHasChanged();
             });
         }
         if (swipeData)
@@ -546,10 +564,12 @@ using MatchFlix_Frontend.Components.Chat;
             }
             endList.Add(swipedSet[answerCount]);
         }
-        Console.WriteLine(endList.Count);
         isSwiping = false;
         isDoneSwiping = true;
         isEndResult = true;
+        try
+        {chosenShow = endList[0];}
+        catch(Exception ex) { Console.WriteLine(ex.Message); }
     }
 
     public bool IsConnected =>
@@ -570,7 +590,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.OpenElement(0, "Menu");
             __builder2.AddMarkupContent(1, "\r\n");
 #nullable restore
-#line 611 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 678 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
          foreach (var user in allUsers)
         {
 
@@ -583,7 +603,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.AddAttribute(5, "style", "color:#6D5AB3;");
             __builder2.AddContent(6, 
 #nullable restore
-#line 613 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 680 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                                                  user.ToString()
 
 #line default
@@ -594,7 +614,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.CloseElement();
             __builder2.AddMarkupContent(7, "\r\n");
 #nullable restore
-#line 614 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 681 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
         }
 
 #line default
@@ -604,7 +624,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.CloseElement();
         }
 #nullable restore
-#line 615 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 682 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 
 private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
@@ -620,7 +640,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.OpenElement(11, "span");
             __builder2.AddContent(12, 
 #nullable restore
-#line 620 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 687 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            leftButton
 
 #line default
@@ -631,7 +651,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.AddMarkupContent(13, "\r\n    ");
             __builder2.AddContent(14, 
 #nullable restore
-#line 621 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 688 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
      rightButton
 
 #line default
@@ -642,7 +662,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.CloseElement();
         }
 #nullable restore
-#line 622 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 689 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 }
 
@@ -655,7 +675,7 @@ private RenderFragment iconUser =>
             __builder2.AddMarkupContent(16, "<Icon Type=\"user\"></Icon>");
         }
 #nullable restore
-#line 626 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 693 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                      ;
 private RenderFragment iconGroup =>
 
@@ -666,7 +686,7 @@ private RenderFragment iconGroup =>
             __builder2.AddMarkupContent(17, "<Icon Type=\"usergroup-add\"></Icon>");
         }
 #nullable restore
-#line 628 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 695 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                               ;
 
 #line default

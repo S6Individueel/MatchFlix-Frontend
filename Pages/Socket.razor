@@ -31,11 +31,22 @@
                     </div>
                     <div class="buttonGroup">
                         <div class="optionsButtonGroup">
-                            <Button @onclick="JoinGroup" Type="primary">Join Group</Button>
-                            <Button @onclick="HostGroup" Type="primary">Host Group</Button>
-                            <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
+
                             @if (isHost)
-                            {<Button Type="primary" @onclick="ToggleSwiping">Start</Button>}
+                            {
+                                <Button Type="primary" @onclick="ToggleSwiping">Start</Button>
+                                <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
+                            }
+                            else if (isGuest)
+                            {
+                                <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
+                            }
+                            else
+                            {
+                                <Button @onclick="JoinGroup" Type="primary">Join Group</Button>
+                                <Button @onclick="HostGroup" Type="primary">Host Group</Button>
+                                <Button @onclick="ToggleChat" Type="primary">@toggleText Chat</Button>
+                            }
                         </div>
                         @if (isHost)
                         {
@@ -48,7 +59,7 @@
                 </div>
                 @if (isChat)
                 {
-                    <Chat messages="@messages" allUsers="@allUsers" baseURI="@baseURI" dynamicGroup="@dynamicGroup" dynamicUserId="@dynamicUserId" ></Chat>
+                    <Chat messages="@messages" allUsers="@allUsers" baseURI="@baseURI" dynamicGroup="@dynamicGroup" dynamicUserId="@dynamicUserId"></Chat>
                 }
             </div>
         </div>
@@ -59,55 +70,91 @@
 
     @if (isDoneSwiping)
     {
-        <div class="doneContent">
 
-            @if (isEndResult)
-            {
+        @if (isEndResult)
+        {
+            <div class="doneContent">
+                <div class="endlist-names" id="endbackground">
+                    <Timeline>
+                        @if (endList == null)
+                        {
+                            <p>Loading...</p>
+                        }
+                        else
+                        {
+                            @foreach (ShowDTO show in endList)
+                            {
+                                if (show.No_Count.Equals(0))
+                                {
+                                    <TimelineItem Color="green"><Button OnClick="@(() => ViewShow(show.Title))">@show.Title</Button></TimelineItem>
+                                }
+                                else if (show.Yes_Count.Equals(show.No_Count))
+                                {
+                                    <TimelineItem Color="yellow"><Button OnClick="@(() => ViewShow(show.Title))">@show.Title</Button></TimelineItem>
+                                }
+                                else
+                                {
+                                    <TimelineItem Color="red"><Button OnClick="@(() => ViewShow(show.Title))">@show.Title</Button></TimelineItem>
+                                }
+                            }
+                        }
+                    </Timeline>
+                    <div class="endButtons">
+                        <Button Type="primary" Icon="home" Size="large"></Button>
+                        <Button Type="primary" Icon="redo" Size="large"></Button>
+                    </div>
+                </div>
 
-                <div class="endListContainer">
-
-                    @foreach (ShowDTO endShow in endList)
-                    {
-                        <div class="card">
-                            <img class="card-img-top" src="@endShow.Image_url" alt="Card image cap">
-
-                            <div class="card-body">
-                                <h5 class="card-title">@endShow.Title</h5>
-                                <p class="card-text">@endShow.Description</p>
+                @if (chosenShow != null)
+                {
+                    <div class="endshow-card">
+                        <div class="endshow-info" id="endbackground">
+                            <div>
+                                <img src="@chosenShow.Image_url" />
                             </div>
+
+                            <h1>@chosenShow.Title</h1>
                             <div class="endVotes">
-                                <div><Icon Type="check-circle" Theme="fill" Style="color:forestgreen" /> @endShow.Yes_Count</div>
-                                <div><Icon Type="close-circle" Theme="fill" Style="color:red" /> @endShow.No_Count</div>
+                                <div><Icon Type="check" Theme="outline" Style="color:forestgreen;" /> @chosenShow.Yes_Count</div>
+                                <div><Icon Type="close" Theme="outline" Style="color:red" /> @chosenShow.No_Count</div>
+                            </div>
+                            <div class="endshow-info-text">
+                                <p>@chosenShow.Description</p>
+                            </div>
+
+                            <div>
+                                <Tag Color="purple-inverse" Style="text-transform:uppercase;">@chosenShow.Media_type</Tag>
                             </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
+                else
+                {
+                    <p>loading...</p>
+                }
+            </div>
+
+        }
+        else
+        {
+            <div class="waitingContent">
                 <div>
-                    <Button Type="primary" OnClick="ToSwiping"><Icon Type="home" Theme="outline" /></Button>
+                    <Steps>
+                        <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
+                        <Step Status="process" Title="Swiping" Icon="loading" />
+                        <Step Status="wait" Title="Discuss results!" Icon="smile" />
+                    </Steps>
                 </div>
 
-            }
-            else
-            {
-        <div class="waitingContent">
-            <div>
-                <Steps>
-                    <Step Status="finish" Title="Lobby" Icon="usergroup-add" />
-                    <Step Status="process" Title="Swiping" Icon="loading" />
-                    <Step Status="wait" Title="Discuss results!" Icon="smile" />
-                </Steps>
+                <div style="display:flex;justify-content:center;">
+                    <h1>Chat while you're waiting</h1>
+                </div>
+
+                <Chat messages="@messages" allUsers="@allUsers" baseURI="@baseURI" dynamicGroup="@dynamicGroup" dynamicUserId="@dynamicUserId"></Chat>
+
             </div>
+        }
 
-            <div style="display:flex;justify-content:center;">
-                <h1>Chat while you're waiting</h1>
-            </div>
-
-            <Chat messages="@messages" allUsers="@allUsers" baseURI="@baseURI" dynamicGroup="@dynamicGroup" dynamicUserId="@dynamicUserId"></Chat>
-
-        </div>
-            }
-
-        </div>
     }
 
     @if (isSwiping)
@@ -171,16 +218,36 @@
             }
 
         </div>
+
         <div class="swipe-controls">
-            <div class="swipe-buttons">
-                <Button Type="primary" Shape="circle" Icon="close" Size="large" @onclick="() => ChooseLeft(dataSet[0].Id)" />
-            </div>
-            <div class="swipe-buttons">
-                <Button Type="primary" Shape="circle" Icon="heart" Size="large" @onclick="() => ChooseRight(dataSet[0].Id)" />
-            </div>
+            @if (dataSet.Count >= 1)
+            {
+                <div class="swipe-buttons">
+                    <Button Type="primary" Shape="circle" Icon="close" Size="large" @onclick="() => ChooseLeft(dataSet[0].Id)" />
+                </div>
+                <div class="swipe-buttons">
+                    <Button Type="primary" Shape="circle" Icon="heart" Size="large" @onclick="() => ChooseRight(dataSet[0].Id)" />
+                </div>
+            }
         </div>
     }
 </div>
+
+@code {
+    private ShowDTO chosenShow = new ShowDTO();
+    public void ViewShow(string chosenTitle)
+    {
+        foreach (ShowDTO show in endList)
+        {
+            if (show.Title.Equals(chosenTitle))
+            {
+                chosenShow = show;
+                StateHasChanged();
+                return;
+            }
+        }
+    }
+} 
 
 @code {
     string mvmt;
@@ -389,7 +456,7 @@
     private bool isChat = true;
     private bool isSwiping = false;
     private bool isHost = false;
-    private bool isGuest = true;
+    private bool isGuest = false;
     private bool isEndResult = false;
     private bool isPreLoadLobby = true;
     private bool isDoneMessage = true;
@@ -493,10 +560,10 @@
                 hubConnection.On<ChatMessage>("incomingUserUpdate", async (message) =>
                 {
                     messages.Add(message); //Make it special list message or somethgin color idk
-                allUsers.Add(message.UserName);
+                    allUsers.Add(message.UserName);
                     message.UsersList = allUsers;
                     message.ShowChoice = selectedData;//Doesn't allow for dynamic change of data.
-                StateHasChanged();
+                    StateHasChanged();
                     await client.PostAsJsonAsync<string>($"{baseURI}/{dynamicGroup}/updategroup", JsonSerializer.Serialize(message));
                 });
                 hubConnection.On<ChatMessage>(incomingHost, (message) =>
@@ -522,8 +589,6 @@
             {
                 matches.Add(incomingList);
                 ParseAnswer(incomingList.MatchResults);
-                Console.WriteLine("AllAnswers");
-                Console.WriteLine(allAnswers.Count);
                 if (allAnswers.Count == dataCount * allUsers.Count)
                 {
                     CalculateResults();
@@ -536,9 +601,9 @@
             hubConnection.On<ChatMessage>("incomingUser", (message) =>
             {
                 messages.Add(message); //Takes latest user and funny entrance, Make it special list message or somethgin color idk
-            selectedData = message.ShowChoice;
+                selectedData = message.ShowChoice;
                 allUsers = message.UsersList; //latest user from server.
-            StateHasChanged();
+                StateHasChanged();
             });
         }
         if (swipeData)
@@ -592,10 +657,12 @@
             }
             endList.Add(swipedSet[answerCount]);
         }
-        Console.WriteLine(endList.Count);
         isSwiping = false;
         isDoneSwiping = true;
         isEndResult = true;
+        try
+        {chosenShow = endList[0];}
+        catch(Exception ex) { Console.WriteLine(ex.Message); }
     }
 
     public bool IsConnected =>

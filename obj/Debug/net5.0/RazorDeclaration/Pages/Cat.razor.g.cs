@@ -103,7 +103,7 @@ using MatchFlix_Frontend.Models;
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/swipetest")]
+    [Microsoft.AspNetCore.Components.RouteAttribute("/endtest")]
     public partial class Cat : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -112,14 +112,38 @@ using MatchFlix_Frontend.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 46 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
+#line 69 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
       
     private List<ShowDTO> endList = new List<ShowDTO>();
+    private ShowDTO chosenShow = new ShowDTO();
     private bool isHidden { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         endList = await client.GetFromJsonAsync<List<ShowDTO>>("https://localhost:5021/topmovie");
+        endList[0].Yes_Count = 1; //yellow
+        endList[0].No_Count = 1;
+
+        endList[1].Yes_Count = 1; //red
+        endList[1].No_Count = 2;
+
+        endList[2].Yes_Count = 2; //green
+        endList[2].No_Count = 0;
+
+        chosenShow = endList[0];
+    }
+
+    public void ViewShow(string chosenTitle)
+    {
+        foreach (ShowDTO show in endList)
+        {
+            if (show.Title.Equals(chosenTitle))
+            {
+                chosenShow = show;
+                StateHasChanged();
+                return;
+            }
+        }
     }
 
 #line default

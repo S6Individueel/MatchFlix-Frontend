@@ -345,6 +345,9 @@ a, .btn-link {
 
 .joinBox h1, h2, p {
     color: white;
+/*    text-align: justify;
+    border-left: 1px solid #722ed1;
+    padding-left: 0.9em;*/
 }
 
 .joinTitle {
@@ -589,24 +592,105 @@ a, .btn-link {
     display: flex;
     justify-content: space-evenly;
     width: 100%;
+    font-size:2em;
 }
 
 .doneContent {
-    height:100vh;
-    width:100vw;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction:row;
+}
+
+.endlist-names {
+    width: 25vw;
+    border-radius: 0px 15px 15px 0px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.endlist-names .ant-btn {
+/*    border-radius:15em;
+*/}
+
+.endshow-card {
     display:flex;
     justify-content:center;
+    align-items:center;
+    width:100%;
+}
+
+.endshow-info {
+    width: 45vw;
+    overflow-y:auto;
+    border-radius: 15px;
+    display:flex;
+    align-items:center;
+    flex-direction: column;
+}
+
+    .endshow-info::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    .endshow-info::-webkit-scrollbar-thumb {
+        background: linear-gradient(13deg, #722ed1 14%,#d6d6d6 64%);
+        border-radius: 8px;
+    }
+
+    .endshow-info::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(13deg, #722ed1 14%,#ebebeb 64%);
+    }
+
+    .endshow-info::-webkit-scrollbar-track {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: inset 7px 10px 12px #f0f0f0;
+    }
+
+.endshow-info h1 {
+    margin: 1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid;
+    padding-bottom: 0.2em;
+    letter-spacing: 1px;
+}
+
+.endshow-info-text{
+    width:80%;
+    margin: 1em;
+}
+
+#endbackground {
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    padding: 2em;
+    height: 100vh;
+}
+
+.ant-timeline-item-head{
+    background-color: transparent !important;
+}
+
+.endlist-names .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
+    text-decoration: none !important;
+    background: #722ed1 !important;
+    color: #fff !important;
 }
 
 .endListContainer {
     width: 50vw;
-/*    display: flex;
+    /*    display: flex;
     justify-content: center;*/
-    display:flex;
-    flex-wrap:wrap;
+    display: flex;
+    flex-wrap: wrap;
     overflow-y: auto;
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .endListContainer .card{
@@ -650,12 +734,19 @@ a, .btn-link {
     flex-direction:column;
     align-items:center;
     justify-content:space-around;
+    height:100vh;
 }
 
 .waitingContent h1 {
     color:white;
 }
 
-.waitingContent .anticon svg {
+.ant-steps .anticon svg {
     color: white !important;
 }
+
+.endButtons .ant-btn-primary {
+    border-radius:15em !important;
+}
+
+

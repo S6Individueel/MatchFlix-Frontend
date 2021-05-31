@@ -133,177 +133,30 @@ using Microsoft.JSInterop;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 60 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
+#line 142 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
       
-    List<string> collection = new List<string>(){"One","Two", "Three" };
 
-    void Delete()
+    public class ListDataSource
     {
-        collection.RemoveAt(0);
-        StateHasChanged();
+        public string Title { get; set; }
+    };
+
+    List<ListDataSource> datasource = new List<ListDataSource>() {
+        new ListDataSource(){Title="Henry"},
+        new ListDataSource(){Title="Henry"}
+    };
+    bool visible = false;
+
+
+    void open(MouseEventArgs arg, string Title)
+    {
+        this.visible = true;
     }
 
-    private string cursorGrab;
-    ((double, double) tupleMouse, DateTime StartTime) mousePoint;
-    bool pressedDown;
-
-    void HandleMouseDown(MouseEventArgs m)
+    void close()
     {
-        cursorGrab = "-webkit-grabbing;";
-        pressedDown = true;
-        (double, double) pos = (m.ClientX, m.ClientY);
-        mousePoint.StartTime = DateTime.Now;
-        mousePoint.tupleMouse = pos;
+        this.visible = false;
     }
-
-    void HandleMouseMove(MouseEventArgs m)
-    {
-        if (pressedDown == true)
-        {
-            mvmtReset = "";
-            double difference = m.ClientX - mousePoint.tupleMouse.Item1;
-            mvmt = difference + "px";
-            rotation = (difference / 10) + "deg";
-        }
-    }
-
-    void HandleMouseUp(MouseEventArgs m)
-    {
-        pressedDown = false;
-        cursorGrab = "";
-        mvmt = "";
-        mvmtReset = "transform 0.5s";
-        const double swipeThreshold = 0.8;
-        try
-        {
-            if (mousePoint.Equals(default))
-            {
-                return;
-            }
-
-
-            var diffX = mousePoint.tupleMouse.Item1 - m.ClientX;
-            var diffY = mousePoint.tupleMouse.Item2 - m.ClientY;
-            var diffTime = DateTime.Now - mousePoint.StartTime;
-            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
-            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
-
-            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
-            if (Math.Abs(velocityX - velocityY) < .5) return;
-
-            if (velocityX >= swipeThreshold)
-            {
-                if (diffX < 0)
-                { message = "right"; }
-                else { message = "left"; }
-            }
-        }
-
-        catch (Exception e)
-        {
-            message = e.Message;
-        }
-    }
-
-
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 135 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Swiping.razor"
-       
-    string mvmt;
-    string rotation;
-
-    string mvmtReset = "";
-    string rotationReset = "";
-
-    private string selectedData = "";
-    private bool animeCheck;
-    private bool movieCheck;
-
-    private List<string> myAnswers = new List<string>();
-    private List<ShowDTO> dataSet; private readonly string baseApiUri = "https://localhost:5021";
-
-    public async Task LoadData(string dataURL, string _selectedData)
-    {
-        selectedData = _selectedData;
-        dataSet = await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/{dataURL}");
-    }
-    public async Task LoadSelectedData()
-    {
-        Console.WriteLine("Enter");
-        if (animeCheck)
-        {
-            Console.WriteLine("Anime Check");
-            dataSet.AddRange(await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/topanime"));
-        }
-        if (movieCheck)
-        {
-            Console.WriteLine("MovieCheck");
-            dataSet.AddRange(await Http.GetFromJsonAsync<List<ShowDTO>>($"{baseApiUri}/topmovie"));
-        }
-    }
-    (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
-
-    string message = "touch to begin";
-
-
-    void HandleTouchStart(TouchEventArgs t)
-    {
-        startPoint.ReferencePoint = t.TargetTouches[0];
-        startPoint.StartTime = DateTime.Now;
-        cursorGrab = "-webkit-grabbing;";
-    }
-
-    void HandleTouchMove(TouchEventArgs t) //A list of TouchPoint for every point of contact currently touching the surface.
-    {
-        mvmtReset = "";
-        double difference = t.TargetTouches[0].ClientX - startPoint.ReferencePoint.ClientX;
-        mvmt = difference + "px";
-        rotation = (difference / 10) + "deg";
-    }
-
-
-    void HandleTouchEnd(TouchEventArgs t)
-    {
-        mvmt = "";
-        mvmtReset = "transform 0.5s";
-        cursorGrab = "";
-        const double swipeThreshold = 0.8;
-        try
-        {
-            if (startPoint.ReferencePoint == null)
-            {
-                return;
-            }
-
-            var endReferencePoint = t.ChangedTouches[0];
-
-            var diffX = startPoint.ReferencePoint.ClientX - endReferencePoint.ClientX;
-            var diffY = startPoint.ReferencePoint.ClientY - endReferencePoint.ClientY;
-            var diffTime = DateTime.Now - startPoint.StartTime;
-            var velocityX = Math.Abs(diffX / diffTime.Milliseconds);
-            var velocityY = Math.Abs(diffY / diffTime.Milliseconds);
-
-            if (velocityX < swipeThreshold && velocityY < swipeThreshold) return;
-            if (Math.Abs(velocityX - velocityY) < .5) return;
-
-            if (velocityX >= swipeThreshold)
-            {
-                if (diffX < 0)
-                { message = "right"; }
-                else { message = "left"; }
-            }
-        }
-
-        catch (Exception e)
-        {
-            message = e.Message;
-        }
-    }
-
 
 
 #line default
