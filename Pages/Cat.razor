@@ -1,0 +1,101 @@
+﻿@page "/endtest"
+@inject HttpClient client
+
+<div class="swipingContentPage">
+
+    <div class="doneContent">
+        <div class="endlist-names" id="endbackground">
+            <Timeline>
+                @if (endList == null)
+                {
+                    <p>Loading...</p>
+                }
+                else
+                {
+                    @foreach (ShowDTO show in endList)
+                    {
+                        if (show.No_Count.Equals(0))
+                        {
+                            <TimelineItem Color="green"><Button OnClick="@(() => ViewShow(show.Title))">@show.Title</Button></TimelineItem>
+                        }
+                        else if (show.Yes_Count.Equals(show.No_Count))
+                        {
+                            <TimelineItem Color="yellow"><Button OnClick="@(() => ViewShow(show.Title))">@show.Title</Button></TimelineItem>
+                        }
+                        else
+                        {
+                            <TimelineItem Color="red"><Button OnClick="@(() => ViewShow(show.Title))">@show.Title</Button></TimelineItem>
+                        }
+                    }
+                }
+            </Timeline>
+            <div class="endButtons">
+                <Button Type="primary" Icon="home" Size="large"></Button>
+                <Button Type="primary" Icon="redo" Size="large"></Button>
+            </div>
+        </div>
+
+        @if (chosenShow != null)
+        {
+            <div class="endshow-card">
+                <div class="endshow-info" id="endbackground">
+                    <div>
+                        <img src="@chosenShow.Image_url" />
+                    </div>
+
+                    <h1>@chosenShow.Title</h1>
+                    <div class="endVotes">
+                        <div><Icon Type="check" Theme="outline" Style="color:forestgreen;" /> @chosenShow.Yes_Count</div>
+                        <div><Icon Type="close" Theme="outline" Style="color:red" /> @chosenShow.No_Count</div>
+                    </div>
+                    <div class="endshow-info-text">
+                        <p>@chosenShow.Description</p>
+                    </div>
+
+                    <div>
+                        <Tag Color="purple-inverse" Style="text-transform:uppercase;">@chosenShow.Media_type</Tag>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>loading...</p>
+        }
+    </div>
+</div>
+
+
+@code{
+    private List<ShowDTO> endList = new List<ShowDTO>();
+    private ShowDTO chosenShow = new ShowDTO();
+    private bool isHidden { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        endList = await client.GetFromJsonAsync<List<ShowDTO>>("https://localhost:5021/topmovie");
+        endList[0].Yes_Count = 1; //yellow
+        endList[0].No_Count = 1;
+
+        endList[1].Yes_Count = 1; //red
+        endList[1].No_Count = 2;
+
+        endList[2].Yes_Count = 2; //green
+        endList[2].No_Count = 0;
+
+        chosenShow = endList[0];
+    }
+
+    public void ViewShow(string chosenTitle)
+    {
+        foreach (ShowDTO show in endList)
+        {
+            if (show.Title.Equals(chosenTitle))
+            {
+                chosenShow = show;
+                StateHasChanged();
+                return;
+            }
+        }
+    }
+}

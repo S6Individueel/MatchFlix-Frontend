@@ -1,7 +1,144 @@
 ﻿@page "/"
+@inject HttpClient Http
+@using MatchFlix_Frontend.Components.IconSection;
+@inject NavigationManager NavigationManager
+@inject MessageService message;
+<div class="carousel">
+    <div class="containerTop">
+    <div class="navbar">
+        <a>About</a>
+        <a>FAQ</a>
+        <a>Home</a>
+    </div>
+    <div class="bannerbase">
+        <div class="texts">
 
-<h1>Hello, world!</h1>
+            <h1 id="bannertitle">MatchFlix</h1>
+            <Animate Animation="Animations.FadeRight" Easing="Easings.EaseInOutSine" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(0.5)" IsManual="false">
+                <h2 id="bannerslogan">Match, Swipe, Watch</h2>
+            </Animate>
+        </div>
+        <div class="matchbtn">
+            <Button Shape="round" id="matchBtn" OnClick="ToSwiping">Match!</Button>
+        </div>
+    </div>
+    <Carousel Autoplay="TimeSpan.FromSeconds(5)">
+        <CarouselSlick>
+            <image src="/images/MOANA.JPG"></image>
+        </CarouselSlick>
+        <CarouselSlick>
+            <image src="/images/OP.JPG"></image>
+        </CarouselSlick>
+        <CarouselSlick>
+            <image src="/images/PB.JPG"></image>
+        </CarouselSlick>
+        <CarouselSlick>
+            <image src="/images/QB.JPG"></image>
+        </CarouselSlick>
+    </Carousel>
+    </div>
+</div>
 
-Welcome to your new app.
+<div class="iconSection">
+    <Button Size="large" Ghost>
+        <image src="/images/relationshipclr.png"></image>
+        <p class="iconText">Match with friends and family</p>
+    </Button>
+    <Button Size="large" Ghost OnClick="ToSwiping">
+        <image src="/images/swipeclr.png"></image>
+        <p class="iconText">Swipe your favourite shows</p>
+    </Button>
+    <Button Size="large" Ghost>
+        <image src="/images/watchingclr2.png"></image>
+        <p class="iconText">Compare and watch your matched shows!</p>
+    </Button>
+</div>
+<div class="matchSection">
+    <div class="hostBox">
+        <div class="hostExplanationBox">
+            <div class="hostTitle">
+                <h1>HOST</h1>
+            </div>
+            <div class="hostText">
+                <div class="iconWithText">
+                    <Icon Type="usergroup-add" Theme="outline" /> Host a group
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="share-alt" Theme="outline" /> Share your room pin
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="split-cells" Theme="outline" /> Swipe away!
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="message" Theme="outline" /> Discuss the results
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="joinBox">
+        <div class="joinExplanationBox">
+            <div class="joinTitle">
+                <h1>JOIN</h1>
+            </div>
+            <div class="joinText">
+                <div class="iconWithText">
+                    <Icon Type="borderless-table" Theme="outline" /> Join a group using a room pin
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="smile" Theme="outline" /> Socialize in the lobby
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="split-cells" Theme="outline" /> Swipe away!
+                </div>
+                <div class="iconWithText">
+                    <Icon Type="message" Theme="outline" /> Discuss the results
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<BackTop></BackTop>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{
+
+    private string joinUserName { get; set; }
+    private string joinFriendCode { get; set; }
+    private string hostUserName { get; set; }
+
+    private async Task PostHostRoom()
+    {
+        ForwardModel result = await Http.GetFromJsonAsync<ForwardModel>("https://localhost:5031/anime/host/" + hostUserName);
+        ToHosting(result.name, result.roomName);
+    }
+
+    void ToHosting(string _hostName, string _roomName)
+    {
+        NavigationManager.NavigateTo("room" + "/" + _hostName + "/" + _roomName);
+    }
+
+    void ToSwiping()
+    {
+        NavigationManager.NavigateTo("swiping");
+    }
+
+    public async Task OnSearch()
+    {
+        await message.Loading($"Joining {joinUserName}", 2);
+    }
+
+    public class ForwardModel
+    {
+        public ForwardModel()
+        {
+
+        }
+        public ForwardModel(string _name, string _roomName)
+        {
+            name = _name;
+            roomName = _roomName;
+        }
+        public string name { get; set; }
+        public string roomName { get; set; }
+    }
+}

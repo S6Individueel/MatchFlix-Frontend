@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -9,10 +9,19 @@
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="MatchFlix-Frontend.styles.css" rel="stylesheet" />
+    <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <app id="app">
+        <div class="loaderContainer">
+            <h1 class="loaderTitle">MatchFlix</h1>
+            <div class="loader">The application is loading...</div>
+        </div>
+
+    </app>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -20,6 +29,11 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
+    <script src="_content/BlazorAnimate/blazorAnimateInterop.js"></script>
+    <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
+
 </body>
 
 </html>

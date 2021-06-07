@@ -1,0 +1,6 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/AntDesign" Path="C:\Users\ander\.nuget\packages\antdesign\0.8.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/BlazorAnimate" Path="C:\Users\ander\.nuget\packages\blazoranimate\3.0.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="/" Path="C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\" />
+  <ContentRoot BasePath="/" Path="C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\scopedcss\bundle\" />
+</StaticWebAssets>
