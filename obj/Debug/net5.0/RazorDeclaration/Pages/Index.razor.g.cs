@@ -104,8 +104,29 @@ using MatchFlix_Frontend.Models;
 #line hidden
 #nullable disable
 #nullable restore
+#line 14 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
+using MongoDB;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
+using MongoDB.Driver.Core;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
 using MatchFlix_Frontend.Components.IconSection;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 4 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
+using MatchFlix_Frontend.Components.MatchSection;
 
 #line default
 #line hidden
@@ -119,7 +140,7 @@ using MatchFlix_Frontend.Components.IconSection;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 103 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
+#line 62 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Index.razor"
       
 
     private string joinUserName { get; set; }
@@ -140,6 +161,11 @@ using MatchFlix_Frontend.Components.IconSection;
     void ToSwiping()
     {
         NavigationManager.NavigateTo("swiping");
+    }
+    
+    void ToLogin()
+    {
+        NavigationManager.NavigateTo("login");
     }
 
     public async Task OnSearch()

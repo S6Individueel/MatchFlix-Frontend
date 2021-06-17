@@ -101,6 +101,20 @@ using MatchFlix_Frontend.Models;
 #line hidden
 #nullable disable
 #nullable restore
+#line 14 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
+using MongoDB;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
+using MongoDB.Driver.Core;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\Chat\Chat.razor"
 using System.Text.Json;
 

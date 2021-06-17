@@ -103,6 +103,20 @@ using MatchFlix_Frontend.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
+using MongoDB;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
+using MongoDB.Driver.Core;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/endtest")]
     public partial class Cat : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -112,7 +126,7 @@ using MatchFlix_Frontend.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 69 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
+#line 71 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Cat.razor"
       
     private List<ShowDTO> endList = new List<ShowDTO>();
     private ShowDTO chosenShow = new ShowDTO();
@@ -146,9 +160,30 @@ using MatchFlix_Frontend.Models;
         }
     }
 
+    void ToSwiping()
+    {
+        NavigationManager.NavigateTo("/");
+        InvokeAsync(() =>
+        {
+            uriHelper.NavigateTo(uriHelper.Uri);
+
+        });
+    }
+
+    void ToHome()
+    {
+        NavigationManager.NavigateTo("/");
+        InvokeAsync(() =>
+        {
+            uriHelper.NavigateTo(uriHelper.BaseUri);
+        });
+    }
+
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager uriHelper { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient client { get; set; }
     }
 }

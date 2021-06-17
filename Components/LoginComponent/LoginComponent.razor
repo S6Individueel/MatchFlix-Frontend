@@ -1,0 +1,165 @@
+﻿@using System.Text.Json;
+@using MatchFlix_Frontend.Components.LoginComponent;
+@using System.ComponentModel.DataAnnotations;
+@using MongoDB.Driver;
+@using MongoDB.Bson;
+@using System.Linq;
+@using System.Security.Authentication;
+@using MatchFlix_Frontend.DAL;
+@inject HttpClient client
+@using System.Text;
+
+@if (isLoggingIn)
+{
+    <Form Model="@model"
+          OnFinish="OnFinishRegister"
+          OnFinishFailed="OnFinishFailedRegister"
+          LabelColSpan="8"
+          WrapperColSpan="16">
+        <FormItem Label="Username">
+            <Input @bind-Value="@context.Username" />
+        </FormItem>
+        <FormItem Label="Password">
+            <InputPassword @bind-Value="@context.Password" />
+        </FormItem>
+        <FormItem Label="Email">
+            <Input @bind-Value="@context.Email" />
+        </FormItem>
+        <FormItem WrapperColOffset="8" WrapperColSpan="16">
+            <Button Type="@ButtonType.Primary" HtmlType="submit">
+                Submit
+            </Button>
+        </FormItem>
+        <Button @onclick="ToggleLoggingIn">Login</Button>
+    </Form>
+}
+else
+{
+    <Form Model="@loginModel"
+          OnFinish="OnFinish"
+          OnFinishFailed="OnFinishFailed"
+          LabelColSpan="8"
+          WrapperColSpan="16">
+        <FormItem Label="Username">
+            <Input @bind-Value="@context.Username" />
+        </FormItem>
+        <FormItem Label="Password">
+            <InputPassword @bind-Value="@context.Password" />
+        </FormItem>
+        <FormItem WrapperColOffset="8" WrapperColSpan="16">
+            <Button Type="@ButtonType.Primary" HtmlType="submit">
+                Submit
+            </Button>
+        </FormItem>
+        <Button @onclick="ToggleLoggingIn">Register</Button>
+    </Form>
+}
+@if (isLoggedIn)
+{
+    <div>
+        <h1>Hi @thisUser.Name!</h1>
+        <h1>Current Email: @thisUser.Email</h1>
+        <Button @onclick="ForgetMe">Forget Me</Button>
+    </div>
+}
+@code
+{
+    public class Model
+    {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        public string Email { get; set; }
+    }
+
+    public class LoginModel
+    {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+    }
+
+    private bool isLoggingIn = false;
+    private bool isLoggedIn = false;
+    private Model model = new Model();
+    private LoginModel loginModel = new LoginModel();
+    private readonly string MongoServiceUri = "https://localhost:5941";
+    private Dal dal = null;
+    private User thisUser = new User();
+
+    private async Task OnFinish(EditContext editContext)
+    {
+        thisUser = await GetUserAsync(loginModel.Username, loginModel.Password);
+        Console.WriteLine($"Success:{JsonSerializer.Serialize(thisUser)}");
+
+        if (this.thisUser.Pwd.Equals(loginModel.Password))
+        {
+            isLoggedIn = true;
+        }
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(model)}");
+    }
+
+    private void OnFinishRegister(EditContext editContext)
+    {
+        CreateUser(model.Username, model.Password, model.Email);
+        ToggleLoggingIn();
+        model.Username = thisUser.Name;
+        model.Password = thisUser.Pwd;
+        Console.WriteLine($"Success:{JsonSerializer.Serialize(model)}");
+    }
+
+    private void OnFinishFailedRegister(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(model)}");
+    }
+
+    private void ToggleLoggingIn()
+    {
+        if (isLoggingIn)
+        {
+            isLoggingIn = false;
+        }
+        else
+        {
+            isLoggingIn = true;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dal = new Dal();
+    }
+
+    public async Task<User> CreateUser(string name, string password, string email)
+    {
+        User createdUser = await client.GetFromJsonAsync<User>($"{MongoServiceUri}/user/create?name={name}&password={password}&email={email}");
+        thisUser = createdUser;
+        return createdUser;
+    }
+
+    public async Task<User> GetUserAsync(string name, string password)
+    {
+        User foundUser = await client.GetFromJsonAsync<User>($"{MongoServiceUri}/user/getuser?name={name}&password={password}");
+        thisUser = foundUser;
+        Console.WriteLine("THISUSER: " + foundUser);
+        if (foundUser.Pwd != null)
+        {
+            isLoggedIn = true;
+            StateHasChanged();
+        }
+        return foundUser;
+    }
+
+    public async Task ForgetMe()
+    {
+        StringContent data = new StringContent(JsonSerializer.Serialize(thisUser), Encoding.UTF8, "application/json");
+        await client.GetAsync($"{MongoServiceUri}/user/forgetme?name={loginModel.Username}&password={loginModel.Password}");
+    }
+}

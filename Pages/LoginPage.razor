@@ -1,0 +1,16 @@
+﻿@page "/login"
+@using MatchFlix_Frontend.Components.LoginComponent;
+<div class="loginBody" id="loginPage">
+    <div class="navbar" id="loginNav" style="top:0;width:100vw;">
+        <a>About</a>
+        <a>FAQ</a>
+        <a>Home</a>
+    </div>
+    <div style="border-radius: 15px; padding: 5%;" id="loginForm">
+        <LoginComponent></LoginComponent>
+    </div>
+</div>
+@code {
+    public string txtValue { get; set; }
+
+}

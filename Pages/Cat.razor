@@ -1,5 +1,7 @@
 ﻿@page "/endtest"
 @inject HttpClient client
+@inject NavigationManager NavigationManager
+@inject NavigationManager uriHelper
 
 <div class="swipingContentPage">
 
@@ -30,8 +32,8 @@
                 }
             </Timeline>
             <div class="endButtons">
-                <Button Type="primary" Icon="home" Size="large"></Button>
-                <Button Type="primary" Icon="redo" Size="large"></Button>
+                <Button Type="primary" Icon="home" Size="large" OnClick="ToHome"></Button>
+                <Button Type="primary" Icon="redo" Size="large" OnClick="ToSwiping"></Button>
             </div>
         </div>
 
@@ -97,5 +99,24 @@
                 return;
             }
         }
+    }
+
+    void ToSwiping()
+    {
+        NavigationManager.NavigateTo("/");
+        InvokeAsync(() =>
+        {
+            uriHelper.NavigateTo(uriHelper.Uri);
+
+        });
+    }
+
+    void ToHome()
+    {
+        NavigationManager.NavigateTo("/");
+        InvokeAsync(() =>
+        {
+            uriHelper.NavigateTo(uriHelper.BaseUri);
+        });
     }
 }

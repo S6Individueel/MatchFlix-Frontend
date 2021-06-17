@@ -100,9 +100,9 @@
                         }
                     </Timeline>
                     <div class="endButtons">
-                        <Button Type="primary" Icon="home" Size="large"></Button>
-                        <Button Type="primary" Icon="redo" Size="large"></Button>
-                    </div>
+                        <Button Type="primary" Icon="home" Size="large" OnClick="ToHome"></Button>
+@*                        <Button Type="primary" Icon="redo" Size="large" OnClick="ToSwiping"></Button>
+*@                    </div>
                 </div>
 
                 @if (chosenShow != null)
@@ -294,8 +294,6 @@
 
     void HandleMouseUp(MouseEventArgs m)
     {
-
-
         difference = 0;
         pressedDown = false;
         cursorGrab = "";
@@ -483,6 +481,17 @@
         {
             uriHelper.NavigateTo(uriHelper.Uri);
 
+        });
+    }
+
+    async Task ToHome()
+    {
+        NavigationManager.NavigateTo("/");
+        await InvokeAsync(async () =>
+        {
+            if (hubConnection.State.Equals(HubConnectionState.Connected))
+            {await DisposeAsync();}
+            uriHelper.NavigateTo(uriHelper.BaseUri);
         });
     }
 
