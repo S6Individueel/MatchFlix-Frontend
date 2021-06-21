@@ -69,17 +69,9 @@
               "target": "Package",
               "version": "[1.1.0, )"
             },
-            "MongoDB.Bson": {
+            "Microsoft.Azure.SignalR": {
               "target": "Package",
-              "version": "[2.12.4, )"
-            },
-            "MongoDB.Driver": {
-              "target": "Package",
-              "version": "[2.12.4, )"
-            },
-            "MongoDB.Driver.Core": {
-              "target": "Package",
-              "version": "[2.12.4, )"
+              "version": "[1.8.2, )"
             },
             "System.Net.Http.Json": {
               "target": "Package",
@@ -99,7 +91,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.browser-wasm",
-              "version": "[5.0.4, 5.0.4]"
+              "version": "[5.0.3, 5.0.3]"
             }
           ],
           "frameworkReferences": {
@@ -107,7 +99,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-preview.3.21202.5\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

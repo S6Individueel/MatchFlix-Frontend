@@ -1197,7 +1197,7 @@
       "url": "_content\/AntDesign\/less\/upload\/style\/rtl.less"
     },
     {
-      "hash": "sha256-kHdzhHno653wYWWFwo+Ieyo34wpZ\/lmx3sK8m8kvlZ4=",
+      "hash": "sha256-6mSiPOTrubr7axTiK6ViRGTbMOjLxgmVgyVgwJq\/Cy0=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1207,10 +1207,6 @@
     {
       "hash": "sha256-vGiYBLVyybxLbKCTltgck+lsQRQ3jNQ5QnA+alJq\/7Q=",
       "url": "_framework\/BlazorAnimate.dll"
-    },
-    {
-      "hash": "sha256-gWqxqdNWccOfJcbLM+dhjMNj1xkEDo+YNJiZkDQnEGs=",
-      "url": "_framework\/DnsClient.dll"
     },
     {
       "hash": "sha256-hBmEudhpdeLXLU5KNzx5bBkI9o4ZurJu15U6afmGyIg=",
@@ -1341,28 +1337,8 @@
       "url": "_framework\/Microsoft.JSInterop.WebAssembly.dll"
     },
     {
-      "hash": "sha256-493LWqmwhKuS9mH+N9FHynIE6LYN49Q7vFV\/rlnLKCM=",
-      "url": "_framework\/MongoDB.Bson.dll"
-    },
-    {
-      "hash": "sha256-eTRjP4X0NgnUemZPfmYBEZTcPn8QkZMrz\/Zer02WKhk=",
-      "url": "_framework\/MongoDB.Driver.dll"
-    },
-    {
-      "hash": "sha256-qK6TrzyffhBb6iah93GQ\/0WVxJabPc4+RQLnR+G0PkQ=",
-      "url": "_framework\/MongoDB.Driver.Core.dll"
-    },
-    {
-      "hash": "sha256-LI8HXhW04mDuxPQfiZppobFd8VUbYGN76GOXprNlZTo=",
-      "url": "_framework\/MongoDB.Libmongocrypt.dll"
-    },
-    {
       "hash": "sha256-K99lDyL6VrtTDYGRk5o+Q3caW25Uogee\/1e7aIvpgLY=",
       "url": "_framework\/OneOf.dll"
-    },
-    {
-      "hash": "sha256-\/LU0iM3EOR7E20FEpCe4ZtmZIk0C\/UA+gWuSsB2ey5A=",
-      "url": "_framework\/SharpCompress.dll"
     },
     {
       "hash": "sha256-3ET+mpR7F058YRj9YaLHOVXBqOW6iUxtIpeiKPYw4PA=",
@@ -2057,11 +2033,11 @@
       "url": "_framework\/dotnet.6.0.0-preview.3.21201.4.js"
     },
     {
-      "hash": "sha256-k6c\/0YJNLybEQTyRIf7yHuN5F7AwK8HT+EkStJzQCZw=",
+      "hash": "sha256-UeVvogsmyA8lvo\/8WSXjirJC1HFJBvi5kqL\/ubZfDic=",
       "url": "_framework\/MatchFlix-Frontend.dll"
     },
     {
-      "hash": "sha256-CXR6Wi4m1mCbOx7XAFJBmPvnLMN9u2RgvoVm4\/J9Zco=",
+      "hash": "sha256-KoeJuK1x4RFhqJt0ljFXu780avs19zmLjIxM4I8ipAI=",
       "url": "_framework\/MatchFlix-Frontend.pdb"
     },
     {
@@ -2075,10 +2051,6 @@
     {
       "hash": "sha256-ZyoQjH4u8VvLYxEcoScEX4IF3gIGg+73ggntCL2Thp4=",
       "url": "_framework\/BlazorAnimate.dll.gz"
-    },
-    {
-      "hash": "sha256-GU5w8IyuAlE+3iXuYwFKK1D8aFWeAY8hrBYm88sUo2g=",
-      "url": "_framework\/DnsClient.dll.gz"
     },
     {
       "hash": "sha256-CX3nAY1dqpTfEIvYeEgQj3rtNy1LPe+KezrVGsPvjbs=",
@@ -2209,28 +2181,8 @@
       "url": "_framework\/Microsoft.JSInterop.WebAssembly.dll.gz"
     },
     {
-      "hash": "sha256-h68tt4PS0BjnO\/sLHMzWAF2mFsm\/B3q7GGXSlSrhay4=",
-      "url": "_framework\/MongoDB.Bson.dll.gz"
-    },
-    {
-      "hash": "sha256-0Sp1TV\/sms38y0kFE5yo2O+SfzLcnPB\/Ib2S+5QxLG8=",
-      "url": "_framework\/MongoDB.Driver.dll.gz"
-    },
-    {
-      "hash": "sha256-rnojKD3kz6mnUgzp4yWOBUqGlQDfK4nSdSQ8LiAVKLI=",
-      "url": "_framework\/MongoDB.Driver.Core.dll.gz"
-    },
-    {
-      "hash": "sha256-3daVLyx2hYsKNMQGV3ec2455UqcruHE286lpw8MZNaM=",
-      "url": "_framework\/MongoDB.Libmongocrypt.dll.gz"
-    },
-    {
       "hash": "sha256-fIZZvLR32Q8tchH+t9BJSVZCiFJ72ReOE9fKkeCIuYs=",
       "url": "_framework\/OneOf.dll.gz"
-    },
-    {
-      "hash": "sha256-u8mM89E7sO0+jG10yLkpPJcR4Rht9ShX5vZU+6pLU1Q=",
-      "url": "_framework\/SharpCompress.dll.gz"
     },
     {
       "hash": "sha256-vwjAF20lq+yxKjnFSGOsijXJ8WtpR4ChadUq9n06oVc=",
@@ -2925,6 +2877,10 @@
       "url": "_framework\/dotnet.6.0.0-preview.3.21201.4.js.gz"
     },
     {
+      "hash": "sha256-Mso2V51VrLe\/cOXbt2z2LOSG5wiM\/5tGv0ibvIchm2w=",
+      "url": "appsettings.json"
+    },
+    {
       "hash": "sha256-ykILcWoXBf9lbdJg3MC0SvtXx1Hy4iKSMPneyvZJjHo=",
       "url": "css\/app.css"
     },
@@ -3053,5 +3009,5 @@
       "url": "MatchFlix-Frontend.bundle.scp.css"
     }
   ],
-  "version": "G9tN\/KZP"
+  "version": "xZH\/UKG+"
 };

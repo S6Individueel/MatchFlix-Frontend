@@ -102,14 +102,7 @@ using MatchFlix_Frontend.Models;
 #nullable disable
 #nullable restore
 #line 14 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using MongoDB;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using MongoDB.Driver.Core;
+using Microsoft.Extensions.Configuration.Json;
 
 #line default
 #line hidden

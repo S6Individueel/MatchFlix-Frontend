@@ -104,14 +104,7 @@ using MatchFlix_Frontend.Models;
 #nullable disable
 #nullable restore
 #line 14 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using MongoDB;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using MongoDB.Driver.Core;
+using Microsoft.Extensions.Configuration.Json;
 
 #line default
 #line hidden
@@ -139,27 +132,13 @@ using System.ComponentModel.DataAnnotations;
 #nullable disable
 #nullable restore
 #line 4 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
-using MongoDB.Driver;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 5 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
-using MongoDB.Bson;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 6 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
 using System.Linq;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
+#line 5 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
 using System.Security.Authentication;
 
 #line default
@@ -167,13 +146,6 @@ using System.Security.Authentication;
 #nullable disable
 #nullable restore
 #line 8 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
-using MatchFlix_Frontend.DAL;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 10 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
 using System.Text;
 
 #line default
@@ -187,7 +159,7 @@ using System.Text;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 66 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
+#line 63 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Components\LoginComponent\LoginComponent.razor"
  
     public class Model
     {
@@ -212,17 +184,23 @@ using System.Text;
     private Model model = new Model();
     private LoginModel loginModel = new LoginModel();
     private readonly string MongoServiceUri = "https://localhost:5941";
-    private Dal dal = null;
     private User thisUser = new User();
 
     private async Task OnFinish(EditContext editContext)
     {
-        thisUser = await GetUserAsync(loginModel.Username, loginModel.Password);
-        Console.WriteLine($"Success:{JsonSerializer.Serialize(thisUser)}");
+        var task = _message.Loading(CreateMessage("Logging in...", 0));
+        task.Start();
 
-        if (this.thisUser.Pwd.Equals(loginModel.Password))
+        await GetUserAsync(loginModel.Username, loginModel.Password);
+        if (String.IsNullOrEmpty(thisUser.Pwd))
+        {
+            await _message.Error("User not found");
+        }
+        else
         {
             isLoggedIn = true;
+            Console.WriteLine($"Success:{JsonSerializer.Serialize(thisUser)}");
+            await _message.Success($"Successfully logged in as {thisUser.Name}!");
         }
     }
 
@@ -231,13 +209,13 @@ using System.Text;
         Console.WriteLine($"Failed:{JsonSerializer.Serialize(model)}");
     }
 
-    private void OnFinishRegister(EditContext editContext)
+    private async Task OnFinishRegister(EditContext editContext)
     {
-        CreateUser(model.Username, model.Password, model.Email);
+        var task = _message.Loading(CreateMessage("Registering user...", 0));
+        task.Start();
+        await CreateUser(model.Username, model.Password, model.Email);
+        await _message.Success($"Successfully registered!");
         ToggleLoggingIn();
-        model.Username = thisUser.Name;
-        model.Password = thisUser.Pwd;
-        Console.WriteLine($"Success:{JsonSerializer.Serialize(model)}");
     }
 
     private void OnFinishFailedRegister(EditContext editContext)
@@ -257,9 +235,13 @@ using System.Text;
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    private MessageConfig CreateMessage(string content, int duration)
     {
-        dal = new Dal();
+        return new MessageConfig()
+        {
+            Content = content,
+            Duration = duration
+        };
     }
 
     public async Task<User> CreateUser(string name, string password, string email)
@@ -271,26 +253,25 @@ using System.Text;
 
     public async Task<User> GetUserAsync(string name, string password)
     {
-        User foundUser = await client.GetFromJsonAsync<User>($"{MongoServiceUri}/user/getuser?name={name}&password={password}");
-        thisUser = foundUser;
-        Console.WriteLine("THISUSER: " + foundUser);
-        if (foundUser.Pwd != null)
-        {
-            isLoggedIn = true;
-            StateHasChanged();
-        }
-        return foundUser;
+        thisUser = await client.GetFromJsonAsync<User>($"{MongoServiceUri}/user/getuser?name={name}&password={password}");
+        return thisUser;
     }
 
     public async Task ForgetMe()
     {
+        var task = _message.Loading(CreateMessage("Erasing data...", 0));
+        task.Start();
         StringContent data = new StringContent(JsonSerializer.Serialize(thisUser), Encoding.UTF8, "application/json");
         await client.GetAsync($"{MongoServiceUri}/user/forgetme?name={loginModel.Username}&password={loginModel.Password}");
+        thisUser = new User();
+        isLoggedIn = false;
+        await _message.Success($"Successfully erased data!");
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private MessageService _message { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient client { get; set; }
     }
 }

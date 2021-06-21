@@ -1,15 +1,19 @@
 ﻿@using System.Text.Json;
 @using MatchFlix_Frontend.Components.LoginComponent;
 @using System.ComponentModel.DataAnnotations;
-@using MongoDB.Driver;
-@using MongoDB.Bson;
 @using System.Linq;
 @using System.Security.Authentication;
-@using MatchFlix_Frontend.DAL;
 @inject HttpClient client
+@inject MessageService _message
 @using System.Text;
-
-@if (isLoggingIn)
+@if (isLoggedIn)
+{
+    <div>
+        <h1>Hi @thisUser.Name!</h1>
+        <h1>Current Email: @thisUser.Email</h1>
+        <Button @onclick="ForgetMe">Forget Me</Button>
+    </div>
+} else if (isLoggingIn)
 {
     <Form Model="@model"
           OnFinish="OnFinishRegister"
@@ -54,14 +58,7 @@ else
         <Button @onclick="ToggleLoggingIn">Register</Button>
     </Form>
 }
-@if (isLoggedIn)
-{
-    <div>
-        <h1>Hi @thisUser.Name!</h1>
-        <h1>Current Email: @thisUser.Email</h1>
-        <Button @onclick="ForgetMe">Forget Me</Button>
-    </div>
-}
+
 @code
 {
     public class Model
@@ -87,17 +84,23 @@ else
     private Model model = new Model();
     private LoginModel loginModel = new LoginModel();
     private readonly string MongoServiceUri = "https://localhost:5941";
-    private Dal dal = null;
     private User thisUser = new User();
 
     private async Task OnFinish(EditContext editContext)
     {
-        thisUser = await GetUserAsync(loginModel.Username, loginModel.Password);
-        Console.WriteLine($"Success:{JsonSerializer.Serialize(thisUser)}");
+        var task = _message.Loading(CreateMessage("Logging in...", 0));
+        task.Start();
 
-        if (this.thisUser.Pwd.Equals(loginModel.Password))
+        await GetUserAsync(loginModel.Username, loginModel.Password);
+        if (String.IsNullOrEmpty(thisUser.Pwd))
+        {
+            await _message.Error("User not found");
+        }
+        else
         {
             isLoggedIn = true;
+            Console.WriteLine($"Success:{JsonSerializer.Serialize(thisUser)}");
+            await _message.Success($"Successfully logged in as {thisUser.Name}!");
         }
     }
 
@@ -106,13 +109,13 @@ else
         Console.WriteLine($"Failed:{JsonSerializer.Serialize(model)}");
     }
 
-    private void OnFinishRegister(EditContext editContext)
+    private async Task OnFinishRegister(EditContext editContext)
     {
-        CreateUser(model.Username, model.Password, model.Email);
+        var task = _message.Loading(CreateMessage("Registering user...", 0));
+        task.Start();
+        await CreateUser(model.Username, model.Password, model.Email);
+        await _message.Success($"Successfully registered!");
         ToggleLoggingIn();
-        model.Username = thisUser.Name;
-        model.Password = thisUser.Pwd;
-        Console.WriteLine($"Success:{JsonSerializer.Serialize(model)}");
     }
 
     private void OnFinishFailedRegister(EditContext editContext)
@@ -132,9 +135,13 @@ else
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    private MessageConfig CreateMessage(string content, int duration)
     {
-        dal = new Dal();
+        return new MessageConfig()
+        {
+            Content = content,
+            Duration = duration
+        };
     }
 
     public async Task<User> CreateUser(string name, string password, string email)
@@ -146,20 +153,18 @@ else
 
     public async Task<User> GetUserAsync(string name, string password)
     {
-        User foundUser = await client.GetFromJsonAsync<User>($"{MongoServiceUri}/user/getuser?name={name}&password={password}");
-        thisUser = foundUser;
-        Console.WriteLine("THISUSER: " + foundUser);
-        if (foundUser.Pwd != null)
-        {
-            isLoggedIn = true;
-            StateHasChanged();
-        }
-        return foundUser;
+        thisUser = await client.GetFromJsonAsync<User>($"{MongoServiceUri}/user/getuser?name={name}&password={password}");
+        return thisUser;
     }
 
     public async Task ForgetMe()
     {
+        var task = _message.Loading(CreateMessage("Erasing data...", 0));
+        task.Start();
         StringContent data = new StringContent(JsonSerializer.Serialize(thisUser), Encoding.UTF8, "application/json");
         await client.GetAsync($"{MongoServiceUri}/user/forgetme?name={loginModel.Username}&password={loginModel.Password}");
+        thisUser = new User();
+        isLoggedIn = false;
+        await _message.Success($"Successfully erased data!");
     }
 }

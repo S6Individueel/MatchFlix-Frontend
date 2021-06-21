@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <UserSecretsId>9f58a210-dce1-4a38-80bd-35c9a0def7f1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.3" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
-    <PackageReference Include="MongoDB.Bson" Version="2.12.4" />
-    <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
-    <PackageReference Include="MongoDB.Driver.Core" Version="2.12.4" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.8.2" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>

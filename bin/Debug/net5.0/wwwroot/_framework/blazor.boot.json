@@ -1,6 +1,8 @@
 {
   "cacheBootResources": true,
-  "config": [ ],
+  "config": [
+    "appsettings.json"
+  ],
   "debugBuild": true,
   "entryAssembly": "MatchFlix-Frontend",
   "icuDataMode": 0,
@@ -9,7 +11,6 @@
     "assembly": {
       "AntDesign.dll": "sha256-2StwWT9dN2tH9y0yivooW5lW7IhPJOq4ds8p5H6KxGs=",
       "BlazorAnimate.dll": "sha256-vGiYBLVyybxLbKCTltgck+lsQRQ3jNQ5QnA+alJq\/7Q=",
-      "DnsClient.dll": "sha256-gWqxqdNWccOfJcbLM+dhjMNj1xkEDo+YNJiZkDQnEGs=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-hBmEudhpdeLXLU5KNzx5bBkI9o4ZurJu15U6afmGyIg=",
       "Microsoft.AspNetCore.Components.dll": "sha256-YYHd2lVuYwtRTYNBtWL5k+alBHjMQGBqMwwgixqG9Ak=",
       "Microsoft.AspNetCore.Components.DataAnnotations.Validation.dll": "sha256-VGaB03HIjFg4jeK7BomIFzlhhY3vW5N+jWuRqZkbJsY=",
@@ -42,12 +43,7 @@
       "Microsoft.Extensions.Primitives.dll": "sha256-XNHVw5siarTMMQ009PdQgD7MrQ0iqnJ92cJOWSSE1vs=",
       "Microsoft.JSInterop.dll": "sha256-nRrEUPsQERx39N5116F8869epzUx5PHVOexlygwlEaw=",
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-4vJK1Cg+6YCG2LXoMEVEqy8bqawD3HL16+WNXWIzVCU=",
-      "MongoDB.Bson.dll": "sha256-493LWqmwhKuS9mH+N9FHynIE6LYN49Q7vFV\/rlnLKCM=",
-      "MongoDB.Driver.dll": "sha256-eTRjP4X0NgnUemZPfmYBEZTcPn8QkZMrz\/Zer02WKhk=",
-      "MongoDB.Driver.Core.dll": "sha256-qK6TrzyffhBb6iah93GQ\/0WVxJabPc4+RQLnR+G0PkQ=",
-      "MongoDB.Libmongocrypt.dll": "sha256-LI8HXhW04mDuxPQfiZppobFd8VUbYGN76GOXprNlZTo=",
       "OneOf.dll": "sha256-K99lDyL6VrtTDYGRk5o+Q3caW25Uogee\/1e7aIvpgLY=",
-      "SharpCompress.dll": "sha256-\/LU0iM3EOR7E20FEpCe4ZtmZIk0C\/UA+gWuSsB2ey5A=",
       "System.IO.Pipelines.dll": "sha256-3ET+mpR7F058YRj9YaLHOVXBqOW6iUxtIpeiKPYw4PA=",
       "Microsoft.CSharp.dll": "sha256-7w8yLgolT9mK58A8DN4p3fA1wWdGB+8RS++q3tPXs70=",
       "Microsoft.VisualBasic.Core.dll": "sha256-V1KpCFevupHZe1+dWpJW33HjUVBWKJoGe7VLVRvSAfg=",
@@ -214,11 +210,11 @@
       "mscorlib.dll": "sha256-Fi+LybwHL\/VGD\/09OxxtYlT6exn9xVU+LdojZ9juR2c=",
       "netstandard.dll": "sha256-P8xX0ad1hKyWWbBxiXl3cYokFlDiuXwp3pqoYatH0kk=",
       "System.Private.CoreLib.dll": "sha256-2km83sNUTrumGJYdDzsN8RnJqv00vKWLCCh0UGajTB4=",
-      "MatchFlix-Frontend.dll": "sha256-k6c\/0YJNLybEQTyRIf7yHuN5F7AwK8HT+EkStJzQCZw="
+      "MatchFlix-Frontend.dll": "sha256-UeVvogsmyA8lvo\/8WSXjirJC1HFJBvi5kqL\/ubZfDic="
     },
     "lazyAssembly": null,
     "pdb": {
-      "MatchFlix-Frontend.pdb": "sha256-CXR6Wi4m1mCbOx7XAFJBmPvnLMN9u2RgvoVm4\/J9Zco="
+      "MatchFlix-Frontend.pdb": "sha256-KoeJuK1x4RFhqJt0ljFXu780avs19zmLjIxM4I8ipAI="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-ibxaSjW7s3aLVssChknhzCpgMTHGu4D48Q9OLP3dfe8=",

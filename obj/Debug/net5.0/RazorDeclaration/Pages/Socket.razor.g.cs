@@ -105,14 +105,7 @@ using MatchFlix_Frontend.Models;
 #nullable disable
 #nullable restore
 #line 14 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using MongoDB;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\_Imports.razor"
-using MongoDB.Driver.Core;
+using Microsoft.Extensions.Configuration.Json;
 
 #line default
 #line hidden
@@ -365,8 +358,8 @@ using MatchFlix_Frontend.Components.Chat;
     private List<ChatMessage> messages = new List<ChatMessage>();
     private List<MatchList> matches = new List<MatchList>();
 
-    //private static readonly string baseURI = "https://matchfunctionmatchflix.azurewebsites.net/api";
-    private static readonly string baseURI = "http://localhost:7071/api";
+    private static readonly string baseURI = "https://matchfunctionmatchflix.azurewebsites.net/api";
+    //private static readonly string baseURI = "http://localhost:7071/api";
     private string message = "";
     private string dynamicGroup = "";
     private string dynamicUserId = "";
