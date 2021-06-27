@@ -121,7 +121,7 @@
       "url": "watching-tv-512.png"
     },
     {
-      "hash": "sha256-yjL93pYsVqdw5HtUcDpSdfFYiQgnO703grCP8Nf12TE=",
+      "hash": "sha256-yYYGhCRdI7uirm\/vv+GhaG19iqT9UkAvstqOuAlI2eM=",
       "url": "_framework\/nginx.config"
     },
     {
@@ -1465,7 +1465,7 @@
       "url": "_framework\/System.IO.Pipelines.dll"
     },
     {
-      "hash": "sha256-Jls9vLlIVqiZcR+FpNUjhLY89Hu9TA1XksIG6FbL8U0=",
+      "hash": "sha256-IS84LGkM2bdiM4dmd\/\/jb8l+sYYyQXc+PMpBHoolWG0=",
       "url": "_framework\/MatchFlix-Frontend.dll"
     },
     {
@@ -1541,12 +1541,16 @@
       "url": "_framework\/System.Net.Primitives.dll"
     },
     {
-      "hash": "sha256-QwPNLp6CqUJS5s4evFTeL3fXwe3YNkSZAO0uT8s2Wyg=",
+      "hash": "sha256-wAAHtV97+emjjXVSCsciBA7wmdJLoJFLDo1oMVGEQbs=",
       "url": "_framework\/System.Net.Requests.dll"
     },
     {
-      "hash": "sha256-CZCdCVHYBJP+WjyZZ4WW3uJwEVhdfiLRnuD1oxQJ998=",
+      "hash": "sha256-hyjaQhthLkarl5pJSlsZ5pIV3xRRtBGFPVvDAzlYkRk=",
       "url": "_framework\/System.Net.Security.dll"
+    },
+    {
+      "hash": "sha256-DqPv1dNILDpnAszprfKRTSNHw6duAwc3A7y4RX7A48k=",
+      "url": "_framework\/System.Net.ServicePoint.dll"
     },
     {
       "hash": "sha256-\/GYZkUPkEHfmQOTdl8nOch3sTdjez1dGy99VIeTAqew=",
@@ -1601,7 +1605,7 @@
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
-      "hash": "sha256-OD3xj1w\/t0VotADFIj0Rga2R0vh1XaZeOZTO2MUQpF4=",
+      "hash": "sha256-oC2zJB2dYpImvYsIaEK4rc8pbmK4QrgiWJeCGD9R\/gw=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1609,5 +1613,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "WkgR0ILu"
+  "version": "diboavDQ"
 };

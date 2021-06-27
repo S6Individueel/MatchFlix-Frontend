@@ -680,10 +680,13 @@ C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Fronte
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Serverless.razor.g.cs
 C:\Users\ander\Documents\SCHOOL\SEMESTER 6\INDIVIDUEEL\PROJECTS\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Test.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\_framework\blazor.boot.json
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\nginx.config
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\MatchFlix-Frontend.StaticWebAssets.xml
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\MatchFlix-Frontend.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\ref\MatchFlix-Frontend.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\MatchFlix-Frontend.pdb
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\service-worker-assets.js
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\service-worker.js
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\_framework\MatchFlix-Frontend.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\_framework\MatchFlix-Frontend.pdb
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\_framework\blazor.webassembly.js
@@ -1108,9 +1111,14 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Fr
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.RazorComponent.input.cache
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\App.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\Chat\Chat.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\IconPiece\IconPiece.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\IconSection\IconSection.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\LoginComponent\LoginComponent.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\MatchSection\MatchSection.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Cat.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Index.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\LoginPage.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Socket.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Swiping.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Test.razor.g.cs
@@ -1124,9 +1132,14 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Fr
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.TagHelpers.output.cache
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.RazorCoreGenerate.cache
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\App.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\Chat\Chat.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\IconPiece\IconPiece.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\IconSection\IconSection.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\LoginComponent\LoginComponent.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\MatchSection\MatchSection.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Cat.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Index.razor.g.cs
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\LoginPage.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Socket.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Swiping.razor.g.cs
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Test.razor.g.cs
@@ -1181,21 +1194,8 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Fr
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\ref\MatchFlix-Frontend.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.pdb
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\Cat.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\Cat.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\service-worker-assets.js
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\service-worker.js
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\serviceworkers\wwwroot\service-worker.js
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\service-worker-assets.js
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\Chat\Chat.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\Chat\Chat.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\MatchSection\MatchSection.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\MatchSection\MatchSection.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Pages\LoginPage.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Pages\LoginPage.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\RazorDeclaration\Components\LoginComponent\LoginComponent.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\Razor\Components\LoginComponent\LoginComponent.razor.g.cs
-C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\nginx.config
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\_framework\dotnet.6.0.0-preview.3.21201.4.js.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\bin\Debug\net5.0\wwwroot\_framework\dotnet.6.0.0-preview.3.21201.4.js
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Debug\net5.0\MatchFlix-Frontend.csproj.AssemblyReference.cache

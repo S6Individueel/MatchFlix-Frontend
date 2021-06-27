@@ -17,7 +17,7 @@ namespace MatchFlix_Frontend
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-            await LoadAppSettingsAsync(builder);
+            //await LoadAppSettingsAsync(builder);
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             builder.Services.AddAntDesign();

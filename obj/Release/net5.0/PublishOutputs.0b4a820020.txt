@@ -385,6 +385,7 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wa
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Primitives.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Requests.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Security.dll
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.ServicePoint.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.WebSockets.Client.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.WebSockets.dll
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.ObjectModel.dll
@@ -790,6 +791,7 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wa
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Primitives.dll.br
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Requests.dll.br
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Security.dll.br
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.ServicePoint.dll.br
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.WebSockets.Client.dll.br
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.WebSockets.dll.br
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.ObjectModel.dll.br
@@ -1194,6 +1196,7 @@ C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wa
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Primitives.dll.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Requests.dll.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.Security.dll.gz
+C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.ServicePoint.dll.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.WebSockets.Client.dll.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.Net.WebSockets.dll.gz
 C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\obj\Release\net5.0\browser-wasm\PubTmp\Out\wwwroot\_framework\System.ObjectModel.dll.gz

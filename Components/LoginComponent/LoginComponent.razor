@@ -11,7 +11,7 @@
     <div>
         <h1>Hi @thisUser.Name!</h1>
         <h1>Current Email: @thisUser.Email</h1>
-        <Button @onclick="ForgetMe">Forget Me</Button>
+        <Button @onclick="ForgetMe" id="forgetMeButton">Forget Me</Button>
     </div>
 } else if (isLoggingIn)
 {
@@ -21,20 +21,20 @@
           LabelColSpan="8"
           WrapperColSpan="16">
         <FormItem Label="Username">
-            <Input @bind-Value="@context.Username" />
+            <Input @bind-Value="@context.Username" id="registerUsername" />
         </FormItem>
         <FormItem Label="Password">
-            <InputPassword @bind-Value="@context.Password" />
+            <InputPassword @bind-Value="@context.Password" id="registerPassword" />
         </FormItem>
         <FormItem Label="Email">
-            <Input @bind-Value="@context.Email" />
+            <Input @bind-Value="@context.Email" id="registerEmail"/>
         </FormItem>
         <FormItem WrapperColOffset="8" WrapperColSpan="16">
-            <Button Type="@ButtonType.Primary" HtmlType="submit">
-                Submit
+            <Button Type="@ButtonType.Primary" HtmlType="submit" id="registerButton">
+                Register
             </Button>
         </FormItem>
-        <Button @onclick="ToggleLoggingIn">Login</Button>
+        <Button @onclick="ToggleLoggingIn" id="toLoginButton">Login</Button>
     </Form>
 }
 else
@@ -45,17 +45,17 @@ else
           LabelColSpan="8"
           WrapperColSpan="16">
         <FormItem Label="Username">
-            <Input @bind-Value="@context.Username" />
+            <Input @bind-Value="@context.Username" id="loginUsername" />
         </FormItem>
         <FormItem Label="Password">
-            <InputPassword @bind-Value="@context.Password" />
+            <InputPassword @bind-Value="@context.Password" id="loginPassword"/>
         </FormItem>
         <FormItem WrapperColOffset="8" WrapperColSpan="16">
-            <Button Type="@ButtonType.Primary" HtmlType="submit">
-                Submit
+            <Button Type="@ButtonType.Primary" HtmlType="submit" id="loginSubmit">
+                Login
             </Button>
         </FormItem>
-        <Button @onclick="ToggleLoggingIn">Register</Button>
+        <Button @onclick="ToggleLoggingIn" id="toRegisterButton">Register</Button>
     </Form>
 }
 

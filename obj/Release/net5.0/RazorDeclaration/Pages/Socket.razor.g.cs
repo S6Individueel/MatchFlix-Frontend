@@ -438,15 +438,15 @@ using MatchFlix_Frontend.Components.Chat;
         var task = _message.Loading(CreateMessage("Connecting to server...", 0));
         isHost = true;
         await ListenerBuilder(isHost, false, true, true, true);
-        await client.GetAsync($"{baseURI}/host1/{dynamicUserId}/testRoom");
-        await client.GetAsync($"{baseURI}/host2/{dynamicUserId}/testRoom");
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 530 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
-          task.Start();
+#line 528 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                                                                             
+        await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
+        task.Start();
         await _message.Success("Successfully connected");
     }
 

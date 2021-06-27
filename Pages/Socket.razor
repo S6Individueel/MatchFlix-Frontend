@@ -26,8 +26,8 @@
             <div class="connectGroup">
                 <div class="settings">
                     <div class="inputGroup">
-                        <Input Size="@InputSize.Large" Placeholder="Username" @bind-Value="@dynamicUserId" Prefix="iconUser" />
-                        <Input Size="@InputSize.Large" Placeholder="Room pin" @bind-Value="@dynamicGroup" Prefix="iconGroup" />
+                        <Input Size="@InputSize.Large" Placeholder="Username" @bind-Value="@dynamicUserId" Prefix="iconUser" id="usernameInput"/>
+                        <Input Size="@InputSize.Large" Placeholder="Room pin" @bind-Value="@dynamicGroup" Prefix="iconGroup" id="roomInput"/>
                     </div>
                     <div class="buttonGroup">
                         <div class="optionsButtonGroup">
@@ -223,10 +223,10 @@
             @if (dataSet.Count >= 1)
             {
                 <div class="swipe-buttons">
-                    <Button Type="primary" Shape="circle" Icon="close" Size="large" @onclick="() => ChooseLeft(dataSet[0].Id)" />
+                    <Button Type="primary" Shape="circle" Icon="close" Size="large" @onclick="() => ChooseLeft(dataSet[0].Id)" id="swipeLeftButton"/>
                 </div>
                 <div class="swipe-buttons">
-                    <Button Type="primary" Shape="circle" Icon="heart" Size="large" @onclick="() => ChooseRight(dataSet[0].Id)" />
+                    <Button Type="primary" Shape="circle" Icon="heart" Size="large" @onclick="() => ChooseRight(dataSet[0].Id)" id="swipeRightButton" />
                 </div>
             }
         </div>
