@@ -358,8 +358,8 @@ using MatchFlix_Frontend.Components.Chat;
     private List<ChatMessage> messages = new List<ChatMessage>();
     private List<MatchList> matches = new List<MatchList>();
 
-    private static readonly string baseURI = "https://matchfunctionmatchflix.azurewebsites.net/api";
-    //private static readonly string baseURI = "http://localhost:7071/api";
+    //private static readonly string baseURI = "https://matchfunctionmatchflix.azurewebsites.net/api";
+    private static readonly string baseURI = "http://localhost:7071/api";
     private string message = "";
     private string dynamicGroup = "";
     private string dynamicUserId = "";
@@ -438,6 +438,13 @@ using MatchFlix_Frontend.Components.Chat;
         var task = _message.Loading(CreateMessage("Connecting to server...", 0));
         isHost = true;
         await ListenerBuilder(isHost, false, true, true, true);
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 528 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+                                                                             
         await client.GetAsync($"{baseURI}/host/{dynamicUserId}");
         task.Start();
         await _message.Success("Successfully connected");
@@ -606,7 +613,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.OpenElement(0, "Menu");
             __builder2.AddMarkupContent(1, "\r\n");
 #nullable restore
-#line 687 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 689 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
          foreach (var user in allUsers)
         {
 
@@ -619,7 +626,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.AddAttribute(5, "style", "color:#6D5AB3;");
             __builder2.AddContent(6, 
 #nullable restore
-#line 689 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 691 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                                                  user.ToString()
 
 #line default
@@ -630,7 +637,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.CloseElement();
             __builder2.AddMarkupContent(7, "\r\n");
 #nullable restore
-#line 690 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 692 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
         }
 
 #line default
@@ -640,7 +647,7 @@ using MatchFlix_Frontend.Components.Chat;
             __builder2.CloseElement();
         }
 #nullable restore
-#line 691 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 693 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 
 private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment rightButton)
@@ -656,7 +663,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.OpenElement(11, "span");
             __builder2.AddContent(12, 
 #nullable restore
-#line 696 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 698 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            leftButton
 
 #line default
@@ -667,7 +674,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.AddMarkupContent(13, "\r\n    ");
             __builder2.AddContent(14, 
 #nullable restore
-#line 697 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 699 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
      rightButton
 
 #line default
@@ -678,7 +685,7 @@ private RenderFragment ButtonsRender(RenderFragment leftButton, RenderFragment r
             __builder2.CloseElement();
         }
 #nullable restore
-#line 698 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 700 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
            ;
 }
 
@@ -691,7 +698,7 @@ private RenderFragment iconUser =>
             __builder2.AddMarkupContent(16, "<Icon Type=\"user\"></Icon>");
         }
 #nullable restore
-#line 702 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 704 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                      ;
 private RenderFragment iconGroup =>
 
@@ -702,7 +709,7 @@ private RenderFragment iconGroup =>
             __builder2.AddMarkupContent(17, "<Icon Type=\"usergroup-add\"></Icon>");
         }
 #nullable restore
-#line 704 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
+#line 706 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Socket.razor"
                               ;
 
 #line default

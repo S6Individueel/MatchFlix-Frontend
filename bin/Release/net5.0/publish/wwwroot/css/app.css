@@ -1,0 +1,776 @@
+﻿    /*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');*/
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap');
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+     display: none;
+}
+
+a, .btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.bannerbase {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Alata', sans-serif;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10;
+    background-color: rgb(128, 128, 128, 0.5);
+}
+.bannerbase h2 {
+    font-size: 10px;
+    font-family: Arial;
+    margin-bottom: -5px;
+    margin-top: -16px;
+    color: white;
+}
+#bannertitle {
+    font-size: 120px;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+}
+
+#bannerslogan {
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 17px;
+    margin-top: -70px;
+    display: flex;
+    font-family: 'Josefin Sans', sans-serif;
+    justify-content: flex-end;
+}
+
+.slick-track {
+    height: 100vh;
+    background-color: rgba(220, 220, 220, 1)
+}
+
+.carousel img{
+    height:100vh;
+    width: 100%;
+    filter: blur(3px);
+}
+.ant-carousel {
+    position:relative;
+}
+
+.matchbtn {
+    padding-top:3em;
+}
+#matchBtn {
+    height: 2em;
+    width: 8em;
+    font-size: 3em;
+    font-family: 'Alata', sans-serif;
+    background-color: #f6f6f6;
+}
+
+#matchBtn :hover {
+    color: red;
+}
+
+.iconSection {
+    height: 30vh;
+    background-color: #f6f6f6;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+
+.iconBox {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    transition: 0.3s;
+    background-color: white;
+    height: 80%;
+    width: 25%;
+}
+
+.iconSection img {
+    height: 5.5em;
+    width: 5.5em;
+}
+
+.iconSection Button {
+    height: 10em;
+    width: 25em;
+}
+.iconText {
+    color: grey;
+}
+
+
+
+.loader,
+.loader:before,
+.loader:after {
+    background: #b37feb;
+    -webkit-animation: load1 1s infinite ease-in-out;
+    animation: load1 1s infinite ease-in-out;
+    width: 1em;
+    height: 4em;
+}
+
+.loaderTitle {
+    font-family: 'Alata', sans-serif;
+    font-size: 10vw;
+    color: #000;
+    text-shadow: 5px 5px 1px #efdbff;
+}
+.loaderContainer {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+.loader {
+    color: #b37feb;
+    text-indent: -9999em;
+    margin: 88px auto;
+    position: relative;
+    font-size: 11px;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+    .loader:before,
+    .loader:after {
+        position: absolute;
+        top: 0;
+        content: '';
+    }
+
+    .loader:before {
+        left: -1.5em;
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .loader:after {
+        left: 1.5em;
+    }
+
+@-webkit-keyframes load1 {
+    0%, 80%, 100% {
+        box-shadow: 0 0;
+        height: 4em;
+    }
+
+    40% {
+        box-shadow: 0 -2em;
+        height: 5em;
+    }
+}
+
+@keyframes load1 {
+    0%, 80%, 100% {
+        box-shadow: 0 0;
+        height: 4em;
+    }
+
+    40% {
+        box-shadow: 0 -2em;
+        height: 5em;
+    }
+}
+
+/*ANTDESIGN*/
+.ant-btn:focus, .ant-btn:hover { /*Overrides Antdesign CSS, currently can't do it from centralized place*/
+    color: #b37feb !important;
+    background: #fff;
+    border-color: #b37feb !important;
+}
+
+.ant-switch {
+    width: 100px;
+}
+.ant-switch-checked {
+    background-color: #6D5AB3 !important;
+}
+
+.ant-spin-dot-item {
+    background-color: #b37feb !important;
+}
+.ant-input-search .ant-input:focus, .ant-input-search .ant-input:hover{
+    border-color: #b37feb !important;
+}
+.ant-input-focused, .ant-input:focus {
+    box-shadow: 0 0 0 2px rgba(179, 127, 235, .2) !important;
+}
+
+.ant-input-affix-wrapper-focused, .ant-input-affix-wrapper:focus {
+    border-color: #b37feb !important;
+    box-shadow: 0 0 0 2px rgba(179, 127, 235, .2) !important;
+}
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+    border-color: #b37feb !important;
+}
+
+    .navbar {
+        color: rgb(255, 255, 255);
+        text-shadow: rgb(0 0 0) 1px 1px 1px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 17px;
+        position: absolute;
+        z-index: 11;
+        display: flex;
+        justify-content: flex-end;
+        width: 98vw;
+    }
+
+.navbar a {
+    margin: 5px;
+}
+.matchSection {
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    display:flex;
+    flex-direction:row;
+}
+.hostBox {
+    width: 50vw;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.hostExplanationBox {
+    border: 1px solid #b37feb;
+    border-radius: 15px;
+    width: 50%;
+    padding: 5%;
+}
+
+.hostExplanationBox p {
+    color: black;
+}
+
+.hostTitle {
+    display:flex;
+    justify-content:center;
+}
+
+.hostText{
+    font-size:large;
+    font-weight:300;
+}
+
+.iconWithText {
+    display: flex;
+    align-items: center;
+}
+
+.joinBox {
+    width: 50vw;
+    background-color: #b37feb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.joinExplanationBox {
+    border: 1px solid white;
+    border-radius: 15px;
+    width: 50%;
+    padding: 5%;
+}
+
+.joinBox h1, h2, p {
+    color: white;
+/*    text-align: justify;
+    border-left: 1px solid #722ed1;
+    padding-left: 0.9em;*/
+}
+
+.joinTitle {
+    display:flex;
+    justify-content:center;
+}
+.joinText {
+    color: white;
+    font-size: large;
+    font-weight: 300;
+}
+.ant-btn-primary {
+    background: #6D5AB3 !important;
+    border-color: #6D5AB3 !important;
+}
+.ant-btn:focus, .ant-btn:hover {
+    color: #463973 !important;
+}
+.joinInput {
+    width: 25vw;
+}
+.ant-input-search > .ant-input-group > .ant-input-group-addon:last-child{
+    left: 0px !important;
+}
+.card {
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
+}
+
+    .card:hover {
+        cursor: -webkit-grab;
+    }
+.card-img-top {
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
+.card-text {
+    color: black;
+    text-align: justify;
+    border-left: 3px solid #9f8fdb9e;
+    padding-left: 10px;
+    font-size: 12px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap');
+.card-title {
+    margin-bottom: .75rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Pathway Gothic One', sans-serif;
+}
+/*ChatRoom*/
+.swipingPage{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    width:100vw;
+    height:100vh;
+}
+.roomInfo{
+    height:20%;
+}
+
+.connectGroup{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+}
+.swipingContentPage {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.chatComponent {
+    width: 60vw;
+}
+
+.chatView {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
+    min-height: 50vh;
+}
+.chatMessageContainer {
+    width: 100%;
+    border-radius: 5px;
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    box-shadow: 6px 6px 20px rgba(122,122,122,0.2);
+}
+.sendMessageBar{
+    width:100%;
+}
+.userList {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
+}
+/*Send Chat button*/
+.ant-input-search > .ant-input-group > .ant-input-group-addon:last-child {
+    left: -1px !important;
+}
+/*room settings*/
+.settings {
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    box-shadow: 6px 6px 20px rgba(122,122,122,0.2);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 25vw;
+    min-height: 50vh;
+}
+
+.inputGroup {
+    width:80%;
+}
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+}
+
+.buttonGroup .ant-btn-primary{
+    margin:1% ;
+}
+.trendButtonGroup{
+    margin-top: 10%;
+    display:flex;
+    justify-content: space-between;
+}
+.trendButtonGroup .ant-btn {
+    width: 50%;
+}
+
+.optionsButtonGroup{
+    width:80%;
+}
+
+.optionsButtonGroup .ant-btn-primary {
+    width: 100%;
+}
+
+.connectionIcon{
+    display:flex;
+    align-items:center;
+}
+
+.pageInfo {
+    width:100vw;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+.isSwiping{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    overflow-y:auto;
+    min-height:90vh;
+}
+
+.swipe-controls {
+    display: flex;
+    justify-content: center;
+    min-height:10vh;
+}
+
+.swipe-buttons {
+    margin: 0em 2em 0em 2em;
+}
+
+.swipe-icons {
+    position: absolute;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+/*    font-size: 8em;
+*/}
+
+.swipe-icons #swipe-icon-heart path{
+    fill: rgba(255, 167, 237, 0.8) !important;
+}
+
+.swipe-icons #swipe-icon-close path {
+    fill: rgba(205, 214, 221, 0.8) !important;
+}
+
+.ant-btn-circle.ant-btn-lg {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.ant-btn-icon-only.ant-btn-lg {
+    width: 3.5em !important;
+    height: 3.5em !important;
+}
+.ant-btn-icon-only.ant-btn-lg>*{
+    font-size:2em !important;
+}
+
+.endVotes {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    font-size:2em;
+}
+
+.doneContent {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction:row;
+}
+
+.endlist-names {
+    width: 25vw;
+    border-radius: 0px 15px 15px 0px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.endlist-names .ant-btn {
+/*    border-radius:15em;
+*/}
+
+.endshow-card {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+}
+
+.endshow-info {
+    width: 45vw;
+    overflow-y:auto;
+    border-radius: 15px;
+    display:flex;
+    align-items:center;
+    flex-direction: column;
+}
+
+    .endshow-info::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    .endshow-info::-webkit-scrollbar-thumb {
+        background: linear-gradient(13deg, #722ed1 14%,#d6d6d6 64%);
+        border-radius: 8px;
+    }
+
+    .endshow-info::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(13deg, #722ed1 14%,#ebebeb 64%);
+    }
+
+    .endshow-info::-webkit-scrollbar-track {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: inset 7px 10px 12px #f0f0f0;
+    }
+
+.endshow-info h1 {
+    margin: 1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid;
+    padding-bottom: 0.2em;
+    letter-spacing: 1px;
+}
+
+.endshow-info-text{
+    width:80%;
+    margin: 1em;
+}
+
+#endbackground {
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    padding: 2em;
+    height: 100vh;
+}
+
+.ant-timeline-item-head{
+    background-color: transparent !important;
+}
+
+.endlist-names .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
+    text-decoration: none !important;
+    background: #722ed1 !important;
+    color: #fff !important;
+}
+
+.endListContainer {
+    width: 50vw;
+    /*    display: flex;
+    justify-content: center;*/
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.endListContainer .card{
+    width: 40%;
+    height:auto;
+    padding:1em;
+}
+
+.endListContainer::-webkit-scrollbar {
+        display: none;
+}
+
+.card-vote-choice{
+    display:flex;
+    justify-content:space-evenly;
+    width:100%;
+}
+
+.card-body {
+    overflow-y: auto;
+    max-height: 300px;
+    margin-bottom: 15px;
+}
+
+.finishMessage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    align-content: space-around;
+}
+
+.finishMessage h1 {
+    color: white;
+}
+.finishMessage .ant-btn-primary {
+    margin-top:10%;
+    width: 80%;
+}
+.waitingContent{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-around;
+    height:100vh;
+}
+
+.waitingContent h1 {
+    color:white;
+}
+
+.ant-steps .anticon svg {
+    color: white !important;
+}
+
+.endButtons .ant-btn-primary {
+    border-radius:15em !important;
+}
+
+.loginBody {
+    width:100vw;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#loginPage {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+#loginNav {
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    box-shadow: 6px 6px 20px rgb(122 122 122 / 20%);
+}
+
+#loginForm {
+    background: linear-gradient(to right bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    box-shadow: 6px 6px 20px rgb(122 122 122 / 20%);
+}
