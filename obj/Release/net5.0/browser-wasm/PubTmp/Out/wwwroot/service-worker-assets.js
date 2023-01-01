@@ -121,7 +121,7 @@
       "url": "watching-tv-512.png"
     },
     {
-      "hash": "sha256-yYYGhCRdI7uirm\/vv+GhaG19iqT9UkAvstqOuAlI2eM=",
+      "hash": "sha256-FDh7xfX7fQ2PCqrMPa3PSzH2ss+phvrAS3D2TeWeQ6E=",
       "url": "_framework\/nginx.config"
     },
     {
@@ -1465,7 +1465,7 @@
       "url": "_framework\/System.IO.Pipelines.dll"
     },
     {
-      "hash": "sha256-IS84LGkM2bdiM4dmd\/\/jb8l+sYYyQXc+PMpBHoolWG0=",
+      "hash": "sha256-LPsCf4KE45rJnxyGpS\/RCxWQXyr96kNJP+rOlZ9fZAA=",
       "url": "_framework\/MatchFlix-Frontend.dll"
     },
     {
@@ -1605,7 +1605,7 @@
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
-      "hash": "sha256-oC2zJB2dYpImvYsIaEK4rc8pbmK4QrgiWJeCGD9R\/gw=",
+      "hash": "sha256-bJ4alVmEhG3gPLtXV2qJVQzBJocLgBSUk6+YBhSuF7Y=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1613,5 +1613,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "diboavDQ"
+  "version": "0rVFblZl"
 };

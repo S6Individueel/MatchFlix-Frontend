@@ -117,11 +117,14 @@ a, .btn-link {
     width: 8em;
     font-size: 3em;
     font-family: 'Alata', sans-serif;
-    background-color: #f6f6f6;
 }
 
-#matchBtn :hover {
-    color: red;
+#matchBtn:hover {
+    color: #b37feb !important;
+}
+
+.navbar .ant-btn:focus .ant-btn:hover {
+    color: #b37feb !important;
 }
 
 .iconSection {
@@ -676,7 +679,7 @@ a, .btn-link {
     background-color: transparent !important;
 }
 
-.endlist-names .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
+.endlist-names .ant-btn:active .ant-btn:focus .ant-btn:hover {
     text-decoration: none !important;
     background: #722ed1 !important;
     color: #fff !important;

@@ -4,7 +4,7 @@
 #pragma warning disable 0649
 #pragma warning disable 0169
 
-namespace MatchFlix_Frontend.Pages
+namespace MatchFlix_Frontend.Components.Carousel
 {
     #line hidden
     using System;
@@ -110,35 +110,13 @@ using Microsoft.Extensions.Configuration.Json;
 #line default
 #line hidden
 #nullable disable
-#nullable restore
-#line 2 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\LoginPage.razor"
-using MatchFlix_Frontend.Components.LoginComponent;
-
-#line default
-#line hidden
-#nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/login")]
-    public partial class LoginPage : Microsoft.AspNetCore.Components.ComponentBase
+    public partial class Carousel : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
         {
         }
         #pragma warning restore 1998
-#nullable restore
-#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\LoginPage.razor"
-       
-    public string txtValue { get; set; }
-
-    void ToHome()
-    {
-        NavigationManager.NavigateTo("/");
-    }
-
-#line default
-#line hidden
-#nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavigationManager { get; set; }
     }
 }
 #pragma warning restore 1591

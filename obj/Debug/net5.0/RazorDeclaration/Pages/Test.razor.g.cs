@@ -110,6 +110,7 @@ using Microsoft.Extensions.Configuration.Json;
 #line default
 #line hidden
 #nullable disable
+    [Microsoft.AspNetCore.Components.RouteAttribute("/test")]
     public partial class Test : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -117,6 +118,24 @@ using Microsoft.Extensions.Configuration.Json;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 15 "C:\Users\ander\Desktop\frontend\MatchFlix-Frontend\Pages\Test.razor"
+      
+    private string text;
+
+    private void onButtonClick()
+    {
+        Console.WriteLine(text);
+    }
+
+    private void onChange(string value)
+    {
+        text = value;
+    }
+
+#line default
+#line hidden
+#nullable disable
     }
 }
 #pragma warning restore 1591
